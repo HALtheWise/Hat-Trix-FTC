@@ -1,5 +1,7 @@
 package initialTesting;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,12 +12,13 @@ import javax.microedition.io.StreamConnection;
 import javax.microedition.io.Connector;
 
 public class BluetoothCommunicator {
+	static final int portNum = 1;
+
 	String brickID;
-	int portNum = 1;
 	LocalDevice localDevice;
 	Connection connection;
-	DataOutputStream out;
-	DataInputStream in;
+	BufferedOutputStream out;
+	BufferedInputStream in;
 	
 	public static final byte END_OF_MESSAGE = 42;
 	
@@ -48,8 +51,8 @@ public class BluetoothCommunicator {
 	public void connect(){
 		try{
 			connection = Connector.open("btspp://"+brickID+":"+portNum);
-			out = ((StreamConnection) connection).openDataOutputStream();
-			in = ((StreamConnection) connection).openDataInputStream();
+			out = new BufferedOutputStream(((StreamConnection) connection).openDataOutputStream());
+			in = new BufferedInputStream(((StreamConnection) connection).openDataInputStream());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -58,13 +61,17 @@ public class BluetoothCommunicator {
 	public void sendData(byte[] data){
 		try {
 			out.write(data);
-			out.writeByte(END_OF_MESSAGE);
+			out.write(END_OF_MESSAGE);
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	
+	/**
+	 * This method has never been seen to work, but should be used anyway.
+	 */
 	public void close(){
 		try{
 			connection.close();
