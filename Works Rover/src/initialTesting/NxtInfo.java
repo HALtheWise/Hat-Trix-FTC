@@ -1,13 +1,13 @@
 package initialTesting;
 
 public class NxtInfo {
-	public int comPort;
+	public int ip;
 	public String brickName;
 	public String friendlyName;
 	
 	//comment
-	public NxtInfo(int comPort, String name){
-		this.comPort = comPort;
+	public NxtInfo(int btIP, String name){
+		this.ip = btIP;
 		this.brickName = this.friendlyName = name;
 	}
 }
