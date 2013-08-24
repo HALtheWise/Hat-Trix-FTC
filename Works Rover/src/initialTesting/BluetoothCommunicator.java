@@ -68,6 +68,23 @@ public class BluetoothCommunicator {
 		}
 	}
 	
+	public void sendNXTMessage(byte[] data){
+		byte[] dataToSend = new byte[data.length + 4];
+		dataToSend[0] = (byte) 0x80; //Command without response expected
+		dataToSend[1] = (byte) 0x09; //Direct Message
+		dataToSend[2] = (byte) 0x00; //Mailbox #1
+		dataToSend[3] = (byte) data.length; //Length of message
+		for (int i = 0; i<data.length; i++){
+			dataToSend[i+4] = data[i];
+		}
+		try {
+			out.write(dataToSend);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * This method has never been seen to work, but should be used anyway.
