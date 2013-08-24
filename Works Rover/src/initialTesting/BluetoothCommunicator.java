@@ -25,15 +25,16 @@ public class BluetoothCommunicator {
 	public static void main(String[] args){
 		BluetoothCommunicator bc = new BluetoothCommunicator("0016530082A7");
 		bc.connect(); 
-		System.out.println("connected");
-		try{System.in.read();}catch(Exception e){};
-		System.out.println("sending");
-		
-		byte[] data = "hello".getBytes();
-		sanitize(data);
-		bc.sendData(data);
-		
-		System.out.println("sent");
+		while(true){
+			System.out.println("connected. press enter to send message");
+			try{System.in.read();}catch(Exception e){};
+			System.out.println("sending");
+
+			byte[] data = "hello".getBytes();
+			bc.sendNXTMessage(data);
+			System.out.println("sent");
+			if(false) break;
+		}
 		bc.close();
 	}
 	
