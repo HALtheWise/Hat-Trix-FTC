@@ -1,12 +1,12 @@
 package initialTesting;
 
 public class NxtInfo {
-	public String ip;
+	public int ip;
 	public String brickName;
 	public String friendlyName;
 	
 	//comment
-	public NxtInfo(String btIP, String name){
+	public NxtInfo(int btIP, String name){
 		this.ip = btIP;
 		this.brickName = this.friendlyName = name;
 	}

@@ -72,4 +72,12 @@ public class BluetoothCommunicator {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void sanitize(byte[] data){
+		for(int i=0; i<data.length; i++){
+			if(data[i] == END_OF_MESSAGE){
+				data[i] -= 1;
+			}
+		}
+	}
 }
