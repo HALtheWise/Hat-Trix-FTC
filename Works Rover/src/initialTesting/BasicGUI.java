@@ -4,27 +4,21 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.Color;
-import net.miginfocom.swing.MigLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JPanel;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class BasicGUI {
 
 	private JFrame frame;
-
 	/**
 	 * Launch the application.
 	 */
@@ -53,6 +47,12 @@ public class BasicGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				
+			}
+		});
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 509, 375);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
