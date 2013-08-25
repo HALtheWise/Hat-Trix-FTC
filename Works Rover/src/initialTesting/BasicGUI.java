@@ -47,12 +47,6 @@ public class BasicGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame(); 
-		frame.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				
-			}
-		});
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 509, 375);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
