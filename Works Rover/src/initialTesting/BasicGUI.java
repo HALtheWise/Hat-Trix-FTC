@@ -9,16 +9,18 @@ import javax.swing.JComboBox;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class BasicGUI {
 
 	private JFrame frame;
+
 	/**
 	 * Launch the application.
 	 */
@@ -46,7 +48,7 @@ public class BasicGUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame(); 
+		frame = new JFrame();
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 509, 375);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
