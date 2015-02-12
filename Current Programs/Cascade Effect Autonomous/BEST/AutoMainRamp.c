@@ -40,7 +40,7 @@ void onRamp()
 	//wait1Msec(1000);
 	if (DO_EXTEND) liftFirstStage();
 	wait1Msec(1000);
-	move(-60, 35);
+	move(-60, 35, true, true); //Glide before goal grab
 	wait1Msec(1000);
 	grabGoal();
 	wait1Msec(1000);
