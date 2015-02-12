@@ -27,17 +27,32 @@
 
 #define DEBUG true
 #define DO_EXTEND false
+#define TEST_IR true
 
 #include "JoystickDriver.c"
+#include "drivers/hitechnic-irseeker-v2.h"
 
 #include "AutoLib.h"
 
+task juliet2(){
+	HTIRS2setDSPMode(seeker, DSP_1200);
+	while(true){
+		wait1Msec(10);
+		int dir = HTIRS2readACDir(seeker);
+		if (dir == 3 || dir == 7){
+			writeDebugStreamLine("Encoder Count: %d", nMotorEncoder[FrontR]);
+			break;
+		}
+	}
+}
 
 void onRamp()
 {
 	wait1Msec(1500);
+	if (TEST_IR) StartTask(juliet2);
 	move(-180, 35);
 	//wait1Msec(1000);
+	if (TEST_IR) return;
 	if (DO_EXTEND) liftFirstStage();
 	wait1Msec(1000);
 	move(-60, 35, true, true); //Glide before goal grab
