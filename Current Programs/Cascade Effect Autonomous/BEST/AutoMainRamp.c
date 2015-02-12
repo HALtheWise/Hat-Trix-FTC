@@ -35,35 +35,10 @@
 #include "AutoLib.h"
 
 int centerPos = -1;
-task juliet2(){
-	const int IR_THRESH = 40;
-
-	HTIRS2setDSPMode(seeker, DSP_1200);
-	int distance = 0;
-	centerPos = 2;
-	while(true){
-		wait1Msec(3);
-		int strengths[5];
-		HTIRS2readAllACStrength(seeker, strengths[0], strengths[1], strengths[2], strengths[3], strengths[4]);
-		int dir = HTIRS2readACDir(seeker);
-
-		//if (dir != 0){
-		if (strengths[3] > IR_THRESH){
-			distance = nMotorEncoder[FrontR];
-			writeDebugStreamLine("Encoder Count: %d", distance);
-			break;
-		}
-	}
-	if(abs(distance) > 4830){
-		centerPos = 1;
-	}else{
-		centerPos = 3;
-	}
-
-}
 
 void onRamp()
 {
+
 	wait1Msec(1500);
 	move(-180, 35);
 	//wait1Msec(1000);
@@ -84,6 +59,33 @@ void onRamp()
 		writeDebugStreamLine("Tower in positon %d.", centerPos);
 		return;
 	}
+}
+
+
+task juliet2(){
+	const int IR_THRESH = 40;
+
+	HTIRS2setDSPMode(seeker, DSP_1200);
+	int distance = 0;
+	while(true){
+		wait1Msec(3);
+		int strengths[5];
+		HTIRS2readAllACStrength(seeker, strengths[0], strengths[1], strengths[2], strengths[3], strengths[4]);
+		int dir = HTIRS2readACDir(seeker);
+
+		//if (dir != 0){
+		if (strengths[3] > IR_THRESH){
+			distance = nMotorEncoder[FrontR];
+			writeDebugStreamLine("Encoder Count: %d", distance);
+			break;
+		}
+	}
+	if(abs(distance) > 6050){
+		centerPos = 3;
+	}else if(abs(distance > 0){
+		centerPos = 1;
+	}
+
 }
 
 task main()
