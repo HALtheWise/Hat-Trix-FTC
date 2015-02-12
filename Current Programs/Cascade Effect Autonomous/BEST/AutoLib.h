@@ -38,16 +38,21 @@ void Stop	(bool hold);
 void liftFirstStage();
 void liftTallArm ();
 void lowerTallArm();
-void dumpBalls();
+void dumpBalls(bool fastMode = false);
 void hitKickstand();
 
 
 //----------- Function Definitions ----------//
 
-void dumpBalls(){
-	servo[dropperServo] = 130;
-	wait1Msec(4000);
-	servo[dropperServo] = 60;
+void dumpBalls(bool fastMode){
+	const int DUMPING_POS = 130;
+	const int HOLDING_POS = 55;
+
+	servo[dropperServo] = DUMPING_POS;
+	if(!fastMode){
+		wait1Msec(4000);
+		servo[dropperServo] = HOLDING_POS;
+	}
 	//wait1Msec(10000);
 }
 
