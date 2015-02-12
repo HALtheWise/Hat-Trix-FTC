@@ -26,7 +26,7 @@
 // !! Changes to motor configuration must be copied to all files !! //
 
 #define DEBUG true
-#define DO_EXTEND true
+#define DO_EXTEND false
 
 #include "JoystickDriver.c"
 
