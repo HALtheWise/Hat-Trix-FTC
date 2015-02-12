@@ -272,7 +272,7 @@ void onRamp()
 	wait1Msec(1000);
 	grabGoal();
 	wait1Msec(1000);
-	dumpBalls();
+	dumpBalls(true);
 	wait1Msec(1000);
 	turnFromLWall(-170, 80);
 	wait1Msec(1000);
