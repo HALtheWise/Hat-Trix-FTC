@@ -52,7 +52,9 @@ void onRamp()
 	wait1Msec(1000);
 	turnFromLWall(-170, 80);
 	wait1Msec(1000);
-	if (TEST_IR) StartTask(juliet2);
+	if (TEST_IR){
+		StartTask(juliet2);
+	}
 	move(-240, 40);
 	if (TEST_IR) {
 		StopTask(juliet2);
@@ -81,9 +83,11 @@ task juliet2(){
 		}
 	}
 	if(abs(distance) > 6050){
-		centerPos = 3;
+		centerPos = 3; //Position 3 has been measured at distance = 6100
 	}else if(abs(distance > 0){
 		centerPos = 1;
+	}else{
+		centerPos = 2;
 	}
 
 }
