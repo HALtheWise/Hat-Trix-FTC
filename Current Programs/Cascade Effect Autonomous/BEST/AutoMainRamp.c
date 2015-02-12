@@ -34,16 +34,32 @@
 
 #include "AutoLib.h"
 
+int centerPos = -1;
 task juliet2(){
+	const int IR_THRESH = 40;
+
 	HTIRS2setDSPMode(seeker, DSP_1200);
+	int distance = 0;
+	centerPos = 2;
 	while(true){
-		wait1Msec(10);
+		wait1Msec(3);
+		int strengths[5];
+		HTIRS2readAllACStrength(seeker, strengths[0], strengths[1], strengths[2], strengths[3], strengths[4]);
 		int dir = HTIRS2readACDir(seeker);
-		if (dir == 3 || dir == 7){
-			writeDebugStreamLine("Encoder Count: %d", nMotorEncoder[FrontR]);
+
+		//if (dir != 0){
+		if (strengths[3] > IR_THRESH){
+			distance = nMotorEncoder[FrontR];
+			writeDebugStreamLine("Encoder Count: %d", distance);
 			break;
 		}
 	}
+	if(abs(distance) > 4830){
+		centerPos = 1;
+	}else{
+		centerPos = 3;
+	}
+
 }
 
 void onRamp()
@@ -52,7 +68,11 @@ void onRamp()
 	if (TEST_IR) StartTask(juliet2);
 	move(-180, 35);
 	//wait1Msec(1000);
-	if (TEST_IR) return;
+	if (TEST_IR) {
+		StopTask(juliet2);
+		writeDebugStreamLine("Tower in positon %d.", centerPos);
+		return;
+	}
 	if (DO_EXTEND) liftFirstStage();
 	wait1Msec(1000);
 	move(-60, 35, true, true); //Glide before goal grab
