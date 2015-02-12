@@ -26,6 +26,7 @@
 // !! Changes to motor configuration must be copied to all files !! //
 
 #define DEBUG true
+#define DO_EXTEND true
 
 #include "JoystickDriver.c"
 
@@ -265,7 +266,7 @@ void onRamp()
 	wait1Msec(1500);
 	move(-180, 35);
 	//wait1Msec(1000);
-	//liftFirstStage();
+	if (DO_EXTEND) liftFirstStage();
 	wait1Msec(1000);
 	move(-60, 35);
 	wait1Msec(1000);
