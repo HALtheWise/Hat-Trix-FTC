@@ -1,0 +1,21 @@
+<head>
+<title>FTC Field Coordinate Mapper</title>
+<script>
+function updateCoords(e){
+	coords = document.getElementById("coords");
+	img = document.getElementById("image");
+	x = Math.round(e.clientX / img.width * 365 - 5);
+	y = Math.round((1 - e.clientY / img.height) * 365 + 4);
+	coords.innerText = '('+String(x)+ "cm, " + String(y) + 'cm)'
+	img2 = document.getElementById("dot");
+	img2.style.left = String(e.screenX - img2.width/2)+"px"
+	img2.style.top = String(e.screenY - img2.height/2)+"px"
+}
+</script>
+</head>
+
+<body>
+<img id="image" onmousemove="updateCoords(event);" src="http://i.imgur.com/aGc1jDh.png">
+<p style="float: right; font-size: 400%; font-family: Verdana, Geneva, sans-serif; color: red;" id="coords">(0cm, 0cm)</p>
+<!--<img style="position: fixed" src="reddot" id="dot">-->
+</body>

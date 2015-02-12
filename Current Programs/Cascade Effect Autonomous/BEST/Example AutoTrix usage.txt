@@ -1,0 +1,15 @@
+void DemoFunctions() //Never called, just examples to copy from.
+{
+	FieldPos p;
+	
+	p.x = 175; p.y = 265;
+	turnAndMoveTo(p, 50);	//
+
+	if (DEBUG) wait1Msec(2000);
+	else wait1Msec(200);
+
+	turnToHeading(degreesToRadians(-90), 40, Backward);
+
+	p.x += 0; p.y -= 33;
+	moveTo(p, 30, Backward, NO_STEERING);
+}
