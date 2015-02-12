@@ -84,7 +84,7 @@ task juliet2(){
 	}
 	if(abs(distance) > 6050){
 		centerPos = 3; //Position 3 has been measured at distance = 6100
-	}else if(abs(distance > 0){
+	}else if(abs(distance > 4242){ // Unknown value here. Testing needed.
 		centerPos = 1;
 	}else{
 		centerPos = 2;
