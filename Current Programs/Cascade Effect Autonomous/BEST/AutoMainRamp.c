@@ -65,14 +65,8 @@ task juliet2(){
 void onRamp()
 {
 	wait1Msec(1500);
-	if (TEST_IR) StartTask(juliet2);
 	move(-180, 35);
 	//wait1Msec(1000);
-	if (TEST_IR) {
-		StopTask(juliet2);
-		writeDebugStreamLine("Tower in positon %d.", centerPos);
-		return;
-	}
 	if (DO_EXTEND) liftFirstStage();
 	wait1Msec(1000);
 	move(-60, 35, true, true); //Glide before goal grab
@@ -83,7 +77,13 @@ void onRamp()
 	wait1Msec(1000);
 	turnFromLWall(-170, 80);
 	wait1Msec(1000);
+	if (TEST_IR) StartTask(juliet2);
 	move(-240, 40);
+	if (TEST_IR) {
+		StopTask(juliet2);
+		writeDebugStreamLine("Tower in positon %d.", centerPos);
+		return;
+	}
 }
 
 task main()
