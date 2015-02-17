@@ -2,13 +2,12 @@
 
 int julietUS(){
 	int reading = SensorValue[sonar];
-	if (reading == 255){
-		return 2;
-	}
-	else if(reading > 130){
+	if(reading >= 130 && reading < 150){
 		return 1;
 	}
-	else{
+	else if(reading < 130 && reading > 110){
 		return 3;
+	}else{
+		return 2;
 	}
 }
