@@ -46,9 +46,19 @@ void hitKickstand();
 
 const int HOLDING_POS = 55;
 void dumpBalls(bool fastMode){
+	const bool SMOOTH_OPEN = true;
 	const int DUMPING_POS = 130;
 
+	if(SMOOTH_OPEN){
+		int servoPos = HOLDING_POS;
+		while (servoPos < DUMPING_POS) {
+			servo[dropperServo] = servoPos;
+			wait1Msec(15);
+			servoPos += 1;
+		}
+	}
 	servo[dropperServo] = DUMPING_POS;
+
 	if(!fastMode){
 		wait1Msec(2000);
 		servo[dropperServo] = HOLDING_POS;
