@@ -23,7 +23,7 @@ void initPositions(){
 
 	GPS_prepareForCenterDump.x = -99; GPS_prepareForCenterDump.y = 0;
 	GPS_centerDumpPosition1.x = -66; GPS_centerDumpPosition1.y = 7;
-	GPS_centerDumpPosition2.x = -66; GPS_centerDumpPosition2.y = 7;
+	GPS_centerDumpPosition2.x = -63; GPS_centerDumpPosition2.y = 7;
 	GPS_centerDumpPosition3.x = -66; GPS_centerDumpPosition3.y = 3;
 	GPS_prepareForKickstand.x = -85; GPS_prepareForKickstand.y = -35;
 	GPS_hitKickstand.x = 10; GPS_hitKickstand.y = -35;
