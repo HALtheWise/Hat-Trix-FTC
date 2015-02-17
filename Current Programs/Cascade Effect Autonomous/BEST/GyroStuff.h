@@ -28,9 +28,9 @@ void resetGyro();
 
 float gyroCal()
 {
-	int sum = 0;
+	long sum = 0;
 
-	// Take 50 readings and average them out
+	// Take 200 readings and average them out
 	for (int i = 0; i < 50; i++)
 	{
 		sum += SensorValue(S2);

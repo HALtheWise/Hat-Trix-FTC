@@ -1,7 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S4,     seeker,         sensorI2CCustom)
+#pragma config(Sensor, S4,     sonar,          sensorSONAR)
 #pragma config(Motor,  motorA,          sweeper1,      tmotorNXT, openLoop, reversed)
 #pragma config(Motor,  motorB,          sweeper2,      tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
@@ -33,28 +33,32 @@ typedef struct {
 #include "TrackerAutoLib.h"
 #include "AutoLib.h"
 #include "Field Positions.h"
+#include "USstuff.h"
 //#include "IRstuff.c"
 
-#define DEBUG true
+#define DEBUG false
 #define DOLIFT1 false
 #define DOLIFT2 true
 
 int centerPos = -1;
 
+float getCenterAngle(){
+	if (centerPos == 1){
+		return degreesToRadians(-90);
+		}else if (centerPos == 2){
+		return degreesToRadians(-45);
+		}else if (centerPos == 1){
+		return 0;
+		}else{
+		writeDebugStreamLine("Warning: center position not detected yet!");
+		return 0;
+	}
+}
+
 void translate(CenterRelativePos input, FieldPos *result){
 	writeDebugStreamLine("Input was %d, %d", input.x, input.y);
 	const float FIELD_SIZE = 365.76;
-	float angle; //Heading of center structure with respect to field coords.
-	if (centerPos == 1){
-		angle = degreesToRadians(-90);
-	}else if (centerPos == 2){
-		angle = degreesToRadians(-45);
-	}else if (centerPos == 1){
-		angle = 0;
-	}else{
-		writeDebugStreamLine("Warning: center position not detected yet!");
-	}
-	writeDebugStreamLine("angle is (degrees) %d", radiansToDegrees(angle));
+	float angle = getCenterAngle(); //Heading of center structure with respect to field coords.
 	result->x = FIELD_SIZE/2;
 	result->y = FIELD_SIZE/2;
 	result->theta = angle;
@@ -66,9 +70,21 @@ void translate(CenterRelativePos input, FieldPos *result){
 }
 
 void turnAndMoveTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
-		FieldPos target2;
-		translate(target, target2);
-		turnAndMoveTo(target2, power, forward);
+	FieldPos target2;
+	translate(target, target2);
+	turnAndMoveTo(target2, power, forward);
+}
+
+void turnTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
+	FieldPos target2;
+	translate(target, target2);
+	turnTo(target2, power, forward);
+}
+
+void moveTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
+	FieldPos target2;
+	translate(target, target2);
+	moveTo(target2, power, forward);
 }
 
 void initializeRobot()
@@ -82,34 +98,111 @@ void initializeRobot()
 }
 
 void floorStart(){
-	FieldPos p;
-
-	const int speed_normal = 50;
+	const int speed_normal = 60;
+	const int speed_slower = 45;
+	const int speed_precise = 35;
 
 	if(DOLIFT1) liftFirstStage();
 
-//	centerPos = juliet(); //Take IR beacon reading
-	centerPos = 1; //Override for testing purposes
-
+	//	centerPos = juliet(); //Take IR beacon reading
+	//	centerPos = 1; //Override for testing purposes
+	centerPos = julietUS();
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
-	turnAndMoveTo(GPS_awayFromWall, speed_normal);
+	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
 	if (DEBUG) wait1Msec(4000);
 	else wait1Msec(200);
 
 	if(centerPos == 1)
 	{
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal);
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
 		if(DOLIFT2) liftTallArm();
 
-		turnAndMoveTo(GPS_centerDumpPosition, 40, Backward);
+		turnTo(GPS_centerDumpPosition1, speed_slower, Backward);
+		moveTo(GPS_centerDumpPosition1, speed_precise, Backward);
 
-		wait1Msec(1000);
+		wait1Msec(2000);
+		if(DOLIFT2) dumpBalls();
+
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
+		if(DOLIFT2) lowerTallArm();
+
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		if (true){
+			turnAndMoveTo(GPS_navPoint1, speed_normal);
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+			grabGoal();
+		}
+		else{
+
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+
+			if (DEBUG) wait1Msec(2000);
+			else wait1Msec(200);
+
+			turnAndMoveTo(GPS_hitKickstand, speed_normal);
+		}
+	}
+	else if(centerPos == 2)///////////////////////////////////////////////////////////////////////////////////////////
+	{
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		if(DOLIFT2) liftTallArm();
+
+		turnTo(GPS_centerDumpPosition2, speed_slower, Backward);
+		moveTo(GPS_centerDumpPosition2, speed_precise, Backward);
+
+		wait1Msec(2000);
+		if(DOLIFT2) dumpBalls();
+
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
+		if(DOLIFT2) lowerTallArm();
+
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		if (true){
+			turnAndMoveTo(GPS_navPoint1, speed_normal);
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+			grabGoal();
+		}
+		else{
+
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+
+			if (DEBUG) wait1Msec(2000);
+			else wait1Msec(200);
+
+			turnAndMoveTo(GPS_hitKickstand, speed_normal);
+		}
+	}
+	else if(centerPos == 3)///////////////////////////////////////////////////////////////////////////////////////////
+	{
+		//turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		if(DOLIFT2) liftTallArm();
+
+		turnTo(GPS_centerDumpPosition3, speed_normal, Backward);
+		moveTo(GPS_centerDumpPosition3, speed_precise, Backward);
+
+		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
@@ -127,108 +220,6 @@ void floorStart(){
 		else wait1Msec(200);
 
 		turnAndMoveTo(GPS_hitKickstand, speed_normal);
-
-		if (DEBUG){
-			wait1Msec(2000);
-			turnAndMoveTo(GPS_floorStartingPosition, 50);
-			turnToHeading(degreesToRadians(0), 40);
-		}
-	}
-	else if(centerPos == 2)///////////////////////////////////////////////////////////////////////////////////////////
-	{
-		//It just so happens that the position for delivery of the POSITION=2 ball is exactly the same as the IR sensing position.
-		//p.x = 100; p.y = 213;
-		//turnAndMoveTo(p, 50);
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-		turnToHeading(degreesToRadians(-35), 40, Backward);
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-		liftTallArm();
-
-		p.x += 50; p.y += -20;
-		moveTo(p, 30, Backward, NO_STEERING);
-		dumpBalls();
-
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
-
-
-		p.x -= 20; p.y += 5;
-		moveTo(p, 30, Forward, NO_STEERING);
-		lowerTallArm();
-
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-
-		p.x = 90; p.y = 175;
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
-
-		p.x = 180; p.y = 145; //Hit kickstand
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG){
-			wait1Msec(2000);
-			p.x = 22; p.y = 213; //Return to base
-			turnAndMoveTo(p, 50);
-			turnToHeading(degreesToRadians(0), 40);
-		}
-	}
-	else if(centerPos == 3)///////////////////////////////////////////////////////////////////////////////////////////
-	{
-		p.x = 100; p.y = 155;
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-		turnToHeading(degreesToRadians(0), 40, Backward);
-
-		if (DEBUG) wait1Msec(1000);
-
-		liftTallArm();
-
-		p.x += 30; p.y += 0;
-		moveTo(p, 30, Backward, NO_STEERING);
-		dumpBalls();
-
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
-
-
-		p.x -= 15; p.y += 0;
-		moveTo(p, 30, Forward, NO_STEERING);
-		lowerTallArm();
-
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-
-		/*p.x = 110;*/ p.y = 130;
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
-
-		p.x = 195; /*p.y = 155;*/ //Hit kickstand
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG){
-			wait1Msec(2000);
-			p.x = 22; p.y = 213; //Return to base
-			turnAndMoveTo(p, 50);
-			turnToHeading(degreesToRadians(0), 40);
-		}
 	}
 	else writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 }
@@ -239,12 +230,15 @@ task main()
 
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
+	int startTime = nPgmTime;
 	resetTracker();
 	//Floor start tracking positions
-	robot.x = 22.9; //9in, defined from robot
-	robot.y = 213.0; //84in, measured
-	robot.theta = 0.0;
+	robot.x = GPS_floorStartingPositionUS.x;
+	robot.y = GPS_floorStartingPositionUS.y;
+	robot.theta = GPS_floorStartingPositionUS.theta;
 	StartTask(trackRobot);
 
 	floorStart();
+
+	writeDebugStreamLine("Autonomous completed in %.2f seconds", (nPgmTime-startTime)/1000.0);
 }

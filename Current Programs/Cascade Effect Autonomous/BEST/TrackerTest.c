@@ -152,7 +152,7 @@ task main()
 		}
 		if (joy1Btn(1)){//Blue button
 			writeDebugStreamLine("Testing dump procedure");
-			dumpTallBalls();
+			dumpBalls();
 		}
 		if (joy1Btn(2)){ //Green button
 

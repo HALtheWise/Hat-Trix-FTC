@@ -1,7 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S4,     seeker,         sensorI2CCustom)
+#pragma config(Sensor, S4,     sonar,          sensorSONAR)
 #pragma config(Motor,  motorA,          sweeper1,      tmotorNXT, openLoop, reversed)
 #pragma config(Motor,  motorB,          sweeper2,      tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
@@ -45,15 +45,6 @@ float neededTurn(FieldPos target, DrivingDirection forward = Forward);
 
 
 //----------- Function Definitions ----------//
-void grabGoal(){
-	const int GRABBED_POSITION = 0;
-	servo[grabberServo] = GRABBED_POSITION;
-}
-
-void releaseGoal(){
-	const int RELEASED_POSITION = 70;
-	servo[grabberServo] = RELEASED_POSITION;
-}
 
 void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 	turnTo(target, power, forward);
@@ -105,7 +96,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 
 		float fwdpower = power;
 		if(glide){
-			const float accelLimit = 1.0; //Units of % / cm
+			const float accelLimit = 0.7; //Units of % / cm
 			if (toGo < 30) {
 				float cap = 10 + accelLimit * toGo;
 				fwdpower = (cap < fwdpower) ? cap : fwdpower;
