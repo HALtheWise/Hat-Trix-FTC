@@ -45,11 +45,11 @@ int centerPos = -1;
 float getCenterAngle(){
 	if (centerPos == 1){
 		return degreesToRadians(-90);
-	}else if (centerPos == 2){
+		}else if (centerPos == 2){
 		return degreesToRadians(-45);
-	}else if (centerPos == 1){
+		}else if (centerPos == 1){
 		return 0;
-	}else{
+		}else{
 		writeDebugStreamLine("Warning: center position not detected yet!");
 		return 0;
 	}
@@ -70,21 +70,21 @@ void translate(CenterRelativePos input, FieldPos *result){
 }
 
 void turnAndMoveTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
-		FieldPos target2;
-		translate(target, target2);
-		turnAndMoveTo(target2, power, forward);
+	FieldPos target2;
+	translate(target, target2);
+	turnAndMoveTo(target2, power, forward);
 }
 
 void turnTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
-		FieldPos target2;
-		translate(target, target2);
-		turnTo(target2, power, forward);
+	FieldPos target2;
+	translate(target, target2);
+	turnTo(target2, power, forward);
 }
 
 void moveTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
-		FieldPos target2;
-		translate(target, target2);
-		moveTo(target2, power, forward);
+	FieldPos target2;
+	translate(target, target2);
+	moveTo(target2, power, forward);
 }
 
 void initializeRobot()
@@ -99,11 +99,13 @@ void initializeRobot()
 
 void floorStart(){
 	const int speed_normal = 60;
+	const int speed_slower = 45;
+	const int speed_precise = 35;
 
 	if(DOLIFT1) liftFirstStage();
 
-//	centerPos = juliet(); //Take IR beacon reading
-//	centerPos = 1; //Override for testing purposes
+	//	centerPos = juliet(); //Take IR beacon reading
+	//	centerPos = 1; //Override for testing purposes
 	centerPos = julietUS();
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
@@ -121,8 +123,8 @@ void floorStart(){
 
 		if(DOLIFT2) liftTallArm();
 
-		turnTo(GPS_centerDumpPosition1, 40, Backward);
-		moveTo(GPS_centerDumpPosition1, 35, Backward);
+		turnTo(GPS_centerDumpPosition1, speed_slower, Backward);
+		moveTo(GPS_centerDumpPosition1, speed_precise, Backward);
 
 		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
@@ -136,27 +138,58 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		turnAndMoveTo(GPS_navPoint1, speed_normal);
-		turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
-		grabGoal();
-		return;
+		if (true){
+			turnAndMoveTo(GPS_navPoint1, speed_normal);
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+			grabGoal();
+		}
+		else{
 
-		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+			if (DEBUG) wait1Msec(2000);
+			else wait1Msec(200);
 
-		turnAndMoveTo(GPS_hitKickstand, speed_normal);
-
-		if (DEBUG){
-			wait1Msec(2000);
-			turnAndMoveTo(GPS_floorStartingPosition, 50);
-			turnToHeading(degreesToRadians(0), 40);
+			turnAndMoveTo(GPS_hitKickstand, speed_normal);
 		}
 	}
 	else if(centerPos == 2)///////////////////////////////////////////////////////////////////////////////////////////
 	{
-		return;
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		if(DOLIFT2) liftTallArm();
+
+		turnTo(GPS_centerDumpPosition2, speed_slower, Backward);
+		moveTo(GPS_centerDumpPosition2, speed_precise, Backward);
+
+		wait1Msec(2000);
+		if(DOLIFT2) dumpBalls();
+
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
+		if(DOLIFT2) lowerTallArm();
+
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		if (true){
+			turnAndMoveTo(GPS_navPoint1, speed_normal);
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+			grabGoal();
+		}
+		else{
+
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+
+			if (DEBUG) wait1Msec(2000);
+			else wait1Msec(200);
+
+			turnAndMoveTo(GPS_hitKickstand, speed_normal);
+		}
 	}
 	else if(centerPos == 3)///////////////////////////////////////////////////////////////////////////////////////////
 	{
@@ -166,8 +199,8 @@ void floorStart(){
 
 		if(DOLIFT2) liftTallArm();
 
-		turnTo(GPS_centerDumpPosition3, 40, Backward);
-		moveTo(GPS_centerDumpPosition3, 35, Backward);
+		turnTo(GPS_centerDumpPosition3, speed_normal, Backward);
+		moveTo(GPS_centerDumpPosition3, speed_precise, Backward);
 
 		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
@@ -187,12 +220,6 @@ void floorStart(){
 		else wait1Msec(200);
 
 		turnAndMoveTo(GPS_hitKickstand, speed_normal);
-
-		if (DEBUG){
-			wait1Msec(2000);
-			turnAndMoveTo(GPS_floorStartingPosition, 50);
-			turnToHeading(degreesToRadians(0), 40);
-		}
 	}
 	else writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 }
