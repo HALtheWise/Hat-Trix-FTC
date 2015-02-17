@@ -36,7 +36,8 @@ typedef struct {
 //#include "IRstuff.c"
 
 #define DEBUG false
-#define DOLIFT true
+#define DOLIFT1 false
+#define DOLIFT2 true
 
 int centerPos = -1;
 
@@ -54,7 +55,7 @@ void translate(CenterRelativePos input, FieldPos *result){
 	}
 	result->x = FIELD_SIZE/2;
 	result->y = FIELD_SIZE/2;
-	result->theta = 0;
+	result->theta = angle;
 
 	result->x += input.x * cos(angle) - input.y * sin(angle);
 	result->y += input.y * cos(angle) + input.x * sin(angle);
@@ -70,16 +71,15 @@ void initializeRobot()
 {
 	clearDebugStream();
 	gyroCal();
+	servo[dropperServo] = HOLDING_POS;
 	//servo[grabberServo]=???;
-	//servo[dropperServo] =???;
 	return;
 }
 
 void floorStart(){
 	FieldPos p;
 
-	servo[dropperServo] = HOLDING_POS; //Need to update number
-	if(DOLIFT) liftFirstStage();
+	if(DOLIFT1) liftFirstStage();
 
 //	centerPos = juliet(); //Take IR beacon reading
 	centerPos = 1; //Override for testing purposes
@@ -96,17 +96,17 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		liftTallArm();
+		if(DOLIFT2) liftTallArm();
 
 		turnAndMoveTo(GPS_centerDumpPosition, 30);
 
-		dumpBalls();
+		if(DOLIFT2) dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
 		turnAndMoveTo(GPS_prepareForCenterDump, 40, Backward);
-		lowerTallArm();
+		if(DOLIFT2) lowerTallArm();
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);

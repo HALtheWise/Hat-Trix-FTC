@@ -139,7 +139,7 @@ void actionTakeADump(Command cmd, EventList *eList, int res_id )
 			if( isPressed( eList, takeADump )){
 				//writeDebugStreamLine("Dropper Opening");
 				//servo[dropperServo] = DUMPING_POS;
-			state *= -1;
+				state *= -1;
 			}
 
 			if(state == 1){
@@ -390,7 +390,7 @@ void actionCar(Command cmd, EventList *eList, int res_id)
 		{
 			if( isPressed( eList, liftCar )){
 				motor[car] = UP_POWER;
-
+				actionRoller(C_ABORT, null, RES_ROLLERS);
 			}
 			if( isPressed( eList, lowerCar )){
 				motor[car] = DOWN_POWER;
