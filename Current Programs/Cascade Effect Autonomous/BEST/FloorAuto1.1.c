@@ -111,20 +111,16 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-
-		p.x = 150; p.y = 250;
-		turnAndMoveTo(p, 50);
+		turnAndMoveTo(GPS_prepareForKickstand, 40);
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		/*p.x = 150;*/ p.y = 170; //Hit kickstand
-		turnAndMoveTo(p, 50);
+		turnAndMoveTo(GPS_hitKickstand, 40);
 
 		if (DEBUG){
 			wait1Msec(2000);
-			p.x = 22; p.y = 213; //Return to base
-			turnAndMoveTo(p, 50);
+			turnAndMoveTo(GPS_floorStartingPosition, 50);
 			turnToHeading(degreesToRadians(0), 40);
 		}
 	}
