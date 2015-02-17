@@ -3,7 +3,6 @@ const int elevatorUp = 0;
 const int elevatorDown = 1;
 const int elvStop = 2;
 const int takeADump = 3;
-const int endDelivery = 23;
 
 const int grab = 4;
 const int release = 5;
@@ -46,7 +45,7 @@ int commandMap[][] = {
 {lowerCar, stopCar, cmndNone} ,//JOY2_GREEN
 {sweeperStop, cmndNone, cmndNone} ,//JOY2_RED
 {liftCar, stopCar, cmndNone} ,//JOY2_YELLOW
-{endDelivery, takeADump, cmndNone} ,//JOY2_LBUMP
+{takeADump, cmndNone, cmndNone} ,//JOY2_LBUMP
 {rollrStop, cmndNone, cmndNone} ,//JOY2_RBUMP
 {rollrRvsStrt, cmndNone, cmndNone} ,//JOY2_LTRIG
 {rollrStart, cmndNone, cmndNone} ,//JOY2_RTRIG

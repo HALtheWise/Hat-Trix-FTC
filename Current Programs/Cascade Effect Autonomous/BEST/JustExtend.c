@@ -26,71 +26,12 @@
 // !! Changes to motor configuration must be copied to all files !! //
 
 #define DEBUG true
-#define DO_EXTEND true
-#define TEST_IR true
 
 #include "JoystickDriver.c"
-#include "drivers/hitechnic-irseeker-v2.h"
 
 #include "AutoLib.h"
 
-int centerPos = -1;
 
-void onRamp()
-{
-
-	//wait1Msec(1500);
-	move(-180, 35);
-	wait1Msec(250);
-	if (DO_EXTEND) liftFirstStage();
-	wait1Msec(500);
-	move(-60, 35, true, true); //Glide before goal grab
-	wait1Msec(250);
-	grabGoal();
-	wait1Msec(500);
-	dumpBalls(false);
-	wait1Msec(250);
-	turnFromLWall(-160, 80);
-	wait1Msec(250);
-	/*if (TEST_IR){
-		StartTask(juliet2);
-	}*/
-	move(-250, 40);
-	/*if (TEST_IR) {
-		StopTask(juliet2);
-		writeDebugStreamLine("Tower in positon %d.", centerPos);
-		return;
-	}*/
-}
-
-
-/*task juliet2(){
-	const int IR_THRESH = 40;
-
-	HTIRS2setDSPMode(seeker, DSP_1200);
-	int distance = 0;
-	while(true){
-		wait1Msec(3);
-		int strengths[5];
-		HTIRS2readAllACStrength(seeker, strengths[0], strengths[1], strengths[2], strengths[3], strengths[4]);
-		int dir = HTIRS2readACDir(seeker);
-
-		//if (dir != 0){
-		if (strengths[3] > IR_THRESH){
-			distance = nMotorEncoder[FrontR];
-			writeDebugStreamLine("Encoder Count: %d", distance);
-			break;
-		}
-	}
-	if(abs(distance) > 6050){
-		centerPos = 3; //Position 3 has been measured at distance = 6100
-	}else if(abs(distance > 4242){ // Unknown value here. Testing needed.
-		centerPos = 1;
-	}else{
-		centerPos = 2;
-	}
-
-}*/
 
 task main()
 {
@@ -102,8 +43,6 @@ task main()
 	nMotorEncoder[FrontR] = 0;
 	nMotorEncoder[car] = 0;
 	nMotorEncoder[elevator] = 0;
-	nMotorEncoder[sweeper] = 0;
-	nMotorEncoder[deploySweep] = 0;
 
-	onRamp();
+	liftFirstStage();
 }

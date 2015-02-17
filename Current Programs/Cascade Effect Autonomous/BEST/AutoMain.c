@@ -179,7 +179,7 @@ int juliet(Signls *sigList);
 
 void onFloor(Signls *sigList)
 {
-	servo[dropperServo] = 100;
+	servo[dropperServo] = 55;
 	liftFirstStage();
 	move(80, 30, 1, 0);
 	turn(15, 30);
@@ -194,30 +194,25 @@ void onFloor(Signls *sigList)
 
 	if(world.centerPos == 1)
 	{
-		/*turn(-40, 50);
-		if (DEBUG) wait1Msec(500);
-		move(140, 50);
+		turn(-50, 35);
 
-		if (DEBUG) wait1Msec(500);
-		turn(-75, 50);
-		move(5, 50);
+		move(75, 35);
+
+		turn(-55, 35);
+		wait1Msec(250);
 		liftTallArm();
 
-		move(-10, 50);
+		move(-24, 30);
+		wait1Msec(1000);
 		dumpBalls();
-		move(15, 50);
+		move(15, 30);
 		lowerTallArm();
-		if (DEBUG) wait1Msec(500);
-		hitKickstand();*/
 
-
-		move(27, 30);
-		turn(70 , 50);
 
 	}
 	else if(world.centerPos == 2)
 	{
-		/*turn(-70, 35);
+		turn(-70, 35);
 		move(19, 35);
 		turn(-65, 35);
 		liftTallArm();
@@ -227,28 +222,21 @@ void onFloor(Signls *sigList)
 		move(15, 30);
 		lowerTallArm();
 		if (DEBUG) wait1Msec(500);
-		hitKickstand();*/
-		turn(40 , 30); //just kickstand
-		move(50, 50);
-		//turn(-80, 35);
-		//move(75, 90);
+		//hitKickstand();
 	}
 	else if(world.centerPos == 3)
 	{
-		/*turn(70, 35);
-		move(42, 35);
-		turn(83, 35);
+		turn(70, 35);
+		move(23, 35);
+		turn(85, 40);
 		liftTallArm();
-		move(-12, 20);
+		move(-13, 20);
+		wait1Msec(100);
 		dumpBalls();
 		move(15, 30);
 		lowerTallArm();
-		if (DEBUG) wait1Msec(500);
-		hitKickstand();*/
-		turn(70 , 30); //just kickstand
-		move(60, 30);
-		turn(-80, 30);
-		move(75, 50);
+
+
 	}
 	else writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 }
@@ -356,8 +344,6 @@ task main()
 	nMotorEncoder[FrontR] = 0;
 	nMotorEncoder[car] = 0;
 	nMotorEncoder[elevator] = 0;
-	nMotorEncoder[sweeper] = 0;
-	nMotorEncoder[deploySweep] = 0;
 
 	world.centerPos = 0;
 

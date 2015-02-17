@@ -34,28 +34,28 @@ task main()
 	while(1)
 	{
 		getJoystickSettings(joystick);
-		//writeDebugStreamLine("encoder value: %d" , nMotorEncoder[elevator] );
+		writeDebugStreamLine("encoder value: %d" , nMotorEncoder[car] );
 
 		if(joy1Btn(10))
-			nMotorEncoder[elevator] = 0;
+			nMotorEncoder[car] = 0;
 
 		if(joy1Btn(4))
 		{
 			writeDebugStreamLine("down");
-			servo[dropperServo] = 130;
-			//motor[elevator] = -90;
+			//servo[dropperServo] = 130;
+			motor[car] = -90;
 		}
 		else if(joy1Btn(2))
 		{
 			writeDebugStreamLine("up");
-			servo[dropperServo] = 55;
-			//motor[elevator] = 90;
+			//servo[dropperServo] = 55;
+			motor[car] = 90;
 		}
 		else
 		{
 			//motor[deploySweep] = 0;
 			//motor[arm] = 0;
-			//motor[elevator] = 0;
+			motor[elevator] = 0;
 		}
 
 		//if(joy1Btn(1))

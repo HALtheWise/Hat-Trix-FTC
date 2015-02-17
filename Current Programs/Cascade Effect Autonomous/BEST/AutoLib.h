@@ -50,7 +50,7 @@ void dumpBalls(bool fastMode){
 
 	servo[dropperServo] = DUMPING_POS;
 	if(!fastMode){
-		wait1Msec(4000);
+		wait1Msec(2000);
 		servo[dropperServo] = HOLDING_POS;
 	}
 	//wait1Msec(10000);
@@ -83,20 +83,20 @@ void liftFirstStage() {
 }
 
 void liftTallArm() {
-	const int TIMEOUT = 4000;
-	const int LIFT_HEIGHT = 3800;
+	const int TIMEOUT = 6000;
+	const int LIFT_HEIGHT = 5000;
 
 	nMotorEncoder[car] = 0;
 	ClearTimer(T1);
 	while(abs(nMotorEncoder[car]) < LIFT_HEIGHT && time1[T1] < TIMEOUT){
-		motor[car] = -90;
+		motor[car] = -100;
 	}
 	motor[car] = 0;
 	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lifting arm timed out after travelling %d", nMotorEncoder[car]);
 }
 
 void lowerTallArm() {
-	const int TIMEOUT = 4000;
+	const int TIMEOUT = 6000;
 
 	ClearTimer(T1);
 	while(nMotorEncoder[car] < 0 && time1[T1] < TIMEOUT){

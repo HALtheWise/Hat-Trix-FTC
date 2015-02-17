@@ -117,6 +117,7 @@ void actionTakeADump(Command cmd, EventList *eList, int res_id )
 {
 	const int DUMPING_POS = 130;
 	const int HOLDING_POS = 55;
+	static int state = 1;
 	switch(cmd)
 	{
 	case C_ABORT:
@@ -136,12 +137,16 @@ void actionTakeADump(Command cmd, EventList *eList, int res_id )
 		if(get_owner(RES_DELIVERY) == AI_DELIVERY)
 		{
 			if( isPressed( eList, takeADump )){
-				writeDebugStreamLine("Dropper Opening");
-				servo[dropperServo] = DUMPING_POS;
+				//writeDebugStreamLine("Dropper Opening");
+				//servo[dropperServo] = DUMPING_POS;
+			state *= -1;
 			}
-			if( isPressed( eList, endDelivery ))	{
-				writeDebugStreamLine("Dropper closing");
+
+			if(state == 1){
 				servo[dropperServo] = HOLDING_POS;
+			}
+			else if(state == -1){
+				servo[dropperServo] = DUMPING_POS;
 			}
 		}
 		break;
@@ -572,7 +577,6 @@ task main()
 	ClearTimer(T1);
 	ClearTimer(T2);
 	ClearTimer(T4);
-	servo[dropperServo] = 55;
 
 
 	while(1)
