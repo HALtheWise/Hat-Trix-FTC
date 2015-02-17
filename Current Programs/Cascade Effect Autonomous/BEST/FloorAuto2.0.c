@@ -42,20 +42,22 @@ typedef struct {
 
 int centerPos = -1;
 
-void translate(CenterRelativePos input, FieldPos *result){
-	writeDebugStreamLine("Input was %d, %d", input.x, input.y);
-	const float FIELD_SIZE = 365.76;
-	float angle; //Heading of center structure with respect to field coords.
+float getCenterAngle(){
 	if (centerPos == 1){
-		angle = degreesToRadians(-90);
+		return degreesToRadians(-90);
 	}else if (centerPos == 2){
-		angle = degreesToRadians(-45);
+		return degreesToRadians(-45);
 	}else if (centerPos == 1){
-		angle = 0;
+		return 0;
 	}else{
 		writeDebugStreamLine("Warning: center position not detected yet!");
 	}
-	writeDebugStreamLine("angle is (degrees) %d", radiansToDegrees(angle));
+}
+
+void translate(CenterRelativePos input, FieldPos *result){
+	writeDebugStreamLine("Input was %d, %d", input.x, input.y);
+	const float FIELD_SIZE = 365.76;
+	float angle = getCenterAngle(); //Heading of center structure with respect to field coords.
 	result->x = FIELD_SIZE/2;
 	result->y = FIELD_SIZE/2;
 	result->theta = angle;
@@ -95,7 +97,7 @@ void floorStart(){
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
-	turnAndMoveTo(GPS_awayFromWall, speed_normal, Backward);
+	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
 	if (DEBUG) wait1Msec(4000);
 	else wait1Msec(200);
@@ -108,9 +110,9 @@ void floorStart(){
 
 		if(DOLIFT2) liftTallArm();
 
-		turnAndMoveTo(GPS_centerDumpPosition, 40, Backward);
+		turnAndMoveTo(GPS_centerDumpPosition, 35, Backward);
 
-		wait1Msec(1000);
+		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
