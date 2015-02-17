@@ -51,6 +51,7 @@ float getCenterAngle(){
 		return 0;
 	}else{
 		writeDebugStreamLine("Warning: center position not detected yet!");
+		return 0;
 	}
 }
 
