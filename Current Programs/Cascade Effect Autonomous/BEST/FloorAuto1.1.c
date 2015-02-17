@@ -41,8 +41,8 @@ typedef struct {
 int centerPos = -1;
 
 void translate(CenterRelativePos input, FieldPos *result){
-	const float FIELD_SIZE = 358.5; //Measured
-	float angle = 0; //Heading of center structure with respect to field coords.
+	const float FIELD_SIZE = 365.76;
+	float angle; //Heading of center structure with respect to field coords.
 	if (centerPos == 1){
 		angle = degreesToRadians(-90);
 	}else if (centerPos == 2){
@@ -70,59 +70,57 @@ void initializeRobot()
 {
 	clearDebugStream();
 	gyroCal();
-	servo[dropperServo] = HOLDING_POS;
 	//servo[grabberServo]=???;
+	//servo[dropperServo] =???;
 	return;
 }
 
 void floorStart(){
-	const int speed_normal = 50;
-	const int speed_slower = 40;
-	const int speed_deliver = 35;
 	FieldPos p;
 
+	servo[dropperServo] = HOLDING_POS; //Need to update number
 	if(DOLIFT) liftFirstStage();
 
 //	centerPos = juliet(); //Take IR beacon reading
 	centerPos = 1; //Override for testing purposes
+
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
 	if (DEBUG) wait1Msec(4000);
 	else wait1Msec(200);
 
-	turnAndMoveTo(GPS_floorStartingAwayFromWall, speed_normal);
 	if(centerPos == 1)
 	{
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal);
+		turnAndMoveTo(GPS_prepareForCenterDump, 50);
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
 		liftTallArm();
 
-		turnAndMoveTo(GPS_centerDumpPosition, speed_deliver);
+		turnAndMoveTo(GPS_centerDumpPosition, 30);
 
 		dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_slower, Backward);
+		turnAndMoveTo(GPS_prepareForCenterDump, 40, Backward);
 		lowerTallArm();
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+		turnAndMoveTo(GPS_prepareForKickstand, 40);
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		turnAndMoveTo(GPS_hitKickstand, speed_slower);
+		turnAndMoveTo(GPS_hitKickstand, 40);
 
 		if (DEBUG){
 			wait1Msec(2000);
-			turnAndMoveTo(GPS_floorStartingPosition, speed_normal);
+			turnAndMoveTo(GPS_floorStartingPosition, 50);
 			turnToHeading(degreesToRadians(0), 40);
 		}
 	}

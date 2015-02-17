@@ -1,6 +1,6 @@
 
 FieldPos GPS_floorStartingPosition = {22.9, 213.0, degreesToRadians(0)};
-FieldPos GPS_floorStartingAwayFromWall = {40, 213.0, degreesToRadians(0)};
+
 
 CenterRelativePos GPS_prepareForCenterDump = {-100, 0};
 CenterRelativePos GPS_centerDumpPosition = {-70, 0};
