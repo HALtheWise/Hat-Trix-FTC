@@ -23,6 +23,11 @@
 
 //#include "BALL-E overrides.c" //COMMENT OUT THIS LINE BEFORE RUNNING ON COMPETITION ROBOT
 
+typedef struct {
+	float x; //(0,0) is at the very center of the field. Positive x extends away from our color center goal.
+	float y; //Positive y extends away from our color kickstand
+} CenterRelativePos;
+
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "TrackerAutoLib.h"
@@ -35,14 +40,9 @@
 
 int centerPos = -1;
 
-typedef struct {
-	float x; //(0,0) is at the very center of the field. Positive x extends away from our color center goal.
-	float y; //Positive y extends away from our color kickstand
-} CenterRelativePos;
-
 void translate(CenterRelativePos input, FieldPos *result){
 	const float FIELD_SIZE = 365.76;
-	float angle = 0.0; //Heading of center structure with respect to field coords.
+	float angle; //Heading of center structure with respect to field coords.
 	if (centerPos == 1){
 		angle = degreesToRadians(-90);
 	}else if (centerPos == 2){
@@ -77,22 +77,13 @@ void initializeRobot()
 
 void floorStart(){
 	FieldPos p;
-	memset(&p, 0, sizeof(p));
 
-	servo[dropperServo] = 240;
+	//servo[dropperServo] = 240; //Need to update number
 	if(DOLIFT) liftFirstStage();
 
-	p.x = 100;	p.y = 213.0; //Forward 80cm
-	moveTo(p, 40);
-
-	turnToHeading(degreesToRadians(-27), 30);
-
 //	centerPos = juliet(); //Take IR beacon reading
+	centerPos = 1; //Override for testing purposes
 
-
-	centerPos = 1;
-	//fail! You forgot to comment the BALL-E import!
-//
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
@@ -101,34 +92,21 @@ void floorStart(){
 
 	if(centerPos == 1)
 	{
-		p.x = 171; p.y = 265;
-		turnAndMoveTo(p, 50);
-
+		turnAndMoveTo(GPS_prepareForCenterDump, 50);
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		turnToHeading(degreesToRadians(-90), 40, Backward);
-
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
-
-		//turn(-45, 25);
 		liftTallArm();
 
-		p.x += 0; p.y -= 33;
-		moveTo(p, 30, Backward, NO_STEERING);
-		//move(-33, 30);
+		turnAndMoveTo(GPS_centerDumpPosition, 30);
+
 		dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-
-		p.x += 0; p.y += 15;
-		moveTo(p, 30, Forward, NO_STEERING);
-		//move(15, 30);
+		turnAndMoveTo(GPS_prepareForCenterDump, 40, Backward);
 		lowerTallArm();
-
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
