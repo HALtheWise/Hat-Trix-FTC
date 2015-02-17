@@ -121,8 +121,8 @@ void floorStart(){
 
 		if(DOLIFT2) liftTallArm();
 
-		turnTo(GPS_centerDumpPosition, 40, Backward);
-		moveTo(GPS_centerDumpPosition, 35, Backward);
+		turnTo(GPS_centerDumpPosition1, 40, Backward);
+		moveTo(GPS_centerDumpPosition1, 35, Backward);
 
 		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
@@ -166,8 +166,8 @@ void floorStart(){
 
 		if(DOLIFT2) liftTallArm();
 
-		turnTo(GPS_centerDumpPosition, 40, Backward);
-		moveTo(GPS_centerDumpPosition, 35, Backward);
+		turnTo(GPS_centerDumpPosition3, 40, Backward);
+		moveTo(GPS_centerDumpPosition3, 35, Backward);
 
 		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
