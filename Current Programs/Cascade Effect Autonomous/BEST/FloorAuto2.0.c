@@ -1,7 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S4,     seeker,         sensorI2CCustom)
+#pragma config(Sensor, S4,     sonar,          sensorSONAR)
 #pragma config(Motor,  motorA,          sweeper1,      tmotorNXT, openLoop, reversed)
 #pragma config(Motor,  motorB,          sweeper2,      tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
@@ -33,9 +33,10 @@ typedef struct {
 #include "TrackerAutoLib.h"
 #include "AutoLib.h"
 #include "Field Positions.h"
+#include "USstuff.h"
 //#include "IRstuff.c"
 
-#define DEBUG true
+#define DEBUG false
 #define DOLIFT1 false
 #define DOLIFT2 true
 
@@ -89,19 +90,19 @@ void floorStart(){
 	if(DOLIFT1) liftFirstStage();
 
 //	centerPos = juliet(); //Take IR beacon reading
-	centerPos = 1; //Override for testing purposes
-
+//	centerPos = 1; //Override for testing purposes
+	centerPos = julietUS();
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
-	turnAndMoveTo(GPS_awayFromWall, speed_normal);
+	turnAndMoveTo(GPS_awayFromWall, speed_normal, Backward);
 
 	if (DEBUG) wait1Msec(4000);
 	else wait1Msec(200);
 
 	if(centerPos == 1)
 	{
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal);
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
@@ -136,6 +137,7 @@ void floorStart(){
 	}
 	else if(centerPos == 2)///////////////////////////////////////////////////////////////////////////////////////////
 	{
+		return;
 		//It just so happens that the position for delivery of the POSITION=2 ball is exactly the same as the IR sensing position.
 		//p.x = 100; p.y = 213;
 		//turnAndMoveTo(p, 50);
@@ -185,6 +187,7 @@ void floorStart(){
 	}
 	else if(centerPos == 3)///////////////////////////////////////////////////////////////////////////////////////////
 	{
+		return;
 		p.x = 100; p.y = 155;
 		turnAndMoveTo(p, 50);
 
@@ -241,9 +244,9 @@ task main()
 
 	resetTracker();
 	//Floor start tracking positions
-	robot.x = 22.9; //9in, defined from robot
-	robot.y = 213.0; //84in, measured
-	robot.theta = 0.0;
+	robot.x = GPS_floorStartingPositionUS.x;
+	robot.y = GPS_floorStartingPositionUS.y;
+	robot.theta = GPS_floorStartingPositionUS.theta;
 	StartTask(trackRobot);
 
 	floorStart();
