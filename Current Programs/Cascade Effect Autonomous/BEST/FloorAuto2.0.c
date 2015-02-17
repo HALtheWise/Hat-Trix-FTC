@@ -98,9 +98,7 @@ void initializeRobot()
 }
 
 void floorStart(){
-	FieldPos p;
-
-	const int speed_normal = 50;
+	const int speed_normal = 60;
 
 	if(DOLIFT1) liftFirstStage();
 
@@ -138,6 +136,11 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
+		turnAndMoveTo(GPS_navPoint1, speed_normal);
+		turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+		grabGoal();
+		return;
+
 		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
 		if (DEBUG) wait1Msec(2000);
@@ -154,98 +157,40 @@ void floorStart(){
 	else if(centerPos == 2)///////////////////////////////////////////////////////////////////////////////////////////
 	{
 		return;
-		//It just so happens that the position for delivery of the POSITION=2 ball is exactly the same as the IR sensing position.
-		//p.x = 100; p.y = 213;
-		//turnAndMoveTo(p, 50);
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-		turnToHeading(degreesToRadians(-35), 40, Backward);
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-		liftTallArm();
-
-		p.x += 50; p.y += -20;
-		moveTo(p, 30, Backward, NO_STEERING);
-		dumpBalls();
-
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
-
-
-		p.x -= 20; p.y += 5;
-		moveTo(p, 30, Forward, NO_STEERING);
-		lowerTallArm();
-
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-
-		p.x = 90; p.y = 175;
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
-
-		p.x = 180; p.y = 145; //Hit kickstand
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG){
-			wait1Msec(2000);
-			p.x = 22; p.y = 213; //Return to base
-			turnAndMoveTo(p, 50);
-			turnToHeading(degreesToRadians(0), 40);
-		}
 	}
 	else if(centerPos == 3)///////////////////////////////////////////////////////////////////////////////////////////
 	{
-		return;
-		p.x = 100; p.y = 155;
-		turnAndMoveTo(p, 50);
-
-		if (DEBUG) wait1Msec(1000);
+		//turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
+		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		turnToHeading(degreesToRadians(0), 40, Backward);
+		if(DOLIFT2) liftTallArm();
 
-		if (DEBUG) wait1Msec(1000);
+		turnTo(GPS_centerDumpPosition, 40, Backward);
+		moveTo(GPS_centerDumpPosition, 35, Backward);
 
-		liftTallArm();
-
-		p.x += 30; p.y += 0;
-		moveTo(p, 30, Backward, NO_STEERING);
-		dumpBalls();
+		wait1Msec(2000);
+		if(DOLIFT2) dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-
-		p.x -= 15; p.y += 0;
-		moveTo(p, 30, Forward, NO_STEERING);
-		lowerTallArm();
-
-
-		if (DEBUG) wait1Msec(1000);
-		else wait1Msec(200);
-
-
-		/*p.x = 110;*/ p.y = 130;
-		turnAndMoveTo(p, 50);
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
+		if(DOLIFT2) lowerTallArm();
 
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		p.x = 195; /*p.y = 155;*/ //Hit kickstand
-		turnAndMoveTo(p, 50);
+		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+
+		if (DEBUG) wait1Msec(2000);
+		else wait1Msec(200);
+
+		turnAndMoveTo(GPS_hitKickstand, speed_normal);
 
 		if (DEBUG){
 			wait1Msec(2000);
-			p.x = 22; p.y = 213; //Return to base
-			turnAndMoveTo(p, 50);
+			turnAndMoveTo(GPS_floorStartingPosition, 50);
 			turnToHeading(degreesToRadians(0), 40);
 		}
 	}

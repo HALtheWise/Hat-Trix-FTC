@@ -45,15 +45,6 @@ float neededTurn(FieldPos target, DrivingDirection forward = Forward);
 
 
 //----------- Function Definitions ----------//
-void grabGoal(){
-	const int GRABBED_POSITION = 0;
-	servo[grabberServo] = GRABBED_POSITION;
-}
-
-void releaseGoal(){
-	const int RELEASED_POSITION = 70;
-	servo[grabberServo] = RELEASED_POSITION;
-}
 
 void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 	turnTo(target, power, forward);
