@@ -78,7 +78,7 @@ void initializeRobot()
 void floorStart(){
 	FieldPos p;
 
-	//servo[dropperServo] = 240; //Need to update number
+	servo[dropperServo] = HOLDING_POS; //Need to update number
 	if(DOLIFT) liftFirstStage();
 
 //	centerPos = juliet(); //Take IR beacon reading

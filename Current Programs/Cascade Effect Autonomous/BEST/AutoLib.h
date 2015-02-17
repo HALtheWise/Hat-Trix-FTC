@@ -44,9 +44,9 @@ void hitKickstand();
 
 //----------- Function Definitions ----------//
 
+const int HOLDING_POS = 55;
 void dumpBalls(bool fastMode){
 	const int DUMPING_POS = 130;
-	const int HOLDING_POS = 55;
 
 	servo[dropperServo] = DUMPING_POS;
 	if(!fastMode){
