@@ -20,8 +20,8 @@ void initPositions(){
 	GPS_mediumGoalPosition.x = 271; GPS_mediumGoalPosition.y = 35; GPS_mediumGoalPosition.theta = 0;
 	GPS_navPoint1.x = 271; GPS_navPoint1.y = 255; GPS_navPoint1.theta = 0;
 
-	GPS_prepareForCenterDump.x = -80; GPS_prepareForCenterDump.y = 0;
-	GPS_centerDumpPosition.x = -54; GPS_centerDumpPosition.y = 5;
+	GPS_prepareForCenterDump.x = -90; GPS_prepareForCenterDump.y = 0;
+	GPS_centerDumpPosition.x = -57; GPS_centerDumpPosition.y = 5;
 	GPS_prepareForKickstand.x = -80; GPS_prepareForKickstand.y = -35;
 	GPS_hitKickstand.x = 20; GPS_hitKickstand.y = -35;
 }

@@ -75,6 +75,18 @@ void turnAndMoveTo (CenterRelativePos target, int power, DrivingDirection forwar
 		turnAndMoveTo(target2, power, forward);
 }
 
+void turnTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
+		FieldPos target2;
+		translate(target, target2);
+		turnTo(target2, power, forward);
+}
+
+void moveTo (CenterRelativePos target, int power, DrivingDirection forward = Forward){
+		FieldPos target2;
+		translate(target, target2);
+		moveTo(target2, power, forward);
+}
+
 void initializeRobot()
 {
 	initPositions();
@@ -111,7 +123,8 @@ void floorStart(){
 
 		if(DOLIFT2) liftTallArm();
 
-		turnAndMoveTo(GPS_centerDumpPosition, 35, Backward);
+		turnTo(GPS_centerDumpPosition, 40, Backward);
+		moveTo(GPS_centerDumpPosition, 35, Backward);
 
 		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();

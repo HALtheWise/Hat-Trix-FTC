@@ -105,7 +105,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 
 		float fwdpower = power;
 		if(glide){
-			const float accelLimit = 1.0; //Units of % / cm
+			const float accelLimit = 0.7; //Units of % / cm
 			if (toGo < 30) {
 				float cap = 10 + accelLimit * toGo;
 				fwdpower = (cap < fwdpower) ? cap : fwdpower;
