@@ -22,7 +22,7 @@ void resetGyro();
 //*
 //*	gyroCal() returns the current offset of the gyro sensor
 //*	assumes the gyro has already been initialized
-//*  Blocks for at least 250 msec.
+//*  Blocks for at least 1 second.
 //*
 //**********************************************************
 
@@ -30,15 +30,15 @@ float gyroCal()
 {
 	int sum = 0;
 
-	// Take 50 readings and average them out
-	for (int i = 0; i < 50; i++)
+	// Take 200 readings and average them out
+	for (int i = 0; i < 200; i++)
 	{
 		sum += SensorValue(S2);
 		wait1Msec(5);
 	}
 
 	// Store new offset
-	gyroOffset = (sum / 50.0);
+	gyroOffset = (sum / 200.0);
 
 	ClearTimer(T2);			// reset gyro timer
 
