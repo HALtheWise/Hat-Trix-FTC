@@ -251,12 +251,12 @@ task main()
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;
+
 	resetTracker();
-	//Floor start tracking positions
 	robot.x = GPS_floorStartingPositionUS.x;
 	robot.y = GPS_floorStartingPositionUS.y;
 	robot.theta = GPS_floorStartingPositionUS.theta;
-	StartTask(trackRobot);
+	StartTask(trackRobot); //Begin GPS tracking
 
 	floorStart();
 
