@@ -37,7 +37,7 @@ typedef struct {
 //#include "IRstuff.c"
 
 #define DEBUG false
-#define DOLIFT1 false
+#define DOLIFT1 true
 #define DOLIFT2 true
 
 int centerPos = -1;
@@ -102,11 +102,10 @@ void floorStart(){
 	const int speed_slower = 45;
 	const int speed_precise = 35;
 
-	if(DOLIFT1) liftFirstStage();
-
-	//	centerPos = juliet(); //Take IR beacon reading
 	//	centerPos = 1; //Override for testing purposes
 	centerPos = julietUS();
+
+	if(DOLIFT1) liftFirstStage();
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
