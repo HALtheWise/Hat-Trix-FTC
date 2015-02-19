@@ -35,7 +35,7 @@ void	mot	(int leftPow, int rightPow);
 int  move	(float dist, float power, bool hold = true, bool glide = false, bool stopAtEnd = true);
 void turn	(float deg, float power);
 void Stop	(bool hold);
-void liftFirstStage();
+void liftFirstStage(bool nonBlocking = false);
 void liftTallArm ();
 void lowerTallArm();
 void dumpBalls(bool fastMode = false);
@@ -72,9 +72,26 @@ void grabGoal(){
 	servo[grabberServo] = 127;
 }
 
-void liftFirstStage() {
-	const int TIMEOUT = 7000;
+bool firstStageIsLifted = false;
+
 	const int LIFT_HEIGHT = -10900;
+void liftFirstStagePart2(){
+	const int TIMEOUT = 3000;
+	ClearTimer(T1);
+	while(nMotorEncoder[elevator] < LIFT_HEIGHT+1000 && time1[T1] < TIMEOUT){
+		motor[elevator] = 100;
+	}
+	motor[elevator] = 0;
+}
+
+task parallelLiftFirstStage(){
+	liftFirstStagePart2();
+firstStageIsLifted = true;
+}
+
+void liftFirstStage(bool nonBlocking) {
+	firstStageIsLifted = false;
+	const int TIMEOUT = 7000;
 
 	nMotorEncoder[elevator] = 0;
 	ClearTimer(T1);
@@ -83,13 +100,15 @@ void liftFirstStage() {
 	}
 	motor[elevator] = 0;
 
-	ClearTimer(T1);
-	while(nMotorEncoder[elevator] < LIFT_HEIGHT+1000 && time1[T1] < TIMEOUT){
-		motor[elevator] = 100;
+	if (nonBlocking) {
+		StartTask(parallelLiftFirstStage);
 	}
-	motor[elevator] = 0;
+	else{
+		liftFirstStagePart2();
+		firstStageIsLifted = true;
+	}
 
-	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lifting arm timed out after travelling %d", nMotorEncoder[elevator]);
+	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lifting first stage timed out after travelling %d", nMotorEncoder[elevator]);
 }
 
 void liftTallArm() {

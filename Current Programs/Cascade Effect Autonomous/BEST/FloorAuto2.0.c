@@ -98,9 +98,12 @@ void initializeRobot()
 }
 
 void floorStart(){
+	const int speed_fast = 70;
 	const int speed_normal = 60;
 	const int speed_slower = 45;
 	const int speed_precise = 35;
+
+	const float GRAB_GOAL = true;
 
 	//	centerPos = 1; //Override for testing purposes
 	centerPos = julietUS();
@@ -137,9 +140,9 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		if (true){
-			turnAndMoveTo(GPS_navPoint1, speed_normal);
-			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+		if (GRAB_GOAL){
+			turnAndMoveTo(GPS_navPoint1, speed_fast);
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 			grabGoal();
 		}
 		else{
@@ -175,9 +178,10 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		if (true){
-			turnAndMoveTo(GPS_navPoint1, speed_normal);
-			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+		if (GRAB_GOAL){
+			turnAndMoveTo(GPS_navPoint1, speed_fast);
+			wait1Msec(100);
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 			grabGoal();
 		}
 		else{
@@ -194,7 +198,7 @@ void floorStart(){
 	{
 		//turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+		//else wait1Msec(200);
 
 		if(DOLIFT2) liftTallArm();
 
@@ -205,20 +209,28 @@ void floorStart(){
 		if(DOLIFT2) dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+		//else wait1Msec(200);
 
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
 		if(DOLIFT2) lowerTallArm();
 
 		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+		//else wait1Msec(200);
 
-		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+		if(GRAB_GOAL){
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal, Backward);
+			wait1Msec(100);
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
+			grabGoal();
+		}
+		else{
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+			if (DEBUG) wait1Msec(2000);
+			else wait1Msec(200);
 
-		turnAndMoveTo(GPS_hitKickstand, speed_normal);
+			turnAndMoveTo(GPS_hitKickstand, speed_normal);
+		}
 	}
 	else writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 }
