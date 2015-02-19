@@ -38,6 +38,7 @@ typedef enum {
 	MODE_CENTER_ONLY,
 	MODE_MEDIUM_ALWAYS,
 	MODE_KICKSTAND_ALWAYS,
+	MODE_DEFEND_CENTER_MEDIUM, //DO NOT USE. Doesn't work.
 } AutoMode;
 
 const AutoMode mode = MODE_MEDIUM_ALWAYS;
@@ -76,6 +77,11 @@ void floorStart(){
 	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
 	wait1Msec(inter_move_delay);
+
+	if(mode == MODE_DEFEND_CENTER_MEDIUM){
+		turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
+		wait1Msec(500);
+	}
 
 	FieldPos target;
 	translate(GPS_prepareForCenterDump, target);
@@ -117,7 +123,7 @@ void floorStart(){
 
 	wait1Msec(inter_move_delay);
 
-	if (mode == MODE_MEDIUM_ALWAYS){
+	if (mode == MODE_MEDIUM_ALWAYS || mode == MODE_DEFEND_CENTER_MEDIUM){
 		if (centerPos == 1 || centerPos == 2){ //Backside navigation
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
 			}else {//Frontside navigation

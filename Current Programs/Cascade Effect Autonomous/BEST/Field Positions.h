@@ -5,6 +5,7 @@ FieldPos GPS_awayFromWall;
 FieldPos GPS_awayFromWallUS;
 FieldPos GPS_mediumGoalPosition;
 FieldPos GPS_navPoint1;
+FieldPos GPS_defendPoint;
 
 
 CenterRelativePos GPS_prepareForCenterDump;
@@ -20,6 +21,8 @@ void initPositions(){
 
 	GPS_mediumGoalPosition.x = 271; GPS_mediumGoalPosition.y = 20; GPS_mediumGoalPosition.theta = 0;
 	GPS_navPoint1.x = 271; GPS_navPoint1.y = 255; GPS_navPoint1.theta = 0;
+
+	GPS_defendPoint.x = 80; GPS_defendPoint.y = 320; GPS_defendPoint.theta = 0;
 
 	GPS_prepareForCenterDump.x = -99; GPS_prepareForCenterDump.y = 0;
 	GPS_centerDumpPosition1.x = -65; GPS_centerDumpPosition1.y = 8;
