@@ -108,7 +108,7 @@ void floorStart(){
 	//	centerPos = 1; //Override for testing purposes
 	centerPos = julietUS();
 
-	if(DOLIFT1) liftFirstStage();
+	if(DOLIFT1) liftFirstStage(true);
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
@@ -121,8 +121,9 @@ void floorStart(){
 	{
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+		else wait1Msec(100);
 
+		while(!firstStageIsLifted){wait1Msec(5);}
 		if(DOLIFT2) liftTallArm();
 
 		turnTo(GPS_centerDumpPosition1, speed_slower, Backward);
@@ -132,13 +133,13 @@ void floorStart(){
 		if(DOLIFT2) dumpBalls();
 
 		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+		else wait1Msec(100);
 
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
 		if(DOLIFT2) lowerTallArm();
 
 		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+		else wait1Msec(100);
 
 		if (GRAB_GOAL){
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
@@ -150,7 +151,7 @@ void floorStart(){
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
 			if (DEBUG) wait1Msec(2000);
-			else wait1Msec(200);
+			else wait1Msec(100);
 
 			turnAndMoveTo(GPS_hitKickstand, speed_normal);
 		}
@@ -160,6 +161,8 @@ void floorStart(){
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
+
+		while(!firstStageIsLifted){wait1Msec(5);}
 
 		if(DOLIFT2) liftTallArm();
 
@@ -199,6 +202,8 @@ void floorStart(){
 		//turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 		if (DEBUG) wait1Msec(2000);
 		//else wait1Msec(200);
+
+		while(!firstStageIsLifted){wait1Msec(5);}
 
 		if(DOLIFT2) liftTallArm();
 

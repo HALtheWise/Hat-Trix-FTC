@@ -74,7 +74,7 @@ void grabGoal(){
 
 bool firstStageIsLifted = false;
 
-	const int LIFT_HEIGHT = -10900;
+const int LIFT_HEIGHT = -10900;
 void liftFirstStagePart2(){
 	const int TIMEOUT = 3000;
 	ClearTimer(T1);
@@ -86,7 +86,7 @@ void liftFirstStagePart2(){
 
 task parallelLiftFirstStage(){
 	liftFirstStagePart2();
-firstStageIsLifted = true;
+	firstStageIsLifted = true;
 }
 
 void liftFirstStage(bool nonBlocking) {
