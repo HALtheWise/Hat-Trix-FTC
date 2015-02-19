@@ -28,13 +28,6 @@ typedef struct {
 	float y; //Positive y extends away from our color kickstand
 } CenterRelativePos;
 
-typedef enum {
-	MODE_NO_MOVE,
-	MODE_CENTER_ONLY,
-	MODE_MEDIUM_ALWAYS,
-	MODE_KICKSTAND_ALWAYS,
-} AutoMode;
-
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "TrackerAutoLib.h"
@@ -42,6 +35,15 @@ typedef enum {
 #include "Field Positions.h"
 #include "USstuff.h"
 //#include "IRstuff.c"
+
+typedef enum {
+	MODE_NO_MOVE,
+	MODE_CENTER_ONLY,
+	MODE_MEDIUM_ALWAYS,
+	MODE_KICKSTAND_ALWAYS,
+} AutoMode;
+
+const AutoMode mode = MODE_NO_MOVE;
 
 #define DEBUG false
 #define DOLIFT1 true
@@ -109,8 +111,6 @@ void floorStart(){
 	const int speed_normal = 60;
 	const int speed_slower = 45;
 	const int speed_precise = 35;
-
-	const AutoMode mode = MODE_NO_MOVE;
 
 	if (mode == MODE_NO_MOVE){
 		liftFirstStage(false);
