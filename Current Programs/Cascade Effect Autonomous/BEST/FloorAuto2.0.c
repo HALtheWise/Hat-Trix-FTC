@@ -28,6 +28,13 @@ typedef struct {
 	float y; //Positive y extends away from our color kickstand
 } CenterRelativePos;
 
+typedef enum {
+	MODE_NO_MOVE,
+	MODE_CENTER_ONLY,
+	MODE_MEDIUM_ALWAYS,
+	MODE_KICKSTAND_ALWAYS,
+} AutoMode;
+
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "TrackerAutoLib.h"
@@ -103,13 +110,18 @@ void floorStart(){
 	const int speed_slower = 45;
 	const int speed_precise = 35;
 
-	const float GRAB_GOAL = true;
+	const AutoMode mode = MODE_NO_MOVE;
+
+	if (mode == MODE_NO_MOVE){
+		liftFirstStage(false);
+		return;
+	}
 
 	//	centerPos = 1; //Override for testing purposes
 	centerPos = julietUS();
 
 	if(DOLIFT1) liftFirstStage(true);
-	wait1Msec(600);
+	wait1Msec(400);
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 
@@ -142,12 +154,12 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(100);
 
-		if (GRAB_GOAL){
+		if (mode == MODE_MEDIUM_ALWAYS){
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
 			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 			grabGoal();
 		}
-		else{
+		else if(mode == MODE_KICKSTAND_ALWAYS){
 
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
@@ -182,13 +194,13 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		else wait1Msec(200);
 
-		if (GRAB_GOAL){
+		if (mode == MODE_MEDIUM_ALWAYS){
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
 			wait1Msec(100);
 			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 			grabGoal();
 		}
-		else{
+		else if(mode == MODE_KICKSTAND_ALWAYS){
 
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
@@ -223,13 +235,13 @@ void floorStart(){
 		if (DEBUG) wait1Msec(2000);
 		//else wait1Msec(200);
 
-		if(GRAB_GOAL){
+		if (mode == MODE_MEDIUM_ALWAYS){
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal, Backward);
 			wait1Msec(100);
 			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
 			grabGoal();
 		}
-		else{
+		else if(mode == MODE_KICKSTAND_ALWAYS){
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
 			if (DEBUG) wait1Msec(2000);
