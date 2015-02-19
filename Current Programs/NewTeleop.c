@@ -364,7 +364,7 @@ void actionElevator(Command cmd, EventList *eList, int res_id )
 void autoLiftElevator(bool reset = false){
 	static int CENTER_HEIGHT = -5000;
 	static int TALL_HEIGHT = -2000;
-	static int DOWN_HEIGHT = 0;
+	static int DOWN_HEIGHT = -50;
 
 	static int positionTarget = 0;
 	static bool goingUp = true;
@@ -375,7 +375,7 @@ void autoLiftElevator(bool reset = false){
 
 	static int lastTopHat = -1;
 	int topHat = joystick.joy2_TopHat;
-
+	//writeDebugStreamLine("%d", topHat);
 	if (moving) {
 		if((goingUp && nMotorEncoder[car] <= positionTarget) || (!goingUp && nMotorEncoder[car] >= positionTarget) ){
 			motor[car] = 0;
@@ -390,10 +390,12 @@ void autoLiftElevator(bool reset = false){
 	if (topHat == 0){
 		changed = true;
 		positionTarget = CENTER_HEIGHT;
+		actionRoller(C_ABORT, null, RES_ROLLERS);
 	}
 	if (topHat == 2 || topHat == 6){
 		changed = true;
 		positionTarget = TALL_HEIGHT;
+		actionRoller(C_ABORT, null, RES_ROLLERS);
 	}
 	if (topHat == 4){
 		changed = true;
@@ -405,6 +407,7 @@ void autoLiftElevator(bool reset = false){
 		if (goingUp) motor[car] = -100;
 		else motor[car] = 60;
 		moving = true;
+		writeDebugStreamLine("New car target is %d", positionTarget);
 	}
 }
 
@@ -435,7 +438,7 @@ void actionCar(Command cmd, EventList *eList, int res_id)
 		{
 			if( isPressed( eList, liftCar )){
 				motor[car] = UP_POWER;
-				actionRoller(C_ABORT, null, RES_ROLLERS);
+				//actionRoller(C_ABORT, null, RES_ROLLERS);
 			}
 			if( isPressed( eList, lowerCar )){
 				motor[car] = DOWN_POWER;
@@ -450,10 +453,8 @@ void actionCar(Command cmd, EventList *eList, int res_id)
 
 		break;
 
-	default:
-		if(get_owner(RES_CAR) == AI_CAR) autoLiftElevator(false);
-		break;
 	}
+	if(get_owner(RES_CAR) == AI_CAR) autoLiftElevator(false);
 }
 
 float getMultiplier(EventList *eList)
@@ -619,6 +620,7 @@ void command_all( Command cmd, EventList *eList, int res_id )
 task main()
 {
 	waitForStart();
+	nMotorEncoder[car] = 0;
 	EventList eList;
 
 	clearDebugStream();
