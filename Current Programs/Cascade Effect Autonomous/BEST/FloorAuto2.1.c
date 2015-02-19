@@ -162,6 +162,7 @@ void floorStart(){
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
 			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 			grabGoal();
+			dumpBalls();
 		}
 		else if(mode == MODE_KICKSTAND_ALWAYS){
 
@@ -262,4 +263,5 @@ task main()
 
 	int dt = nPgmTime-startTime;
 	writeDebugStreamLine("Autonomous completed in %.2f seconds", (dt)/1000.0);
+	wait1Msec(10);
 }
