@@ -72,39 +72,34 @@ void grabGoal(){
 	servo[grabberServo] = 127;
 }
 
-bool firstStageIsLifted = false;
-
-const int LIFT_HEIGHT = -10900;
-void liftFirstStagePart2(){
-	const int TIMEOUT = 3000;
-	ClearTimer(T1);
-	while(nMotorEncoder[elevator] < LIFT_HEIGHT+1000 && time1[T1] < TIMEOUT){
-		motor[elevator] = 100;
-	}
-	motor[elevator] = 0;
-}
-
 task parallelLiftFirstStage(){
 	liftFirstStage(false);
 }
 
+bool firstStageIsLifted = false;
+
 void liftFirstStage(bool nonBlocking) {
 	const int TIMEOUT = 7000;
-	firstStageIsLifted = false;
+	const int LIFT_HEIGHT = -10900;
 
+	firstStageIsLifted = false;
 
 	if (nonBlocking) {
 		StartTask(parallelLiftFirstStage);
 	}
 	else{
-
 		nMotorEncoder[elevator] = 0;
 		ClearTimer(T1);
 		while(nMotorEncoder[elevator] > LIFT_HEIGHT && time1[T1] < TIMEOUT){
 			motor[elevator] = -100;
 		}
 		motor[elevator] = 0;
-		liftFirstStagePart2();
+
+		ClearTimer(T1);
+		while(nMotorEncoder[elevator] < LIFT_HEIGHT+1000 && time1[T1] < TIMEOUT){
+			motor[elevator] = 100;
+		}
+		motor[elevator] = 0;
 		firstStageIsLifted = true;
 	}
 
