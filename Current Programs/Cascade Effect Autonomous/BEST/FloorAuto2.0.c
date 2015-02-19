@@ -43,7 +43,7 @@ typedef enum {
 	MODE_KICKSTAND_ALWAYS,
 } AutoMode;
 
-const AutoMode mode = MODE_NO_MOVE;
+const AutoMode mode = MODE_MEDIUM_ALWAYS;
 
 #define DEBUG false
 #define DOLIFT1 true
