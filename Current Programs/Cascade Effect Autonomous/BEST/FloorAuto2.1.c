@@ -134,7 +134,7 @@ void floorStart(){
 		turnAndMoveTo(GPS_hitKickstand, speed_normal);
 	}
 
-	return;
+	return; /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -260,5 +260,6 @@ task main()
 
 	floorStart();
 
-	writeDebugStreamLine("Autonomous completed in %.2f seconds", (nPgmTime-startTime)/1000.0);
+	int dt = nPgmTime-startTime;
+	writeDebugStreamLine("Autonomous completed in %.2f seconds", (dt)/1000.0);
 }
