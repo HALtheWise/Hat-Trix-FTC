@@ -358,16 +358,60 @@ void actionElevator(Command cmd, EventList *eList, int res_id )
 		}
 
 		break;
+	}
+}
 
+void autoLiftElevator(bool reset = false){
+	static int CENTER_HEIGHT = -5000;
+	static int TALL_HEIGHT = -2000;
+	static int DOWN_HEIGHT = 0;
+
+	static int positionTarget = 0;
+	static bool goingUp = true;
+	static bool moving = false;
+	if(reset){
+		moving = false;
+	}
+
+	static int lastTopHat = -1;
+	int topHat = joystick.joy2_TopHat;
+
+	if (moving) {
+		if((goingUp && nMotorEncoder[car] <= positionTarget) || (!goingUp && nMotorEncoder[car] >= positionTarget) ){
+			motor[car] = 0;
+			moving = false;
+		}
+	}
+	if (topHat == -1 || topHat == lastTopHat){
+		return;
+	}
+	lastTopHat = topHat;
+	bool changed = false;
+	if (topHat == 0){
+		changed = true;
+		positionTarget = CENTER_HEIGHT;
+	}
+	if (topHat == 2 || topHat == 6){
+		changed = true;
+		positionTarget = TALL_HEIGHT;
+	}
+	if (topHat == 4){
+		changed = true;
+		positionTarget = DOWN_HEIGHT;
+	}
+
+	if(changed){
+		goingUp = positionTarget < nMotorEncoder[car];
+		if (goingUp) motor[car] = -100;
+		else motor[car] = 60;
+		moving = true;
 	}
 }
 
 
-
-
 void actionCar(Command cmd, EventList *eList, int res_id)
 {
-	const int UP_POWER = -90;
+	const int UP_POWER = -100;
 	const int DOWN_POWER = 50;
 
 	switch(cmd)
@@ -375,6 +419,7 @@ void actionCar(Command cmd, EventList *eList, int res_id)
 	case C_ABORT:
 		if( get_owner(RES_CAR) == AI_CAR)
 		{
+			autoLiftElevator(true);
 			motor[car] = 0;
 			set_owner( res_id, AI_NONE );
 			return;
@@ -398,13 +443,16 @@ void actionCar(Command cmd, EventList *eList, int res_id)
 			}
 			if( isPressed( eList, stopCar )){
 				motor[car] = 0;
-
+				autoLiftElevator(true);
 			}
 
 		}
 
 		break;
 
+	default:
+		if(get_owner(RES_CAR) == AI_CAR) autoLiftElevator(false);
+		break;
 	}
 }
 
