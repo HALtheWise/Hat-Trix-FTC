@@ -39,8 +39,6 @@ void moveTo (FieldPos target, int power, DrivingDirection forward = Forward, flo
 void turnTo (FieldPos target, int power, DrivingDirection forward = Forward);
 void turnToHeading (float heading, int power, DrivingDirection forward = Forward);
 void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = Forward);
-void grabGoal    ();
-void releaseGoal ();
 float neededTurn(FieldPos target, DrivingDirection forward = Forward);
 
 
