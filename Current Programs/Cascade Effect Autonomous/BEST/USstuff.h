@@ -2,12 +2,16 @@
 
 int julietUS(){
 	int reading = SensorValue[sonar];
+	int centerPosition = 0;
 	if(reading >= 130 && reading < 150){
-		return 1;
+		centerPosition = 1;
 	}
 	else if(reading < 130 && reading > 110){
-		return 3;
+		centerPosition = 3;
 	}else{
-		return 2;
+		centerPosition = 2;
 	}
+
+	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPosition);
+	return centerPosition;
 }

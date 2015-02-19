@@ -42,7 +42,6 @@ typedef enum {
 
 const AutoMode mode = MODE_MEDIUM_ALWAYS;
 
-#define DEBUG false
 #define DOLIFT1 true
 #define DOLIFT2 true
 
@@ -69,7 +68,6 @@ void floorStart(){
 	}
 
 	centerPos = julietUS();
-	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 	//	centerPos = 1; //Override for testing purposes
 
 	if(DOLIFT1) liftFirstStage(true); 	// Lift first stage extension in parallel
@@ -77,14 +75,12 @@ void floorStart(){
 
 	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
-	if (DEBUG) wait1Msec(4000);
-	else wait1Msec(inter_move_delay);
+	wait1Msec(inter_move_delay);
 
 	if(centerPos == 1)
 	{
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(inter_move_delay);
+		wait1Msec(inter_move_delay);
 
 		while(!firstStageIsLifted){wait1Msec(5);}
 		if(DOLIFT2) liftTallArm();
@@ -95,14 +91,10 @@ void floorStart(){
 		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
 
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(inter_move_delay);
-
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
 		if(DOLIFT2) lowerTallArm();
 
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(inter_move_delay);
+		wait1Msec(inter_move_delay);
 
 		if (mode == MODE_MEDIUM_ALWAYS){
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
@@ -113,8 +105,7 @@ void floorStart(){
 
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
-			if (DEBUG) wait1Msec(2000);
-			else wait1Msec(inter_move_delay);
+			wait1Msec(inter_move_delay);
 
 			turnAndMoveTo(GPS_hitKickstand, speed_normal);
 		}
@@ -122,8 +113,7 @@ void floorStart(){
 	else if(centerPos == 2)///////////////////////////////////////////////////////////////////////////////////////////
 	{
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(200);
+		wait1Msec(200);
 
 		while(!firstStageIsLifted){wait1Msec(5);}
 
@@ -135,14 +125,12 @@ void floorStart(){
 		wait1Msec(2000);
 		if(DOLIFT2) dumpBalls();
 
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(inter_move_delay);
+		wait1Msec(inter_move_delay);
 
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
 		if(DOLIFT2) lowerTallArm();
 
-		if (DEBUG) wait1Msec(2000);
-		else wait1Msec(inter_move_delay);
+		wait1Msec(inter_move_delay);
 
 		if (mode == MODE_MEDIUM_ALWAYS){
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
@@ -154,8 +142,7 @@ void floorStart(){
 
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
-			if (DEBUG) wait1Msec(2000);
-			else wait1Msec(inter_move_delay);
+			wait1Msec(inter_move_delay);
 
 			turnAndMoveTo(GPS_hitKickstand, speed_normal);
 		}
@@ -163,8 +150,7 @@ void floorStart(){
 	else if(centerPos == 3)///////////////////////////////////////////////////////////////////////////////////////////
 	{
 		//turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
-		if (DEBUG) wait1Msec(2000);
-		//else wait1Msec(200);
+		//wait1Msec(200);
 
 		while(!firstStageIsLifted){wait1Msec(5);}
 
@@ -188,8 +174,7 @@ void floorStart(){
 		else if(mode == MODE_KICKSTAND_ALWAYS){
 			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 
-			if (DEBUG) wait1Msec(2000);
-			else wait1Msec(inter_move_delay);
+			wait1Msec(inter_move_delay);
 
 			turnAndMoveTo(GPS_hitKickstand, speed_normal);
 		}
