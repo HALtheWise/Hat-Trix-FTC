@@ -71,18 +71,80 @@ void floorStart(){
 	//	centerPos = 1; //Override for testing purposes
 
 	if(DOLIFT1) liftFirstStage(true); 	// Lift first stage extension in parallel
-	wait1Msec(600);				// Gives time to make it impressive that we're lifting in parallel
+		wait1Msec(600);				// Gives time to make it impressive that we're lifting in parallel
 
 	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
 	wait1Msec(inter_move_delay);
+
+	FieldPos target;
+	translate(GPS_prepareForCenterDump, target);
+	if(distanceBetween(target, robot) > 50.0){ //If the robot is more than half a meter from "prepare to dump" position
+		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
+		wait1Msec(inter_move_delay);
+	}
+
+	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
+	if(DOLIFT2) liftTallArm();
+
+	switch (centerPos) //Move to ball dumping position
+	{
+	case 1:
+		turnTo(GPS_centerDumpPosition1, speed_slower, Backward);
+		moveTo(GPS_centerDumpPosition1, speed_precise, Backward);
+		break;
+
+	case 2:
+		turnTo(GPS_centerDumpPosition2, speed_slower, Backward);
+		moveTo(GPS_centerDumpPosition2, speed_precise, Backward);
+		break;
+
+	case 3:
+		turnTo(GPS_centerDumpPosition3, speed_slower, Backward);
+		moveTo(GPS_centerDumpPosition3, speed_precise, Backward);
+		break;
+
+	default:
+		writeDebugStreamLine("Detection of center structure failed in unexpected way.");
+		return;
+	}
+
+	wait1Msec(2000); //Stabilize robot
+	if(DOLIFT2) dumpBalls();
+
+	turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
+	if(DOLIFT2) lowerTallArm();
+
+	wait1Msec(inter_move_delay);
+
+	if (mode == MODE_MEDIUM_ALWAYS){
+		if (centerPos == 1 || centerPos == 2){ //Backside navigation
+			turnAndMoveTo(GPS_navPoint1, speed_fast);
+			}else {//Frontside navigation
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+		}
+		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
+		grabGoal();
+	}
+	else if(mode == MODE_KICKSTAND_ALWAYS){
+
+		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+		wait1Msec(inter_move_delay);
+
+		turnAndMoveTo(GPS_hitKickstand, speed_normal);
+	}
+
+	return;
+
+
 
 	if(centerPos == 1)
 	{
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 		wait1Msec(inter_move_delay);
 
-		while(!firstStageIsLifted){wait1Msec(5);}
+
+		if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
 		if(DOLIFT2) liftTallArm();
 
 		turnTo(GPS_centerDumpPosition1, speed_slower, Backward);
