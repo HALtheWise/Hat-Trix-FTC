@@ -109,6 +109,7 @@ void floorStart(){
 	centerPos = julietUS();
 
 	if(DOLIFT1) liftFirstStage(true);
+	wait1Msec(600);
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPos);
 

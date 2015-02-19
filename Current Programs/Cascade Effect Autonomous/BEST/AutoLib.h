@@ -85,25 +85,25 @@ void liftFirstStagePart2(){
 }
 
 task parallelLiftFirstStage(){
-	liftFirstStagePart2();
-	firstStageIsLifted = true;
+	liftFirstStage(false);
 }
 
 void liftFirstStage(bool nonBlocking) {
-	firstStageIsLifted = false;
 	const int TIMEOUT = 7000;
+	firstStageIsLifted = false;
 
-	nMotorEncoder[elevator] = 0;
-	ClearTimer(T1);
-	while(nMotorEncoder[elevator] > LIFT_HEIGHT && time1[T1] < TIMEOUT){
-		motor[elevator] = -100;
-	}
-	motor[elevator] = 0;
 
 	if (nonBlocking) {
 		StartTask(parallelLiftFirstStage);
 	}
 	else{
+
+		nMotorEncoder[elevator] = 0;
+		ClearTimer(T1);
+		while(nMotorEncoder[elevator] > LIFT_HEIGHT && time1[T1] < TIMEOUT){
+			motor[elevator] = -100;
+		}
+		motor[elevator] = 0;
 		liftFirstStagePart2();
 		firstStageIsLifted = true;
 	}
