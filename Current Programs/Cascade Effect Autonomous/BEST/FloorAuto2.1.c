@@ -29,19 +29,10 @@
 #include "USstuff.h"
 #include "Center Relative Positions.h"
 #include "Field Positions.h"
+#include "Auto GUI.h"
 //#include "IRstuff.c"
 
-
-
-typedef enum {
-	MODE_NO_MOVE,
-	MODE_CENTER_ONLY,
-	MODE_MEDIUM_ALWAYS,
-	MODE_KICKSTAND_ALWAYS,
-	MODE_DEFEND_CENTER_MEDIUM, //DO NOT USE. Doesn't work.
-} AutoMode;
-
-const AutoMode mode = MODE_MEDIUM_ALWAYS;
+AutoMode mode = MODE_MEDIUM_ALWAYS;
 
 #define DOLIFT1 true
 #define DOLIFT2 true
@@ -254,7 +245,7 @@ void floorStart(){
 task main()
 {
 	initializeRobot();
-
+	mode = getAutoMode();
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;
