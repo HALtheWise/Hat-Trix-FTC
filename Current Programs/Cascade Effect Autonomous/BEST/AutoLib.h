@@ -108,7 +108,7 @@ void liftFirstStage(bool nonBlocking) {
 
 void liftTallArm() {
 	const int TIMEOUT = 5000;
-	const int LIFT_HEIGHT = 3800;
+	const int LIFT_HEIGHT = 3900;
 
 	nMotorEncoder[car] = 0;
 	ClearTimer(T1);
