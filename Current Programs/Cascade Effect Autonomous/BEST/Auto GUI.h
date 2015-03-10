@@ -1,11 +1,11 @@
 typedef enum {
-	MODE_MEDIUM_ALWAYS,
-	MODE_NO_MOVE,
-	MODE_CENTER_ONLY,
-	MODE_KICKSTAND_ALWAYS,
+	MODE_MEDIUM_ALWAYS=0,
+	MODE_NO_MOVE=1,
+	MODE_CENTER_ONLY=2,
+	MODE_KICKSTAND_ALWAYS=3,
 
-	NUMBER_AUTO_MODES, //Not an autonomous mode. All elements above this accessable from buttons.
-	MODE_DEFEND_CENTER_MEDIUM, //DO NOT USE. Doesn't work.
+	NUMBER_AUTO_MODES=4, //Not an autonomous mode. All elements above this accessable from buttons.
+	MODE_DEFEND_CENTER_MEDIUM=100, //DO NOT USE. Doesn't work.
 } AutoMode;
 
 char* autoModeString(AutoMode amode){
@@ -43,23 +43,29 @@ AutoMode getAutoMode(){
 	eraseDisplay();
 
 	AutoMode amode = 0;
-	while(nNxtButtonPressed != 2){ // As long as the center button isn't pressed
-		if (nNxtButtonPressed == 1) amode--;
-		if (nNxtButtonPressed == 3) amode++;
-		amode = (AutoMode)(amode % NUMBER_AUTO_MODES);
-		nxtDisplayCenteredTextLine(3, "    %s    ", autoModeString(amode));
+	while(nNxtButtonPressed != 3){ // As long as the center button isn't pressed
+		if (nNxtButtonPressed == 1){ // Right button
+			amode++;
+			while(nNxtButtonPressed != -1){}
+		}
+		if (nNxtButtonPressed == 2){ // Left button
+			amode--;
+			while(nNxtButtonPressed != -1){}
+		}
+		amode = (AutoMode)(abs(amode % NUMBER_AUTO_MODES));
+		nxtDisplayTextLine(3, "%d%s    ", amode, autoModeString(amode));
 		wait1Msec(10);
 	}
-	while(nNxtButtonPressed == 2){}
+	while(nNxtButtonPressed == 3){}
 	eraseDisplay();
 	wait1Msec(2000);
-	while(nNxtButtonPressed != 2){
+	while(nNxtButtonPressed != 3){
 		nxtDisplayCenteredBigTextLine(1, "Confirm:");
-		nxtDisplayCenteredTextLine(4, "    %s    ", autoModeString(amode));
+		nxtDisplayCenteredTextLine(4, "%s    ", autoModeString(amode));
 		wait1Msec(10);
 	}
 
-
+	eraseDisplay();
 	StartTask(displayDiagnostics);
 	return amode;
 }
