@@ -46,11 +46,11 @@ AutoMode getAutoMode(){
 	while(nNxtButtonPressed != 3){ // As long as the center button isn't pressed
 		if (nNxtButtonPressed == 1){ // Right button
 			amode++;
-			while(nNxtButtonPressed != -1){}
+			while(nNxtButtonPressed != -1){wait1Msec(10);}
 		}
 		if (nNxtButtonPressed == 2){ // Left button
 			amode--;
-			while(nNxtButtonPressed != -1){}
+			while(nNxtButtonPressed != -1){wait1Msec(10);}
 		}
 		amode = (AutoMode)(abs(amode % NUMBER_AUTO_MODES));
 		nxtDisplayTextLine(3, "%d%s    ", amode, autoModeString(amode));
@@ -58,7 +58,7 @@ AutoMode getAutoMode(){
 	}
 	while(nNxtButtonPressed == 3){}
 	eraseDisplay();
-	wait1Msec(2000);
+	wait1Msec(500);
 	while(nNxtButtonPressed != 3){
 		nxtDisplayCenteredBigTextLine(1, "Confirm:");
 		nxtDisplayCenteredTextLine(4, "%s    ", autoModeString(amode));
