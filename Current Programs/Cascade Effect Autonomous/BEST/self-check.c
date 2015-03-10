@@ -59,10 +59,16 @@ bool testMotor(int mot, int enc, const string name){
 	}
 	motor[mot] = 0;
 
-	nxtDisplayCenteredTextLine(2, "Test %s:", passed ? "passed":"failed");
-	while(nNxtButtonPressed != -1){wait1Msec(5);}
+nxtDisplayCenteredTextLine(2, "Test %s:", passed ? "passed":"failed");
+	PlayTone(passed ? 2000 : 1000, 20);
+     wait1Msec(500);
+	if (!passed){
+		while(nNxtButtonPressed != -1){wait1Msec(5);}
+	}
 	while(nNxtButtonPressed != 3){wait1Msec(5);}
-	while(nNxtButtonPressed != -1){wait1Msec(5);}
+	if (!passed){
+		while(nNxtButtonPressed != -1){wait1Msec(5);}
+	}
 	return true;
 
 }
