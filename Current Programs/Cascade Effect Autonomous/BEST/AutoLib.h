@@ -44,10 +44,10 @@ void hitKickstand();
 
 //----------- Function Definitions ----------//
 
-const int HOLDING_POS = 55;
+const int HOLDING_POS = 50;
 void dumpBalls(bool fastMode){
 	const bool SMOOTH_OPEN = true;
-	const int DUMPING_POS = 130;
+	const int DUMPING_POS = 125;
 
 	if(SMOOTH_OPEN){
 		int servoPos = HOLDING_POS;
@@ -107,8 +107,8 @@ void liftFirstStage(bool nonBlocking) {
 }
 
 void liftTallArm() {
-	const int TIMEOUT = 6000;
-	const int LIFT_HEIGHT = 5000;
+	const int TIMEOUT = 5000;
+	const int LIFT_HEIGHT = 3800;
 
 	nMotorEncoder[car] = 0;
 	ClearTimer(T1);

@@ -115,8 +115,11 @@ int isPressed( EventList *eList,  int event )
 
 void actionTakeADump(Command cmd, EventList *eList, int res_id )
 {
-	const int DUMPING_POS = 130;
-	const int HOLDING_POS = 55;
+	const int DUMPING_POS = 125;
+	const int HOLDING_POS = 50;
+	const int INCREMENTS = 10;
+	const int OPEN_TIME = 500;
+	static int currentTarget = HOLDING_POS;
 	static int state = 1;
 	switch(cmd)
 	{
@@ -140,14 +143,27 @@ void actionTakeADump(Command cmd, EventList *eList, int res_id )
 				//writeDebugStreamLine("Dropper Opening");
 				//servo[dropperServo] = DUMPING_POS;
 				state *= -1;
+				ClearTimer(T2);
 			}
 
-			if(state == 1){
-				servo[dropperServo] = HOLDING_POS;
+			if(state == 1)
+			{
+				currentTarget = HOLDING_POS;
 			}
-			else if(state == -1){
-				servo[dropperServo] = DUMPING_POS;
+
+			else if(state == -1)
+			{
+				if(currentTarget < DUMPING_POS)
+				{
+					if(time1[T2] >= (OPEN_TIME/INCREMENTS))
+					{
+						currentTarget += ((DUMPING_POS - HOLDING_POS)/INCREMENTS);
+						ClearTimer(T2);
+					}
+				}
 			}
+			servo[dropperServo] = currentTarget;
+
 		}
 		break;
 
@@ -362,7 +378,7 @@ void actionElevator(Command cmd, EventList *eList, int res_id )
 }
 
 void autoLiftElevator(bool reset = false){
-	static int CENTER_HEIGHT = -5000;
+	static int CENTER_HEIGHT = -3800;
 	static int TALL_HEIGHT = -2000;
 	static int DOWN_HEIGHT = -50;
 
