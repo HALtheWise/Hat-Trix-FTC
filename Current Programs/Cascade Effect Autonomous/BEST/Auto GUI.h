@@ -55,11 +55,17 @@ AutoMode getAutoMode(){
 		amode = (AutoMode)(abs(amode % NUMBER_AUTO_MODES));
 		nxtDisplayTextLine(3, "%d%s    ", amode, autoModeString(amode));
 		wait1Msec(10);
+
+
+		getJoystickSettings(joystick);
+		if (!joystick.StopPgm){
+			break;
+		}
 	}
 	while(nNxtButtonPressed == 3){}
 	eraseDisplay();
 	wait1Msec(500);
-	while(nNxtButtonPressed != 3){
+	while(nNxtButtonPressed != 3 && joystick.StopPgm){
 		nxtDisplayCenteredBigTextLine(1, "Confirm:");
 		nxtDisplayCenteredTextLine(4, "%s    ", autoModeString(amode));
 		wait1Msec(10);
