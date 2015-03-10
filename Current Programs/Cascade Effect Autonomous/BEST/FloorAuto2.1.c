@@ -34,7 +34,7 @@
 
 AutoMode mode = MODE_MEDIUM_ALWAYS;
 
-#define DOLIFT1 true
+#define DOLIFT1 false
 #define DOLIFT2 true
 
 void initializeRobot()
