@@ -1,8 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S3,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S4,     seeker,         sensorI2CCustom)
 #pragma config(Motor,  motorA,          stuffer,       tmotorNXT, openLoop)
 #pragma config(Motor,  motorB,          deploySweep,   tmotorNXT, openLoop, encoder)
@@ -29,7 +27,7 @@ task main()
 {
 
 	clearDebugStream();
-	nMotorEncoder[deploySweep] = 0;
+	nMotorEncoder[car] = 0;
 
 	while(1)
 	{
@@ -42,20 +40,21 @@ task main()
 		if(joy1Btn(4))
 		{
 			writeDebugStreamLine("down");
-			//servo[dropperServo] = 130;
+			//servo[sweeperServo] = 200;
 			motor[car] = -90;
 		}
 		else if(joy1Btn(2))
 		{
 			writeDebugStreamLine("up");
-			//servo[dropperServo] = 55;
+			//servo[sweeperServo] = 100;
 			motor[car] = 90;
 		}
 		else
 		{
+			//servo[sweeperServo] =127;
 			//motor[deploySweep] = 0;
-			//motor[arm] = 0;
-			motor[elevator] = 0;
+			motor[car] = 0;
+			//motor[elevator] = 0;
 		}
 
 		//if(joy1Btn(1))

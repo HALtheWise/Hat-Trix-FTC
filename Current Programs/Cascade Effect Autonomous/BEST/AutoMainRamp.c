@@ -30,7 +30,7 @@
 #define TEST_IR true
 
 #include "JoystickDriver.c"
-#include "drivers/hitechnic-irseeker-v2.h"
+//#include "drivers/hitechnic-irseeker-v2.h"
 
 #include "AutoLib.h"
 

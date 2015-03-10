@@ -41,7 +41,7 @@ typedef enum {
 	MODE_DEFEND_CENTER_MEDIUM, //DO NOT USE. Doesn't work.
 } AutoMode;
 
-const AutoMode mode = MODE_MEDIUM_ALWAYS;
+const AutoMode mode = MODE_CENTER_ONLY;
 
 #define DOLIFT1 true
 #define DOLIFT2 true
