@@ -17,7 +17,7 @@
 #pragma config(Motor,  mtr_S1_C4_2,     car,           tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S3_C1_1,    grabberServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_2,    dropperServo,         tServoStandard)
-#pragma config(Servo,  srvo_S3_C1_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S3_C1_3,    sweeperServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_6,    servo6,               tServoNone)
@@ -223,6 +223,7 @@ void actionRoller(Command cmd, EventList *eList, int res_id )
 void actionSweeper(Command cmd, EventList *eList, int res_id )
 {
 	const int POWER = -100;
+	const int SERVO_POWER = 255;
 	switch(cmd)
 	{
 	case C_ABORT:
@@ -231,6 +232,7 @@ void actionSweeper(Command cmd, EventList *eList, int res_id )
 			motor[stuffer] = 0;
 			motor[lateralSweep] = 0;
 			motor[verticalSweep] = 0;
+			servo[sweeperServo] = 127;
 			set_owner( res_id, AI_NONE );
 			return;
 		}
@@ -248,12 +250,14 @@ void actionSweeper(Command cmd, EventList *eList, int res_id )
 				motor[stuffer] = POWER;
 				motor[lateralSweep] = POWER;
 				motor[verticalSweep] = POWER;
+				servo[sweeperServo] = SERVO_POWER;
 			}
 			if( isPressed( eList, sweeperStop ))	{
 				writeDebugStreamLine("arm going down");
 				motor[stuffer] = 0;
 				motor[lateralSweep] = 0;
 				motor[verticalSweep] = 0;
+				servo[sweeperServo] = 127;
 
 			}
 
