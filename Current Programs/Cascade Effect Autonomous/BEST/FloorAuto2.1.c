@@ -29,19 +29,10 @@
 #include "USstuff.h"
 #include "Center Relative Positions.h"
 #include "Field Positions.h"
+#include "Auto GUI.h"
 //#include "IRstuff.c"
 
-
-
-typedef enum {
-	MODE_NO_MOVE,
-	MODE_CENTER_ONLY,
-	MODE_MEDIUM_ALWAYS,
-	MODE_KICKSTAND_ALWAYS,
-	MODE_DEFEND_CENTER_MEDIUM, //DO NOT USE. Doesn't work.
-} AutoMode;
-
-const AutoMode mode = MODE_MEDIUM_ALWAYS
+AutoMode mode = MODE_MEDIUM_ALWAYS;
 
 #define DOLIFT1 true
 #define DOLIFT2 true
@@ -139,122 +130,12 @@ void floorStart(){
 
 		turnAndMoveTo(GPS_hitKickstand, speed_normal);
 	}
-
-	return; /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-	if(centerPos == 1)
-	{
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
-		wait1Msec(inter_move_delay);
-
-
-		if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
-		if(DOLIFT2) liftTallArm();
-
-		turnTo(GPS_centerDumpPosition1, speed_slower, Backward);
-		moveTo(GPS_centerDumpPosition1, speed_precise, Backward);
-
-		wait1Msec(2000);
-		if(DOLIFT2) dumpBalls();
-
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
-		if(DOLIFT2) lowerTallArm();
-
-		wait1Msec(inter_move_delay);
-
-		if (mode == MODE_MEDIUM_ALWAYS){
-			turnAndMoveTo(GPS_navPoint1, speed_fast);
-			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
-			grabGoal();
-			dumpBalls();
-		}
-		else if(mode == MODE_KICKSTAND_ALWAYS){
-
-			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
-
-			wait1Msec(inter_move_delay);
-
-			turnAndMoveTo(GPS_hitKickstand, speed_normal);
-		}
-	}
-	else if(centerPos == 2)///////////////////////////////////////////////////////////////////////////////////////////
-	{
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
-		wait1Msec(200);
-
-		while(!firstStageIsLifted){wait1Msec(5);}
-
-		if(DOLIFT2) liftTallArm();
-
-		turnTo(GPS_centerDumpPosition2, speed_slower, Backward);
-		moveTo(GPS_centerDumpPosition2, speed_precise, Backward);
-
-		wait1Msec(2000);
-		if(DOLIFT2) dumpBalls();
-
-		wait1Msec(inter_move_delay);
-
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
-		if(DOLIFT2) lowerTallArm();
-
-		wait1Msec(inter_move_delay);
-
-		if (mode == MODE_MEDIUM_ALWAYS){
-			turnAndMoveTo(GPS_navPoint1, speed_fast);
-			wait1Msec(inter_move_delay);
-			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
-			grabGoal();
-		}
-		else if(mode == MODE_KICKSTAND_ALWAYS){
-
-			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
-
-			wait1Msec(inter_move_delay);
-
-			turnAndMoveTo(GPS_hitKickstand, speed_normal);
-		}
-	}
-	else if(centerPos == 3)///////////////////////////////////////////////////////////////////////////////////////////
-	{
-		//turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
-		//wait1Msec(200);
-
-		while(!firstStageIsLifted){wait1Msec(5);}
-
-		if(DOLIFT2) liftTallArm();
-
-		turnTo(GPS_centerDumpPosition3, speed_normal, Backward);
-		moveTo(GPS_centerDumpPosition3, speed_precise, Backward);
-
-		wait1Msec(2000);
-		if(DOLIFT2) dumpBalls();
-
-		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
-		if(DOLIFT2) lowerTallArm();
-
-		if (mode == MODE_MEDIUM_ALWAYS){
-			turnAndMoveTo(GPS_prepareForKickstand, speed_normal, Backward);
-			wait1Msec(inter_move_delay);
-			turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
-			grabGoal();
-		}
-		else if(mode == MODE_KICKSTAND_ALWAYS){
-			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
-
-			wait1Msec(inter_move_delay);
-
-			turnAndMoveTo(GPS_hitKickstand, speed_normal);
-		}
-	}
-	else writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 }
 
 task main()
 {
 	initializeRobot();
-
+	mode = getAutoMode();
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;
