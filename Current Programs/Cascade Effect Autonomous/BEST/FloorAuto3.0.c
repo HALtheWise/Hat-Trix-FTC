@@ -100,7 +100,10 @@ void floorStart(){
 		writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 		return;
 	}
-	
+
+	navOffset = ROBOT_dumpRelativePos;
+	updateTRobot();
+
 	turnTo(pos120, speed_slower, Backward);
 
 	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
@@ -108,9 +111,11 @@ void floorStart(){
 
 	moveTo(pos120, speed_precise, Backward);
 
-
 	wait1Msec(1500); //Stabilize robot
 	if(DOLIFT2) dumpBalls();
+
+	navOffset = ROBOT_nullRelativePos;
+	updateTRobot();
 
 	turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
 	if(DOLIFT2) lowerTallArm();
@@ -122,23 +127,23 @@ void floorStart(){
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
 			}else {//Frontside navigation
 				turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
-			}
-			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
-			grabGoal();
 		}
-		else if(mode == MODE_KICKSTAND_ALWAYS){
-
-			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
-			wait1Msec(inter_move_delay);
-
-			turnAndMoveTo(GPS_hitKickstand, speed_normal);
-		}
+		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
+		grabGoal();
 	}
+	else if(mode == MODE_KICKSTAND_ALWAYS){
 
-	task main()
-	{
-		initializeRobot();
-		mode = getAutoMode();
+		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+		wait1Msec(inter_move_delay);
+
+		turnAndMoveTo(GPS_hitKickstand, speed_normal);
+	}
+}
+
+task main()
+{
+	initializeRobot();
+	mode = getAutoMode();
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;

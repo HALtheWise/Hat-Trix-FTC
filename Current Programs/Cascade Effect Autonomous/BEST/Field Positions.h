@@ -15,6 +15,9 @@ RelativePos GPS_centerDumpPosition3;
 RelativePos GPS_prepareForKickstand;
 RelativePos GPS_hitKickstand;
 
+RelativePos ROBOT_dumpRelativePos;
+RelativePos ROBOT_nullRelativePos;
+
 void set(FieldPos *pos, float x, float y, float theta = 0){
 	pos->x = x; pos->y =  y; pos->theta = theta;
 }
@@ -49,4 +52,7 @@ void initPositions(){
 	set(GPS_hitKickstand, 10, -35);
 	// GPS_prepareForKickstand.x = -85; GPS_prepareForKickstand.y = -35;
 	// GPS_hitKickstand.x = 10; GPS_hitKickstand.y = -35;
+
+	set(ROBOT_nullRelativePos, 0, 0);
+	set(ROBOT_dumpRelativePos, -30, 0, 0);
 }
