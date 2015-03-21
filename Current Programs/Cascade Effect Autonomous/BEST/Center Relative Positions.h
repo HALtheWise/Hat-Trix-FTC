@@ -37,7 +37,17 @@ void add(FieldPos base, RelativePos relative, FieldPos *result){
 
 	result->x = result->x + relative.x * cos(result.theta) - relative.y * sin(result.theta);
 	result->y = result->y + relative.y * cos(result.theta) + relative.x * sin(result.theta);
-	result->theta = result->theta + relative->theta;
+	result->theta = result->theta + relative.theta;
+}
+
+
+void subtract(FieldPos sum, RelativePos relative, FieldPos *result){
+	result.x = sum.x;
+	result.y = sum.y;
+	result.theta = base.theta - relative.theta;
+
+	result->x = result->x - relative.x * cos(result.theta) + relative.y * sin(result.theta);
+	result->y = result->y - relative.y * cos(result.theta) - relative.x * sin(result.theta);
 }
 
 void translate(RelativePos input, FieldPos *result){
