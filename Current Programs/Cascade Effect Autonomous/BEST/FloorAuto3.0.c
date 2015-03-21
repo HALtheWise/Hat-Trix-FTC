@@ -128,14 +128,14 @@ void floorStart(){
 	navOffset.theta = 0;
 	updateTRobot();
 
-	turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
+	moveTo(GPS_prepareForCenterDump, speed_normal, Forward);
 	if(DOLIFT2) lowerTallArm();
 
 	wait1Msec(inter_move_delay);
 
 	if (mode == MODE_MEDIUM_ALWAYS || mode == MODE_DEFEND_CENTER_MEDIUM){
 		if (centerPos == 1 || centerPos == 2){ //Backside navigation
-			turnAndMoveTo(GPS_navPoint1, speed_fast);
+			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
 			}else {//Frontside navigation
 				turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 		}

@@ -33,7 +33,7 @@ void initPositions(){
 	set(GPS_defendPoint, 80, 320);
 
 	set(GPS_prepareForCenterDump, -99, 0);
-	set(GPS_centerDumpPosition1, -40, 8);
+	set(GPS_centerDumpPosition1, -40, 11);
 	set(GPS_centerDumpPosition2, -36, 8);
 	set(GPS_centerDumpPosition3, -38, 4);
 
