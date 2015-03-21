@@ -483,10 +483,8 @@ float getMultiplier(EventList *eList)
 
 	if(isPressed(eList, normalSpd))
 		speedMultiplier = 1.0;
-	if(isPressed(eList, lessSpd))
+	if(isPressed(eList, lessSpd) || isPressed(eList, sensorSpeed))
 		speedMultiplier = 0.25;
-	if(isPressed(eList, moreSpd))
-		speedMultiplier= 1.80;
 
 	return speedMultiplier;
 }
@@ -569,10 +567,20 @@ void actionDrive(Command cmd, EventList *eList, int res_id )
 			lefty *= (float)getMultiplier(eList);
 			righty *= (float)getMultiplier(eList);
 
-			if (multiplier < 0.5){
+			if (multiplier < 0.3){
 				float turn = (righty - lefty) / 2.0;
 				righty += turn;
 				lefty -= turn;
+			}
+
+			static bool isSensing = false;
+			if (isPressed(eList, normalSpd)) isSensing = false;
+			if (isPressed(eList, sensorSpeed)) isSensing = true;
+
+			const int sonarThresh = 23;
+			if (isSensing && lefty+righty < 0 && SensorValue[sonar] < sonarThresh){
+				lefty = 0;
+				righty = 0;
 			}
 
 			if(getMultiplier(eList) >= 1){

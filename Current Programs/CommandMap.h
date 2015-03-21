@@ -17,7 +17,7 @@ const int lowerCar = 11;
 const int stopCar = 12;
 
 const int lessSpd = 13;
-const int moreSpd = 14;
+const int sensorSpeed = 14;
 const int normalSpd = 15;
 
 const int switchDrive = 16;
@@ -36,7 +36,7 @@ int commandMap[][] = {
 {cmndNone, cmndNone, cmndNone} ,	// JOY1_RED
 {cmndNone, cmndNone, cmndNone} , //JOY1_YELLOW
 {lessSpd, normalSpd, cmndNone} , //JOY1_LBUMP
-{moreSpd, normalSpd, cmndNone} , //JOY1_RBUMP
+{sensorSpeed, normalSpd, cmndNone} , //JOY1_RBUMP
 {release, stopGrab, cmndNone} , //JOY1_LTRIG
 {grab, stopGrab, cmndNone} , //JOY1_RTRIG
 {cmndNone, cmndNone, cmndNone} , //JOY1_BACK
