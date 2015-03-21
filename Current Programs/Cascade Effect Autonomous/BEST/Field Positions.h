@@ -41,9 +41,9 @@ void initPositions(){
 	// GPS_defendPoint.x = 80; GPS_defendPoint.y = 320; GPS_defendPoint.theta = 0;
 
 	set(GPS_prepareForCenterDump, -99, 0);
-	set(GPS_centerDumpPosition1, -65, 8);
-	set(GPS_centerDumpPosition2, -61, 8);
-	set(GPS_centerDumpPosition3, -63, 4);
+	set(GPS_centerDumpPosition1, -40, 8);
+	set(GPS_centerDumpPosition2, -36, 8);
+	set(GPS_centerDumpPosition3, -38, 4);
 	// GPS_prepareForCenterDump.x = -99; GPS_prepareForCenterDump.y = 0;
 	// GPS_centerDumpPosition1.x = -65; GPS_centerDumpPosition1.y = 8;
 	// GPS_centerDumpPosition2.x = -61; GPS_centerDumpPosition2.y = 8;
@@ -54,5 +54,5 @@ void initPositions(){
 	// GPS_hitKickstand.x = 10; GPS_hitKickstand.y = -35;
 
 	set(ROBOT_nullRelativePos, 0, 0);
-	set(ROBOT_dumpRelativePos, -30, 0, 0);
+	set(ROBOT_dumpRelativePos, -25, 0, 0);
 }
