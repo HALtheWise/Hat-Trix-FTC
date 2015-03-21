@@ -39,7 +39,7 @@ void liftFirstStage(bool nonBlocking = false);
 void liftTallArm ();
 void lowerTallArm();
 void dumpBalls(bool fastMode = false);
-void hitKickstand();
+//void hitKickstand();
 
 
 //----------- Function Definitions ----------//
@@ -139,13 +139,13 @@ void mot(int leftPow, int rightPow) //Takes left an right powers, applies them t
 	motor[BackR] = rightPow;
 }
 
-void hitKickstand()
-{
-	turn(90, 75);
-	move(-18, 75);
-	turn(70, 75);
-	move(80, 75);
-}
+//void hitKickstand()
+//{
+//	turn(90, 75);
+//	move(-18, 75);
+//	turn(70, 75);
+//	move(80, 75);
+//}
 
 //********************************************************************************************************
 //*
