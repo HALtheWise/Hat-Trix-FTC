@@ -40,9 +40,9 @@ void initializeRobot()
 {
 	initPositions();
 	clearDebugStream();
+	writeDebugStreamLine("GPS_centerDumpPosition1=(%d, %d, %d)", GPS_centerDumpPosition1.x, GPS_centerDumpPosition1.y, GPS_centerDumpPosition1.theta);
 	gyroCal();
 	servo[dropperServo] = HOLDING_POS;
-	//servo[grabberServo]=???; //We should probably initialize this
 	return;
 }
 
@@ -84,15 +84,21 @@ void floorStart(){
 	switch (centerPos) //Turn to ball dumping position
 	{
 		case 1:
-		pos120 = GPS_centerDumpPosition1;
+		pos120.x = GPS_centerDumpPosition1.x;
+		pos120.y = GPS_centerDumpPosition1.y;
+		pos120.theta = GPS_centerDumpPosition1.theta;
 		break;
 
 		case 2:
-		pos120 = GPS_centerDumpPosition1;
+		pos120.x = GPS_centerDumpPosition2.x;
+		pos120.y = GPS_centerDumpPosition2.y;
+		pos120.theta = GPS_centerDumpPosition2.theta;
 		break;
 
 		case 3:
-		pos120 = GPS_centerDumpPosition3;
+		pos120.x = GPS_centerDumpPosition3.x;
+		pos120.y = GPS_centerDumpPosition3.y;
+		pos120.theta = GPS_centerDumpPosition3.theta;
 		break;
 
 		default:
@@ -100,8 +106,12 @@ void floorStart(){
 		return;
 	}
 
-	navOffset = ROBOT_dumpRelativePos;
-	updateTRobot();
+	writeDebugStreamLine("pos120=(%d,%d,%d)", pos120.x, pos120.y, pos120.theta);
+
+	navOffset.x = ROBOT_dumpRelativePos.x;
+	navOffset.y = ROBOT_dumpRelativePos.y;
+	navOffset.theta = ROBOT_dumpRelativePos.theta;
+	updateTRobot(true);
 
 	turnTo(pos120, speed_slower, Backward);
 
@@ -113,7 +123,9 @@ void floorStart(){
 	wait1Msec(1500); //Stabilize robot
 	if(DOLIFT2) dumpBalls();
 
-	navOffset = ROBOT_nullRelativePos;
+	navOffset.x = 0;
+	navOffset.y = 0;
+	navOffset.theta = 0;
 	updateTRobot();
 
 	turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
@@ -141,6 +153,7 @@ void floorStart(){
 
 task main()
 {
+
 	initializeRobot();
 	mode = getAutoMode();
 	waitForStart(); // Wait for the beginning of autonomous phase.

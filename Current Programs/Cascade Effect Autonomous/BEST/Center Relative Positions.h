@@ -25,18 +25,18 @@ float getCenterAngle(){
 void getCenterFieldPos(FieldPos *result){
 	const float FIELD_SIZE = 365.76;
 	float angle = getCenterAngle();
-	result.x = FIELD_SIZE/2;
-	result.y = FIELD_SIZE/2;
-	result.theta = angle;
+	result->x = FIELD_SIZE/2;
+	result->y = FIELD_SIZE/2;
+	result->theta = angle;
 }
 
 void add(FieldPos base, RelativePos relative, FieldPos *result){
-	result.x = base.x;
-	result.y = base.y;
-	result.theta = base.theta;
+	result->x = base.x;
+	result->y = base.y;
+	result->theta = base.theta;
 
-	result->x = result->x + relative.x * cos(result.theta) - relative.y * sin(result.theta);
-	result->y = result->y + relative.y * cos(result.theta) + relative.x * sin(result.theta);
+	result->x = result->x + relative.x * cos(result->theta) - relative.y * sin(result->theta);
+	result->y = result->y + relative.y * cos(result->theta) + relative.x * sin(result->theta);
 	result->theta = result->theta + relative.theta;
 }
 
@@ -46,21 +46,21 @@ In particular, the result should be set to the same value as
 base was in the call to add
 */
 void subtract(FieldPos sum, RelativePos relative, FieldPos *result){
-	result.x = sum.x;
-	result.y = sum.y;
-	result.theta = base.theta - relative.theta;
+	result->x = sum.x;
+	result->y = sum.y;
+	result->theta = sum.theta - relative.theta;
 
-	result->x = result->x - relative.x * cos(result.theta) + relative.y * sin(result.theta);
-	result->y = result->y - relative.y * cos(result.theta) - relative.x * sin(result.theta);
+	result->x = result->x - relative.x * cos(result->theta) + relative.y * sin(result->theta);
+	result->y = result->y - relative.y * cos(result->theta) - relative.x * sin(result->theta);
 }
 
 /*
-This function assumes the RelativePos it is given is defined relative to the 
+This function assumes the RelativePos it is given is defined relative to the
 center structure, then stores the absolute field-centric position in FieldPos result
 */
 void translate(RelativePos input, FieldPos *result){
 	writeDebugStreamLine("Input was %d, %d", input.x, input.y);
-	
+
 	FieldPos centerAbsPos;
 	getCenterFieldPos(centerAbsPos);
 	add(centerAbsPos, input, result);
