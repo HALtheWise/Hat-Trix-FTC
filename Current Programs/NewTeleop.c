@@ -564,8 +564,16 @@ void actionDrive(Command cmd, EventList *eList, int res_id )
 				righty = -((eList->joy1.y *100)/128);///2;
 			}
 
+			float multiplier = getMultiplier(eList);
+
 			lefty *= (float)getMultiplier(eList);
 			righty *= (float)getMultiplier(eList);
+
+			if (multiplier < 0.5){
+				float turn = (righty - lefty) / 2.0;
+				righty += turn;
+				lefty -= turn;
+			}
 
 			if(getMultiplier(eList) >= 1){
 
