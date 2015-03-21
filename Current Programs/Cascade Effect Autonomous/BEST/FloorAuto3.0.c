@@ -65,48 +65,51 @@ void floorStart(){
 	if(DOLIFT1) liftFirstStage(true); 	// Lift first stage extension in parallel
 		wait1Msec(600);				// Gives time to make it impressive that we're lifting in parallel
 
-	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
+		turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
-	wait1Msec(inter_move_delay);
+		wait1Msec(inter_move_delay);
 
-	if(mode == MODE_DEFEND_CENTER_MEDIUM){
-		turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
-		wait1Msec(500);
-	}
+		if(mode == MODE_DEFEND_CENTER_MEDIUM){
+			turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
+			wait1Msec(500);
+		}
 
-	FieldPos target;
-	translate(GPS_prepareForCenterDump, target);
+		FieldPos target;
+		translate(GPS_prepareForCenterDump, target);
 	if(distanceBetween(target, robot) > 50.0){ //If the robot is more than half a meter from "prepare to dump" position
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
-		wait1Msec(inter_move_delay);
 	}
+
+	RelativePos pos120;
+
+	switch (centerPos) //Turn to ball dumping position
+	{
+		case 1:
+		pos120 = GPS_centerDumpPosition1;
+		break;
+
+		case 2:
+		pos120 = GPS_centerDumpPosition1;
+		break;
+
+		case 3:
+		pos120 = GPS_centerDumpPosition3;
+		break;
+
+		default:
+		writeDebugStreamLine("Detection of center structure failed in unexpected way.");
+		return;
+	}
+	
+	turnTo(pos120, speed_slower, Backward);
 
 	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
 	if(DOLIFT2) liftTallArm();
 
-	switch (centerPos) //Move to ball dumping position
-	{
-	case 1:
-		turnTo(GPS_centerDumpPosition1, speed_slower, Backward);
-		moveTo(GPS_centerDumpPosition1, speed_precise, Backward);
-		break;
+	moveTo(pos120, speed_precise, Backward);
 
-	case 2:
-		turnTo(GPS_centerDumpPosition2, speed_slower, Backward);
-		moveTo(GPS_centerDumpPosition2, speed_precise, Backward);
-		break;
 
-	case 3:
-		turnTo(GPS_centerDumpPosition3, speed_slower, Backward);
-		moveTo(GPS_centerDumpPosition3, speed_precise, Backward);
-		break;
-
-	default:
-		writeDebugStreamLine("Detection of center structure failed in unexpected way.");
-		return;
-	}
-
-	wait1Msec(2000); //Stabilize robot
+	wait1Msec(1500); //Stabilize robot
 	if(DOLIFT2) dumpBalls();
 
 	turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Forward);
@@ -118,24 +121,24 @@ void floorStart(){
 		if (centerPos == 1 || centerPos == 2){ //Backside navigation
 			turnAndMoveTo(GPS_navPoint1, speed_fast);
 			}else {//Frontside navigation
-			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+				turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+			}
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
+			grabGoal();
 		}
-		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
-		grabGoal();
+		else if(mode == MODE_KICKSTAND_ALWAYS){
+
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+			wait1Msec(inter_move_delay);
+
+			turnAndMoveTo(GPS_hitKickstand, speed_normal);
+		}
 	}
-	else if(mode == MODE_KICKSTAND_ALWAYS){
 
-		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
-		wait1Msec(inter_move_delay);
-
-		turnAndMoveTo(GPS_hitKickstand, speed_normal);
-	}
-}
-
-task main()
-{
-	initializeRobot();
-	mode = getAutoMode();
+	task main()
+	{
+		initializeRobot();
+		mode = getAutoMode();
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;
