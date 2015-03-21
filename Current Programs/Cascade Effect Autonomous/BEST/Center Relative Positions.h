@@ -59,22 +59,3 @@ void translate(RelativePos input, FieldPos *result){
 
 	writeDebugStreamLine("Output was %d, %d", result->x, result->y);
 }
-
-
-void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = Forward){
-	FieldPos target2;
-	translate(target, target2);
-	turnAndMoveTo(target2, power, forward);
-}
-
-void turnTo (RelativePos target, int power, DrivingDirection forward = Forward){
-	FieldPos target2;
-	translate(target, target2);
-	turnTo(target2, power, forward);
-}
-
-void moveTo (RelativePos target, int power, DrivingDirection forward = Forward){
-	FieldPos target2;
-	translate(target, target2);
-	moveTo(target2, power, forward);
-}

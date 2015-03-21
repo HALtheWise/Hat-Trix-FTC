@@ -41,6 +41,10 @@ void turnToHeading (float heading, int power, DrivingDirection forward = Forward
 void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = Forward);
 float neededTurn(FieldPos target, DrivingDirection forward = Forward);
 
+void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = Forward);
+void turnTo (RelativePos target, int power, DrivingDirection forward = Forward);
+void moveTo (RelativePos target, int power, DrivingDirection forward = Forward);
+
 
 //----------- Function Definitions ----------//
 
@@ -206,4 +210,23 @@ void turnToHeading(float heading, int power, DrivingDirection forward){
 	p.theta = 0;
 	p.x *= 100000000.0; p.y *= 100000000.0; //create point a LONG way away.
 	turnTo(p, power, forward);
+}
+
+
+void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward){
+	FieldPos target2;
+	translate(target, target2);
+	turnAndMoveTo(target2, power, forward);
+}
+
+void turnTo (RelativePos target, int power, DrivingDirection forward){
+	FieldPos target2;
+	translate(target, target2);
+	turnTo(target2, power, forward);
+}
+
+void moveTo (RelativePos target, int power, DrivingDirection forward){
+	FieldPos target2;
+	translate(target, target2);
+	moveTo(target2, power, forward);
 }
