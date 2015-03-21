@@ -15,7 +15,7 @@ RelativePos GPS_centerDumpPosition3;
 RelativePos GPS_prepareForKickstand;
 RelativePos GPS_hitKickstand;
 
-RelativePos ROBOT_dumpRelativePos;
+RelativePos ROBOT_dumpRelativePos; //Warning: these are robot-relative, not field-relative
 RelativePos ROBOT_nullRelativePos;
 
 void set(FieldPos *pos, float x, float y, float theta = 0){
