@@ -1,9 +1,11 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S3,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S4,     sonar,          sensorSONAR)
 #pragma config(Motor,  motorA,          lateralSweep,  tmotorNXT, openLoop)
-#pragma config(Motor,  motorB,          stuffer,       tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorB,          stuffer,       tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,          verticalSweep, tmotorNXT, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_1,     FrontL,        tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     BackL,         tmotorTetrix, openLoop, encoder)
@@ -246,7 +248,7 @@ void actionSweeper(Command cmd, EventList *eList, int res_id )
 			if( isPressed( eList, sweeperStart )){
 				writeDebugStreamLine("sweepers going on");
 				motor[stuffer] = POWER;
-				motor[lateralSweep] = POWER;
+				motor[lateralSweep] = -POWER;
 				motor[verticalSweep] = POWER;
 				servo[sweeperServo] = SERVO_POWER;
 			}
@@ -381,7 +383,7 @@ void actionElevator(Command cmd, EventList *eList, int res_id )
 
 void autoLiftElevator(bool reset = false){
 	static int CENTER_HEIGHT = -3800;
-	static int TALL_HEIGHT = -2000;
+	static int TALL_HEIGHT = -2300;
 	static int DOWN_HEIGHT = -50;
 
 	static int positionTarget = 0;
