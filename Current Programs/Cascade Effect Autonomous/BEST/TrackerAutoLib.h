@@ -54,7 +54,7 @@ void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies them to wheels
 	motor[FrontL] = leftPow;
 	motor[BackL] = leftPow;
-
+	
 	motor[FrontR] = rightPow;
 	motor[BackR] = rightPow;
 }
@@ -74,10 +74,10 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 	writeDebugStreamLine("Starting move to (%d, %d) at power %d", target.x, target.y, power);
 
 	FieldPos startingPos;
-	memcpy(startingPos, robot, sizeof(robot));
+	memcpy(startingPos, tRobot, sizeof(tRobot));
 
 	//TODO: Make timelimit dynamic
-	float timelimit = distanceBetween(robot, target)*50+1000; // set a time limit based on distance
+	float timelimit = distanceBetween(tRobot, target)*50+1000; // set a time limit based on distance
 
 #ifdef BALLE
 	timelimit *= 3;
@@ -85,12 +85,12 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 
 	ClearTimer(T1);
 
-	float toGo = distanceBetween(robot, target);
+	float toGo = distanceBetween(tRobot, target);
 
 	//TODO: Don't stop while still moving toward target.
 	while(abs(neededTurn(target, forward)) <= PI/2)//  toGo > OCD)
 	{
-		toGo = distanceBetween(robot, target);
+		toGo = distanceBetween(tRobot, target);
 
 		float fwdpower = power;
 		if(glide){
@@ -143,7 +143,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 	}
 	mot2(0,0);
 
-	writeDebugStreamLine("Move completed with miss amount of %f (cm)", distanceBetween(robot, target));
+	writeDebugStreamLine("Move completed with miss amount of %f (cm)", distanceBetween(tRobot, target));
 
 	return;
 
@@ -151,7 +151,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 }
 
 float neededTurn(FieldPos target, DrivingDirection forward){
-	return coerceAngle(angleBetween(robot, target) - robot.theta + (forward ? 0:PI)); //Negates if robot intends to drive backward
+	return coerceAngle(angleBetween(tRobot, target) - tRobot.theta + (forward ? 0:PI)); //Negates if robot intends to drive backward
 }
 
 void turnTo (FieldPos target, int power, DrivingDirection forward)

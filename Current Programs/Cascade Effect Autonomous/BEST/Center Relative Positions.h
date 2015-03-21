@@ -1,6 +1,7 @@
 
 typedef struct {
 	float x; //(0,0) is at the very center of the field. Positive x extends away from our color center goal.
+			 // Positive x can alternately extend from the robot's center of rotation toward the "front"
 	float y; //Positive y extends away from our color kickstand
 	float theta;
 } RelativePos;

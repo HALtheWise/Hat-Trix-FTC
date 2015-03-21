@@ -71,11 +71,6 @@ void updateTRobot(){
 	add(robot, navOffset, tRobot);
 }
 
-void setTRobot(RelativePosition p){
-	tRobot = p;
-	updateTRobot();
-}
-
 void resetTracker(){
 	robot.x = 0;
 	robot.y = 0;
