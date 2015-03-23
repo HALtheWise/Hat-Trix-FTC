@@ -143,7 +143,7 @@ void lowerTallArm() {
 	tallArmIsMoving = true;
 
 	ClearTimer(T1);
-	while(nMotorEncoder[car] < 0 && time1[T1] < TIMEOUT){
+	while(nMotorEncoder[car] < -40 && time1[T1] < TIMEOUT){
 		motor[car] = 30;
 	}
 	motor[car] = 0;
