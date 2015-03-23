@@ -106,6 +106,8 @@ void liftFirstStage(bool nonBlocking) {
 	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lifting first stage timed out after travelling %d", nMotorEncoder[elevator]);
 }
 
+bool tallArmIsMoving = false;
+
 task parallelLiftTallArm(){
 	liftTallArm();
 }
@@ -116,7 +118,6 @@ task parallelLowerTallArm(){
 	lowerTallArm();
 }
 
-bool tallArmIsMoving = false;
 
 void liftTallArm() {
 	const int TIMEOUT = 5000;
