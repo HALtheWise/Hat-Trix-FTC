@@ -84,21 +84,15 @@ void floorStart(){
 	switch (centerPos) //Turn to ball dumping position
 	{
 		case 1:
-		pos120.x = GPS_centerDumpPosition1.x;
-		pos120.y = GPS_centerDumpPosition1.y;
-		pos120.theta = GPS_centerDumpPosition1.theta;
+		copy(GPS_centerDumpPosition1, pos120);
 		break;
 
 		case 2:
-		pos120.x = GPS_centerDumpPosition2.x;
-		pos120.y = GPS_centerDumpPosition2.y;
-		pos120.theta = GPS_centerDumpPosition2.theta;
+		copy(GPS_centerDumpPosition2, pos120);
 		break;
 
 		case 3:
-		pos120.x = GPS_centerDumpPosition3.x;
-		pos120.y = GPS_centerDumpPosition3.y;
-		pos120.theta = GPS_centerDumpPosition3.theta;
+		copy(GPS_centerDumpPosition3, pos120);
 		break;
 
 		default:
@@ -108,9 +102,7 @@ void floorStart(){
 
 	writeDebugStreamLine("pos120=(%d,%d,%d)", pos120.x, pos120.y, pos120.theta);
 
-	navOffset.x = ROBOT_dumpRelativePos.x;
-	navOffset.y = ROBOT_dumpRelativePos.y;
-	navOffset.theta = ROBOT_dumpRelativePos.theta;
+	copy(ROBOT_dumpRelativePos, navOffset);
 	updateTRobot(true);
 
 	if (DOLIFT2) StartTask(parallelLiftTallArm);
@@ -125,9 +117,7 @@ void floorStart(){
 	wait1Msec(1500); //Stabilize robot
 	if(DOLIFT2) dumpBalls();
 
-	navOffset.x = 0;
-	navOffset.y = 0;
-	navOffset.theta = 0;
+	copy(ROBOT_nullRelativePos, navOffset);
 	updateTRobot();
 
 	moveTo(GPS_prepareForCenterDump, speed_normal, Forward);
