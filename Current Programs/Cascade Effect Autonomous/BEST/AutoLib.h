@@ -106,9 +106,23 @@ void liftFirstStage(bool nonBlocking) {
 	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lifting first stage timed out after travelling %d", nMotorEncoder[elevator]);
 }
 
+task parallelLiftTallArm(){
+	liftTallArm();
+}
+
+task parallelLowerTallArm(){
+	if (tallArmIsMoving) return;
+	lowerTallArm();
+}
+
+bool tallArmIsMoving = false;
+
 void liftTallArm() {
 	const int TIMEOUT = 5000;
 	const int LIFT_HEIGHT = 3900;
+
+	if (tallArmIsMoving) return;
+	tallArmIsMoving = true;
 
 	nMotorEncoder[car] = 0;
 	ClearTimer(T1);
@@ -116,17 +130,22 @@ void liftTallArm() {
 		motor[car] = -100;
 	}
 	motor[car] = 0;
+	tallArmIsMoving = false;
 	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lifting arm timed out after travelling %d", nMotorEncoder[car]);
 }
 
 void lowerTallArm() {
 	const int TIMEOUT = 6000;
 
+	if (tallArmIsMoving) return;
+	tallArmIsMoving = true;
+
 	ClearTimer(T1);
 	while(nMotorEncoder[car] < 0 && time1[T1] < TIMEOUT){
 		motor[car] = 30;
 	}
 	motor[car] = 0;
+	tallArmIsMoving = false;
 	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lowering arm timed out after travelling %d", nMotorEncoder[car]);
 }
 

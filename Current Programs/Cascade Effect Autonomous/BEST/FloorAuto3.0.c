@@ -113,10 +113,12 @@ void floorStart(){
 	navOffset.theta = ROBOT_dumpRelativePos.theta;
 	updateTRobot(true);
 
+	if (DOLIFT2) StartTask(parallelLiftTallArm);
+
 	turnTo(pos120, speed_slower, Backward);
 
 	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
-	if(DOLIFT2) liftTallArm();
+	if(DOLIFT2){while(tallArmIsMoving){wait1Msec(5);}} //Wait until second stage extension has completed
 
 	moveTo(pos120, speed_precise, Backward);
 
