@@ -80,6 +80,7 @@ void floorStart(){
 	}
 
 	RelativePos pos120;
+	RelativePos almostDumpPos;
 
 	switch (centerPos) //Turn to ball dumping position
 	{
@@ -99,6 +100,8 @@ void floorStart(){
 		writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 		return;
 	}
+	copy(pos120, almostDumpPos);
+	almostDumpPos.x -= 20;
 
 	writeDebugStreamLine("pos120=(%d,%d,%d)", pos120.x, pos120.y, pos120.theta);
 
@@ -107,7 +110,7 @@ void floorStart(){
 
 	if (DOLIFT2) StartTask(parallelLiftTallArm);
 
-	turnTo(pos120, speed_slower, Backward);
+	turnAndMoveTo(almostDumpPos, speed_slower, Backward);
 
 	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
 	if(DOLIFT2){while(tallArmIsMoving){wait1Msec(5);}} //Wait until second stage extension has completed
