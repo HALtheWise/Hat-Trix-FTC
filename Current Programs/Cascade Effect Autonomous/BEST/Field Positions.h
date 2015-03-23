@@ -27,14 +27,14 @@ void initPositions(){
 	set(GPS_floorStartingPositionUS, 10, 198, degreesToRadians(180));
 	set(GPS_awayFromWallUS, 50, 195);
 
-	set(GPS_mediumGoalPosition, 271, 20);
-	set(GPS_navPoint1, 271, 255);
+	set(GPS_mediumGoalPosition, 291, 20);
+	set(GPS_navPoint1, 291, 255);
 
 	set(GPS_defendPoint, 80, 320);
 
 	set(GPS_prepareForCenterDump, -99, 0);
 	set(GPS_centerDumpPosition1, -40, 11);
-	set(GPS_centerDumpPosition2, -36, 8);
+	set(GPS_centerDumpPosition2, -34, 8);
 	set(GPS_centerDumpPosition3, -38, 4);
 
 	set(GPS_prepareForKickstand, -85, -35);
