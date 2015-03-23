@@ -1,5 +1,21 @@
 #pragma config(Sensor, S4,     sonar,          sensorSONAR)
 
+void updateOnCenterStructure(){
+	const int USoffset = 35;
+	int reading = SensorValue[sonar];
+
+	RelativePos centerRelativePos;
+	FieldPos centerFieldPos;
+	getCenterFieldPos(centerFieldPos);
+	subtract(robot, centerFieldPos, centerRelativePos);
+
+	float newX = -(reading + USoffset);
+	writeDebugStreamLine("Updated on center structure, difference was %dcm", newX - centerRelativePos.x);
+	centerRelativePos.x = newX;
+
+	add(centerFieldPos, centerRelativePos, robot);
+}
+
 int julietUS(){
 	int reading = SensorValue[sonar];
 	int centerPosition = 0;

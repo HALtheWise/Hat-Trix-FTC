@@ -60,6 +60,21 @@ void subtract(FieldPos sum, RelativePos relative, FieldPos *result){
 }
 
 /*
+If this function is working correctly, it should invert add().
+In particular, the result should be set to the same value as
+relative was in the call to add
+*/
+void subtract(FieldPos base, FieldPos sum, RelativePos *result){
+	float x = sum.x - base.x;
+	float y = sum.y - base.y;
+
+	result->x = x * cos(-base.theta) + y * sin(-base.theta);
+	result->y = y * cos(-base.theta) + x * sin(-base.theta);
+
+	result->theta = sum.theta - base.theta;
+}
+
+/*
 This function assumes the RelativePos it is given is defined relative to the
 center structure, then stores the absolute field-centric position in FieldPos result
 */

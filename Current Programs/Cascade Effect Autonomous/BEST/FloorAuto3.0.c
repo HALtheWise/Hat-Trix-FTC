@@ -31,7 +31,7 @@
 #include "Auto GUI.h"
 //#include "IRstuff.c"
 
-AutoMode mode = MODE_MEDIUM_ALWAYS;
+AutoMode mode = MODE_DEFEND_CENTER_MEDIUM;
 
 #define DOLIFT1 false
 #define DOLIFT2 true
@@ -112,6 +112,8 @@ void floorStart(){
 
 	turnAndMoveTo(almostDumpPos, speed_slower, Backward);
 
+	updateOnCenterStructure();
+
 	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
 	if(DOLIFT2){while(tallArmIsMoving){wait1Msec(5);}} //Wait until second stage extension has completed
 
@@ -150,7 +152,7 @@ task main()
 {
 
 	initializeRobot();
-	mode = getAutoMode();
+	//mode = getAutoMode();
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;

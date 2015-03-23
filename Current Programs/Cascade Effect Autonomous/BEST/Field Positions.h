@@ -30,7 +30,7 @@ void initPositions(){
 	set(GPS_mediumGoalPosition, 291, 20);
 	set(GPS_navPoint1, 291, 255);
 
-	set(GPS_defendPoint, 80, 320);
+	set(GPS_defendPoint, 80, 310);
 
 	set(GPS_prepareForCenterDump, -99, 0);
 	set(GPS_centerDumpPosition1, -40, 11);
