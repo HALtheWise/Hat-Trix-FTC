@@ -8,6 +8,11 @@ typedef struct {
 
 int centerPos = -1;
 
+void copy(RelativePos *from, RelativePos *to){
+	to->x = from->x;
+	to->y = from->y;
+	to->theta = from->theta;
+}
 
 float getCenterAngle(){
 	if (centerPos == 1){
