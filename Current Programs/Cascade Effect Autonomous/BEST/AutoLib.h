@@ -112,6 +112,7 @@ task parallelLiftTallArm(){
 
 task parallelLowerTallArm(){
 	if (tallArmIsMoving) return;
+	wait1Msec(1500); //Give the robot time to back away from the tube.
 	lowerTallArm();
 }
 
