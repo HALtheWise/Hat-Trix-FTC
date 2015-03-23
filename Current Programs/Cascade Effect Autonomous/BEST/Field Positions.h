@@ -11,6 +11,8 @@ RelativePos GPS_centerDumpPosition2;
 RelativePos GPS_centerDumpPosition3;
 RelativePos GPS_prepareForKickstand;
 RelativePos GPS_hitKickstand;
+RelativePos GPS_prepareForKickstandReverse;
+RelativePos GPS_hitKickstandReverse;
 
 RelativePos ROBOT_dumpRelativePos; //Warning: these are robot-relative, not field-relative
 RelativePos ROBOT_nullRelativePos;
@@ -38,7 +40,8 @@ void initPositions(){
 	set(GPS_centerDumpPosition3, -38, 4);
 
 	set(GPS_prepareForKickstand, -85, -35);
-	set(GPS_hitKickstand, 10, -35);
+	set(GPS_prepareForKickstandReverse, 65, -35);
+	set(GPS_hitKickstandReverse, -10, -35);
 
 
 	set(ROBOT_nullRelativePos, 0, 0);
