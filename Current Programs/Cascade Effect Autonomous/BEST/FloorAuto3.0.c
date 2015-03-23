@@ -124,7 +124,7 @@ void floorStart(){
 	updateTRobot();
 
 	moveTo(GPS_prepareForCenterDump, speed_normal, Forward);
-	if(DOLIFT2) lowerTallArm();
+	if(DOLIFT2) StartTask(parallelLowerTallArm); //lowerTallArm();
 
 	wait1Msec(inter_move_delay);
 
