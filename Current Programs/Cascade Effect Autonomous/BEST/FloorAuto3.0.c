@@ -26,8 +26,8 @@
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "TrackerAutoLib.h"
 #include "AutoLib.h"
-#include "USstuff.h"
 #include "Field Positions.h"
+#include "USstuff.h"
 #include "Auto GUI.h"
 //#include "IRstuff.c"
 
