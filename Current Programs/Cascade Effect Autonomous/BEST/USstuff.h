@@ -3,10 +3,13 @@
 int julietUS(){
 	int reading = SensorValue[sonar];
 	int centerPosition = 0;
-	if(reading >= 130 && reading < 150){
+
+	float rPos = robot.x - 10.0;
+
+	if(reading >= 130 - rPos && reading < 150 - rPos){
 		centerPosition = 1;
 	}
-	else if(reading < 130 && reading > 110){
+	else if(reading < 130 - rPos && reading > 110 - rPos){
 		centerPosition = 3;
 	}else{
 		centerPosition = 2;
