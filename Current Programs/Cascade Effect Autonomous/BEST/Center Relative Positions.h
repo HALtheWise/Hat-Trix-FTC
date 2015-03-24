@@ -19,7 +19,7 @@ float getCenterAngle(){
 		return degreesToRadians(-90);
 	}else if (centerPos == 2){
 		return degreesToRadians(-45);
-	}else if (centerPos == 1){
+	}else if (centerPos == 3){
 		return 0;
 	}else{
 		writeDebugStreamLine("Warning: center position not detected yet!");
