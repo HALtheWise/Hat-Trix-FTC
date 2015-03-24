@@ -40,6 +40,7 @@ void initPositions(){
 	set(GPS_centerDumpPosition3, -33, 6);
 
 	set(GPS_prepareForKickstand, -85, -35);
+	set(GPS_hitKickstand, 10, -35);
 	set(GPS_prepareForKickstandReverse, 65, -35);
 	set(GPS_hitKickstandReverse, -10, -35);
 
