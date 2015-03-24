@@ -116,7 +116,7 @@ int isPressed( EventList *eList,  int event )
 void actionTakeADump(Command cmd, EventList *eList, int res_id )
 {
 	const int DUMPING_POS = 125;
-	const int HOLDING_POS = 50;
+	const int HOLDING_POS = 35;
 	const int INCREMENTS = 10;
 	const int OPEN_TIME = 500;
 	static int currentTarget = HOLDING_POS;
@@ -344,7 +344,7 @@ void actionGrabber(Command cmd, EventList *eList, int res_id )
 
 void actionElevator(Command cmd, EventList *eList, int res_id )
 {
-	const int DOWN_POWER = 40;
+	const int DOWN_POWER = 30;
 	const int UP_POWER = -90;
 
 	switch(cmd)
