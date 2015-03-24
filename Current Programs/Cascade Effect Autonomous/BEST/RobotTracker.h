@@ -119,7 +119,7 @@ task trackRobot(){
 
 	StartTask(dispTrack);
 	while(true){
-		wait1Msec(20); //50hz
+		wait1Msec(5); //200hz
 
 		float dEncoder = getEncoder() - oldEncoder;
 		oldEncoder += dEncoder;

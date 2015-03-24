@@ -70,12 +70,13 @@ void floorStart(){
 
 		if(mode == MODE_DEFEND_CENTER_MEDIUM){
 			turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
+			robot.y += 19.0; //TODO: this number seems magical, and should probably be calculated somewhere.
 			wait1Msec(500);
 		}
 
 		FieldPos target;
 		translate(GPS_prepareForCenterDump, target);
-	if(distanceBetween(target, robot) > 50.0){ //If the robot is more than half a meter from "prepare to dump" position
+	if(distanceBetween(target, robot) > 40.0){ //If the robot is more than half a meter from "prepare to dump" position
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 	}
 
@@ -112,7 +113,7 @@ void floorStart(){
 
 	turnAndMoveTo(almostDumpPos, speed_slower, Backward);
 
-	updateOnCenterStructure();
+	//updateOnCenterStructure();
 
 	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
 	if(DOLIFT2){while(tallArmIsMoving){wait1Msec(5);}} //Wait until second stage extension has completed
