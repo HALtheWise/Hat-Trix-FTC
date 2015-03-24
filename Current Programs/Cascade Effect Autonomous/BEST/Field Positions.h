@@ -1,7 +1,11 @@
 FieldPos GPS_floorStartingPositionUS;
 FieldPos GPS_awayFromWallUS;
 FieldPos GPS_mediumGoalPosition;
+FieldPos GPS_tallGoalPosition;
 FieldPos GPS_navPoint1;
+FieldPos GPS_navPoint2;
+FieldPos GPS_navPoint3;
+FieldPos GPS_navPoint4;
 FieldPos GPS_defendPoint;
 
 
@@ -30,12 +34,17 @@ void initPositions(){
 	set(GPS_awayFromWallUS, 50, 195);
 
 	set(GPS_mediumGoalPosition, 291, 20);
+	set(GPS_tallGoalPosition, 355, 90);
+
 	set(GPS_navPoint1, 291, 255);
+	set(GPS_navPoint2, 350, 220);
+	set(GPS_navPoint3, 350, 150);
+	set(GPS_navPoint4, 291, 90);
 
 	set(GPS_defendPoint, 80, 320);
 
 	set(GPS_prepareForCenterDump, -99, 0);
-	set(GPS_centerDumpPosition1, -40, 11);
+	set(GPS_centerDumpPosition1, -35, 11);
 	set(GPS_centerDumpPosition2, -34, 12);
 	set(GPS_centerDumpPosition3, -33, 6);
 

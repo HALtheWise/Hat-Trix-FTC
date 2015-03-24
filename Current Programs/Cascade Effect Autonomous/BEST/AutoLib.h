@@ -93,12 +93,14 @@ void liftFirstStage(bool nonBlocking) {
 		while(nMotorEncoder[elevator] > LIFT_HEIGHT && time1[T1] < TIMEOUT){
 			motor[elevator] = -100;
 		}
+		if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Stage 1 lifting timed out.");
 		motor[elevator] = 0;
 
 		ClearTimer(T1);
 		while(nMotorEncoder[elevator] < LIFT_HEIGHT+1000 && time1[T1] < TIMEOUT){
 			motor[elevator] = 100;
 		}
+		if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Stage 1 lowering timed out.");
 		motor[elevator] = 0;
 		firstStageIsLifted = true;
 	}

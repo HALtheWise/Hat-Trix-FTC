@@ -3,8 +3,9 @@ typedef enum {
 	MODE_NO_MOVE=1,
 	MODE_CENTER_ONLY=2,
 	MODE_KICKSTAND_ALWAYS=3,
+	MODE_SMART_CENTER_MEDIUM=4, //Attempts to evade another robot during backside navigation.
 
-	NUMBER_AUTO_MODES=4, //Not an autonomous mode. All elements above this accessable from buttons.
+	NUMBER_AUTO_MODES=5, //Not an autonomous mode. All elements above this accessable from buttons.
 	MODE_DEFEND_CENTER_MEDIUM=100, //DO NOT USE. Doesn't work.
 } AutoMode;
 
@@ -25,6 +26,10 @@ char* autoModeString(AutoMode amode){
 
 	case MODE_KICKSTAND_ALWAYS:
 		return "Center Then Kickstand";
+		break;
+
+	case MODE_SMART_CENTER_MEDIUM:
+		return "SMART:120+60";
 		break;
 
 	case MODE_DEFEND_CENTER_MEDIUM:
