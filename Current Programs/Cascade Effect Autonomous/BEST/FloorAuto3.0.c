@@ -66,7 +66,7 @@ void floorStart(){
 
 		turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
-		if (centerPos == 2) julietUS(); //Try to get another reading in case the first one missed something.
+		if (centerPos == 2) centerPos = julietUS(); //Try to get another reading in case the first one missed something.
 
 		wait1Msec(inter_move_delay);
 
