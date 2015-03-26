@@ -1,19 +1,38 @@
 
+
+//********************************************************************************************************
+//*
+//*	a RelativePos is used both to denote a location relative to the tower
+//* and to denote a point on the robot itself (like the dumper or ultrasonic sensor)
+//*
+//********************************************************************************************************
 typedef struct {
 	float x; //(0,0) is at the very center of the field. Positive x extends away from our color center goal.
 			 // Positive x can alternately extend from the robot's center of rotation toward the "front"
-	float y; //Positive y extends away from our color kickstand
-	float theta;
+	float y; //Positive y extends away from our color kickstand or 90deg counterclockwise of +x
+	float theta; //Measured in radians counterclockwise from +x
 } RelativePos;
 
-int centerPos = -1;
+int centerPos = -1; //Integer 1, 2, or 3
 
+//********************************************************************************************************
+//*
+//*	Takes a deep copy of a RelativePos.
+//* Note: UPDATE THIS if you add any fields to RelativePos.
+//*
+//********************************************************************************************************
 void copy(RelativePos *from, RelativePos *to){
+	// TODO: Use memcopy()
 	to->x = from->x;
 	to->y = from->y;
 	to->theta = from->theta;
 }
 
+//********************************************************************************************************
+//*
+//*	Returns 0, -pi/4, or -pi/2: angle of tower coordinate frame +x in field coordinates
+//*
+//********************************************************************************************************
 float getCenterAngle(){
 	if (centerPos == 1){
 		return degreesToRadians(-90);
@@ -27,7 +46,14 @@ float getCenterAngle(){
 	}
 }
 
+
+//********************************************************************************************************
+//*
+//*	Provides base for additions involving the center tower.
+//*
+//********************************************************************************************************
 void getCenterFieldPos(FieldPos *result){
+	//TODO: make sure that 
 	const float FIELD_SIZE = 365.76;
 	float angle = getCenterAngle();
 	result->x = FIELD_SIZE/2;
@@ -35,6 +61,13 @@ void getCenterFieldPos(FieldPos *result){
 	result->theta = angle;
 }
 
+
+//********************************************************************************************************
+//*
+//* Returns the vector obtained by compositing relative on top of base.
+//* i.e. "start at [base] and drive [relative]. Where are you now?"
+//*
+//********************************************************************************************************
 void add(FieldPos base, RelativePos relative, FieldPos *result){
 	result->x = base.x;
 	result->y = base.y;
@@ -48,7 +81,7 @@ void add(FieldPos base, RelativePos relative, FieldPos *result){
 /*
 If this function is working correctly, it should invert add().
 In particular, the result should be set to the same value as
-base was in the call to add
+base was in the call to add when sum is the result of add
 */
 void subtract(FieldPos sum, RelativePos relative, FieldPos *result){
 	result->x = sum.x;

@@ -37,9 +37,16 @@ typedef struct {
 
 #include "Center Relative Positions.h"
 
-FieldPos robot;
+FieldPos robot; // Main variable that tracks the robot's GPS coordinates of the center of rotation of the robot.
 
-RelativePos navOffset; //
+//********************************************************************************************************
+//*
+//*	navOffset stores the coordinates relative to the robot of the point on the robot's frame 
+//* around which to navigate. When scoring, it is used to drive the dumper to the target, rather than
+//* the drivetrain.
+//*
+//********************************************************************************************************
+RelativePos navOffset;
 FieldPos tRobot; //This tracks the robot's position, but transformed by the navOffset
 
 //---------- Function Declarations ----------//
@@ -52,28 +59,41 @@ float coerceAngle(float angle);
 
 //----------- Function Definitions ----------//
 
-float angleBetween(FieldPos pos1, FieldPos pos2){ //heading needed to go from pos1 to pos2
+float angleBetween(FieldPos pos1, FieldPos pos2){ //Absolute heading needed to go from pos1 to pos2
 	float ang = atan2(pos2.y - pos1.y, pos2.x - pos1.x);
 	return coerceAngle(ang);
 }
 
-float distanceBetween(FieldPos pos1, FieldPos pos2){ //
+float distanceBetween(FieldPos pos1, FieldPos pos2){ // Distance in cm between pos1 and pos2
 	return sqrt((pos1.x - pos2.x)*(pos1.x - pos2.x) + (pos1.y - pos2.y)*(pos1.y - pos2.y)); //Pythagorean Formula
 }
 
+
+//********************************************************************************************************
+//*
+//*	Returns a value between -pi and +pi such that [output = input+(i*2*pi) for some integer i]
+//*
+//********************************************************************************************************
 float coerceAngle(float angle){
 	while (angle <= -PI)  angle += 2*PI;
 	while (angle >   PI)  angle -= 2*PI;
 	return angle;
 }
 
-void updateTRobot(bool print = false){
+void updateTRobot(bool print = false){ //Updates tRobot to be robot+navOffset
 	add(robot, navOffset, tRobot);
 	if(print){
 		writeDebugStreamLine("offset=(%d, %d, %d)", navOffset.x, navOffset.y, navOffset.theta);
 	}
 }
 
+
+//********************************************************************************************************
+//*
+//*	resetTracker() is called once, at the beginning of the round.
+//* Warning: this function does not calibrate the gyro, that should be done before waitForStart()
+//*
+//********************************************************************************************************
 void resetTracker(){
 	robot.x = 0;
 	robot.y = 0;
@@ -90,6 +110,13 @@ void resetTracker(){
 	resetGyro();
 }
 
+
+//********************************************************************************************************
+//*
+//*	Debug logging task. 
+//* Should nor affect the robot's performance in any way (apart from very minor processor latency)
+//*
+//********************************************************************************************************
 task dispTrack(){
 	while(true){
 		wait1Msec(500);
@@ -99,25 +126,46 @@ task dispTrack(){
 	}
 }
 
-float getEncoder(){ //Returns total average encoder distance in cm.
+
+//********************************************************************************************************
+//*
+//*	Returns total average encoder distance in cm.
+//* Shim layer to adapt this library to other robots.
+//* TODO: gracefully handle single encoder failure.
+//*
+//********************************************************************************************************
+float getEncoder(){
 	const float SCALAR2 = 3125; // Motor clicks per meter
 	return (nMotorEncoder[FrontL] + nMotorEncoder[FrontR])/2.0/SCALAR2*100;
 }
 
-float getGyro(){ //Returns the integrated gyro reading in counterclockwise radians
+//********************************************************************************************************
+//*
+//*	Returns the integrated gyro reading in counterclockwise radians
+//* Shim layer to adapt this library to other robots.
+//*
+//********************************************************************************************************
+float getGyro(){
 	updateGyro(false);
 	return -gyroVal * PI / 180.0;
 }
 
+//********************************************************************************************************
+//*
+//*	Main task for the GPS system. This task does the primary calculus and trigonometry.
+//*
+//********************************************************************************************************
 task trackRobot(){
 	const float OVERESTIMATION_RATIO = 1+1/36.0; //The gyro seems to think it turns an extra ~10deg per full rotation.
+	// If someone external updates the position of robot (round starting postiion, etc) then these variables
+	// make sure that the next loop doesn't cause weird stuff to happen.
 	static float oldEncoder, oldGyro;
 
 	//resetTracker();
 	oldGyro = getGyro();
 	oldEncoder = getEncoder();
 
-	StartTask(dispTrack);
+	StartTask(dispTrack); // Note: Comment out this line if the debug statements are too annoying.
 	while(true){
 		wait1Msec(20); //50hz
 
@@ -130,7 +178,7 @@ task trackRobot(){
 		dGyro /= OVERESTIMATION_RATIO;
 
 		hogCPU(); //Protection against race conditions.
-		robot.theta += dGyro;
+		robot.theta += dGyro; //Note: robot.theta and getGyro() can fall out of sync if other factors update the robot's position. This is OK.
 		robot.theta = coerceAngle(robot.theta);
 
 		robot.x += (cos(robot.theta)*dEncoder);
