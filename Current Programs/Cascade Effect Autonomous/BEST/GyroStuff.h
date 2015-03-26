@@ -63,7 +63,7 @@ float updateGyro(bool requireMotion)
 		float gVal = SensorValue(S2) - gyroOffset;
 
 		//if(!requireMotion || motor[FrontR] != 0 || motor[FrontL] != 0 )
-			gyroVal += (time1[T2] * gVal) / 1000.0;
+		gyroVal += (time1[T2] * gVal) / 1000.0;
 
 		ClearTimer(T2);	// reset gyro timer
 	}

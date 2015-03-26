@@ -29,10 +29,10 @@ typedef struct {
 	float x; // Measured in centimeters
 	float y; // Measured in centimeters
 	float theta; // Measured in counterclockwise radians
-				// (0, 0, 0) is the position on the corner by the ramp facing down to the field.
-				// (0, 0, pi/2) is in the same corner, facing toward the cliff
-				// Positive x extends down the ramp and positive z extends off the cliff.
-				// Robot positions are measured to the center of the robot's drivetrain and through the cannonical front.
+	// (0, 0, 0) is the position on the corner by the ramp facing down to the field.
+	// (0, 0, pi/2) is in the same corner, facing toward the cliff
+	// Positive x extends down the ramp and positive z extends off the cliff.
+	// Robot positions are measured to the center of the robot's drivetrain and through the cannonical front.
 } FieldPos;
 
 #include "Center Relative Positions.h"
@@ -41,7 +41,7 @@ FieldPos robot; // Main variable that tracks the robot's GPS coordinates of the 
 
 //********************************************************************************************************
 //*
-//*	navOffset stores the coordinates relative to the robot of the point on the robot's frame 
+//*	navOffset stores the coordinates relative to the robot of the point on the robot's frame
 //* around which to navigate. When scoring, it is used to drive the dumper to the target, rather than
 //* the drivetrain.
 //*
@@ -113,7 +113,7 @@ void resetTracker(){
 
 //********************************************************************************************************
 //*
-//*	Debug logging task. 
+//*	Debug logging task.
 //* Should nor affect the robot's performance in any way (apart from very minor processor latency)
 //*
 //********************************************************************************************************

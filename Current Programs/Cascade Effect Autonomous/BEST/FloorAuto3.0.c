@@ -82,19 +82,19 @@ void floorStart(){
 	if(DOLIFT1) liftFirstStage(true); 	// Lift first stage extension in parallel
 		wait1Msec(600);					// Gives time to make it clear that we're lifting in parallel
 
-		turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward); // Prevent turning from hitting the wall.
+	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward); // Prevent turning from hitting the wall.
 
-		if (centerPos == 2) centerPos = julietUS(); //Try to get another reading in case the first one missed something.
+	if (centerPos == 2) centerPos = julietUS(); //Try to get another reading in case the first one missed something.
 
-		wait1Msec(inter_move_delay);
+	wait1Msec(inter_move_delay);
 
-		if(mode == MODE_DEFEND_CENTER_MEDIUM){
-			turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
-			wait1Msec(500);
-		}
+	if(mode == MODE_DEFEND_CENTER_MEDIUM){
+		turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
+		wait1Msec(500);
+	}
 
-		FieldPos target;
-		translate(GPS_prepareForCenterDump, target); // Converts GPS_prepareForCenterDump from tower-relative to field-relative coordinates.
+	FieldPos target;
+	translate(GPS_prepareForCenterDump, target); // Converts GPS_prepareForCenterDump from tower-relative to field-relative coordinates.
 	if(distanceBetween(target, robot) > 50.0){ //If the robot is more than half a meter from "prepare to dump" position
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 	}
@@ -104,19 +104,19 @@ void floorStart(){
 
 	switch (centerPos) //Turn to ball dumping position
 	{
-		case 1:
+	case 1:
 		copy(GPS_centerDumpPosition1, pos120);
 		break;
 
-		case 2:
+	case 2:
 		copy(GPS_centerDumpPosition2, pos120);
 		break;
 
-		case 3:
+	case 3:
 		copy(GPS_centerDumpPosition3, pos120);
 		break;
 
-		default:
+	default:
 		writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 		return;
 	}
@@ -153,14 +153,14 @@ void floorStart(){
 		if (centerPos == 1 || centerPos == 2){ //Backside navigation
 			backsideNavigate = true;
 			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
-		}else {//Frontside navigation
-				turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+			}else {//Frontside navigation
+			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 		}
 		turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
 		if (mode == MODE_SMART_CENTER_MEDIUM && backsideNavigate && SensorValue[sonar] < 150){ //Try to avoid a robot in our way.
-				turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
-				turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
-				turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);
+			turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
+			turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
+			turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);
 		}
 		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 		grabGoal();
@@ -179,7 +179,7 @@ task main()
 
 	initializeRobot();
 	mode = getAutoMode(); // Call to "AutoGUI.h"
-	
+
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;

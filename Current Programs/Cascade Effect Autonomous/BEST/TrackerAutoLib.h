@@ -54,13 +54,13 @@ void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){ //Con
 	moveTo(target, power, forward);
 }
 
-// This function is identical to mot(int, int) as defined in "AutoLib.h", but importing both 
+// This function is identical to mot(int, int) as defined in "AutoLib.h", but importing both
 // could cause a name collision,
 // so the name of this was changed to mot2 to avoid needless dependencies.
 void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies them to wheels
 	motor[FrontL] = leftPow;
 	motor[BackL] = leftPow;
-	
+
 	motor[FrontR] = rightPow;
 	motor[BackR] = rightPow;
 }
@@ -106,12 +106,12 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 			const float accelLimit = 0.7; //Units of % / cm
 			if (toGo < 30) {
 				float cap = 10 + accelLimit * toGo;
-				fwdpower = (cap < fwdpower) ? cap : fwdpower;
+			fwdpower = (cap < fwdpower) ? cap : fwdpower;
 			}
 		}
-		#ifdef BALLE
-			fwdpower += 10;
-		#endif
+#ifdef BALLE
+		fwdpower += 10;
+#endif
 
 		float angleError = neededTurn(target, forward);
 
@@ -119,7 +119,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 		float mult = ((toGo)/20.0); //Additional multiplier ranges from 0 to 3, making late drive less jaggy
 		if (mult > 3.0){
 			mult = 3.0;
-	}
+		}
 		turnCorrection *=  mult;
 		turnCorrection *= aggressiveness;
 
@@ -140,7 +140,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 		//	vmot(lpow, rpow);
 		//}
 		//else{
-			mot2(lpow, rpow);
+		mot2(lpow, rpow);
 		//}
 		if(time1[T1] > timelimit) // timeout if stalled
 		{
@@ -160,7 +160,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 }
 
 float neededTurn(FieldPos target, DrivingDirection forward){ //Helper function
-	return coerceAngle(angleBetween(tRobot, target) - tRobot.theta + (forward ? 0:PI)); //Negates if robot intends to drive backward
+return coerceAngle(angleBetween(tRobot, target) - tRobot.theta + (forward ? 0:PI)); //Negates if robot intends to drive backward
 }
 
 //********************************************************************************************************
