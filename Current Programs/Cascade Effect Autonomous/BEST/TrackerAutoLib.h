@@ -25,12 +25,13 @@
 #include "RobotTracker.h"
 
 //---------------- Constants ----------------//
-#define NO_STEERING 0.0
+#define NO_STEERING 0.0 //TODO: this should be an enum.
 
 //------------- Global Variables ------------//
 typedef enum{
 	Forward = 1,
 	Backward = 0,
+	//TODO: DrivingDirection "Automatic" as default
 } DrivingDirection;
 
 //---------- Function Declarations ----------//
@@ -48,13 +49,14 @@ void moveTo (RelativePos target, int power, DrivingDirection forward = Forward);
 
 //----------- Function Definitions ----------//
 
-void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
+void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){ //Convenience function
 	turnTo(target, power, forward);
 	moveTo(target, power, forward);
 }
 
-//This function is identical to mot(int, int) as defined in "AutoLib.h", but importing both could cause a name collision,
-// so the name of this was changed to mot2
+// This function is identical to mot(int, int) as defined in "AutoLib.h", but importing both 
+// could cause a name collision,
+// so the name of this was changed to mot2 to avoid needless dependencies.
 void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies them to wheels
 	motor[FrontL] = leftPow;
 	motor[BackL] = leftPow;
@@ -65,11 +67,14 @@ void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies the
 
 //********************************************************************************************************
 //*
-//*	move( float dist, float power , bool hold, bool glide)
-//*	is a move function that moves 'dist' at 'power' either abruptly, or 'glide'
+//*	moveTo drives a homing path to the given FieldPos target.
+//* Features:
+//*		-Homing trajectory, aggressiveness of corrections configurable
+//*		-Deceleration at the end to prevent any sliding
+//* 	-Dynamic timeout to prevent motor burning and allow the robot to attempt the next objective
+//*		-Ability to drive forward or backward
 //*
 //********************************************************************************************************
-
 void moveTo (FieldPos target, int power, DrivingDirection forward, float aggressiveness)
 {
 	const bool glide = true; //This will eventually become an argument to moveTo().
@@ -83,7 +88,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 	//TODO: Make timelimit dynamic
 	float timelimit = distanceBetween(tRobot, target)*50+1000; // set a time limit based on distance
 
-#ifdef BALLE
+#ifdef BALLE //Testing robot
 	timelimit *= 3;
 #endif
 
@@ -154,10 +159,20 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 
 }
 
-float neededTurn(FieldPos target, DrivingDirection forward){
+float neededTurn(FieldPos target, DrivingDirection forward){ //Helper function
 	return coerceAngle(angleBetween(tRobot, target) - tRobot.theta + (forward ? 0:PI)); //Negates if robot intends to drive backward
 }
 
+//********************************************************************************************************
+//*
+//*	turnTo intelligently turns to face a given target
+//* Features:
+//*		-Automatic left/right turn selection
+//*		-Accomodates for any lateral slip during turn
+//* 	-Dynamic timeout to prevent motor burning and allow the robot to attempt the next objective
+//*		-Ability to face the target with the front or back of the robot
+//*
+//********************************************************************************************************
 void turnTo (FieldPos target, int power, DrivingDirection forward)
 {
 #ifdef BALLE
@@ -203,6 +218,7 @@ void turnTo (FieldPos target, int power, DrivingDirection forward)
 	mot2(0, 0);
 }
 
+// Slightly-cheaty shim on top of turnTo(), but works beautifully.
 void turnToHeading(float heading, int power, DrivingDirection forward){
 	FieldPos p;
 	p.x = cos(heading);
@@ -212,19 +228,21 @@ void turnToHeading(float heading, int power, DrivingDirection forward){
 	turnTo(p, power, forward);
 }
 
-
+// Wrapper for Relative Positions
 void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward){
 	FieldPos target2;
 	translate(target, target2);
 	turnAndMoveTo(target2, power, forward);
 }
 
+// Wrapper for Relative Positions
 void turnTo (RelativePos target, int power, DrivingDirection forward){
 	FieldPos target2;
 	translate(target, target2);
 	turnTo(target2, power, forward);
 }
 
+// Wrapper for Relative Positions
 void moveTo (RelativePos target, int power, DrivingDirection forward){
 	FieldPos target2;
 	translate(target, target2);

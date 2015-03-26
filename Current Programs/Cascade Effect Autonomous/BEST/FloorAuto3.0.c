@@ -36,6 +36,15 @@ AutoMode mode = MODE_MEDIUM_ALWAYS;
 #define DOLIFT1 false
 #define DOLIFT2 true
 
+
+//********************************************************************************************************
+//*
+//*	InitializeRobot is run when the program is started (before the start of the round).
+//* Its job is to initialize the servo motors, calibrate the gyro, and handle miscelaneous initialization.
+//* As a result of calibrating the gyro, it takes a quarter second to run.
+//*
+//********************************************************************************************************
+
 void initializeRobot()
 {
 	initPositions();
@@ -46,27 +55,36 @@ void initializeRobot()
 	return;
 }
 
+
+//********************************************************************************************************
+//*
+//*	floorStart() is the main function of the entire autonomous.
+//*	It contains the main logic of navigation and sequences the actions that the robot takes.
+//* Note that positions are coded in "Field Positions.h" and refrenced here.
+//*
+//********************************************************************************************************
+
 void floorStart(){
 	const int speed_fast = 70;
 	const int speed_normal = 60;
 	const int speed_slower = 45;
 	const int speed_precise = 35;
-	const int inter_move_delay = 100;
+	const int inter_move_delay = 100; // ms
 
 	if (mode == MODE_NO_MOVE){
 		liftFirstStage(false);
 		return;
 	}
 
-	centerPos = julietUS();
+	centerPos = julietUS();				// Detect orientation of the tower with Ultrasonic.
 	//	centerPos = 1; //Override for testing purposes
 
 	if(DOLIFT1) liftFirstStage(true); 	// Lift first stage extension in parallel
-		wait1Msec(600);				// Gives time to make it impressive that we're lifting in parallel
+		wait1Msec(600);					// Gives time to make it clear that we're lifting in parallel
 
-		turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
+		turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward); // Prevent turning from hitting the wall.
 
-		if (centerPos == 2) julietUS(); //Try to get another reading in case the first one missed something.
+		if (centerPos == 2) julietUS(); // Disambiguate possible erroneous result from earlier reading.
 
 		wait1Msec(inter_move_delay);
 
@@ -76,13 +94,13 @@ void floorStart(){
 		}
 
 		FieldPos target;
-		translate(GPS_prepareForCenterDump, target);
+		translate(GPS_prepareForCenterDump, target); // Converts GPS_prepareForCenterDump from tower-relative to field-relative coordinates.
 	if(distanceBetween(target, robot) > 50.0){ //If the robot is more than half a meter from "prepare to dump" position
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 	}
 
-	RelativePos pos120;
-	RelativePos almostDumpPos;
+	RelativePos pos120;			// Position of the 120 cm goal, tower-relative
+	RelativePos almostDumpPos;	// Just shy of pos120, stop here to avoid hitting goal while lifting
 
 	switch (centerPos) //Turn to ball dumping position
 	{
@@ -103,14 +121,14 @@ void floorStart(){
 		return;
 	}
 	copy(pos120, almostDumpPos);
-	almostDumpPos.x -= 20;
+	almostDumpPos.x -= 20; //Just shy of 120cm goal
 
 	writeDebugStreamLine("pos120=(%d,%d,%d)", pos120.x, pos120.y, pos120.theta);
 
-	copy(ROBOT_dumpRelativePos, navOffset);
+	copy(ROBOT_dumpRelativePos, navOffset); // Sets the navigation offset for the robot, see "RobotTracker.h"
 	updateTRobot(true);
 
-	if (DOLIFT2) StartTask(parallelLiftTallArm);
+	if (DOLIFT2) StartTask(parallelLiftTallArm); // Save time by lifting in parallel with driving
 
 	turnAndMoveTo(almostDumpPos, speed_slower, Backward);
 
@@ -122,7 +140,7 @@ void floorStart(){
 	wait1Msec(1500); //Stabilize robot
 	if(DOLIFT2) dumpBalls();
 
-	copy(ROBOT_nullRelativePos, navOffset);
+	copy(ROBOT_nullRelativePos, navOffset); // Reset navigation offset
 	updateTRobot();
 
 	moveTo(GPS_prepareForCenterDump, speed_normal, Forward);
@@ -131,9 +149,9 @@ void floorStart(){
 	wait1Msec(inter_move_delay);
 
 	if (mode == MODE_MEDIUM_ALWAYS || mode == MODE_DEFEND_CENTER_MEDIUM){
-		if (centerPos == 1 || centerPos == 2){ //Backside navigation
+		if (centerPos == 1 || centerPos == 2){ 		//Backside navigation: drive on far side of tower
 			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
-			}else {//Frontside navigation
+			}else {									//Frontside navigation: close / ramp side of tower
 				turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 		}
 		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
@@ -152,7 +170,8 @@ task main()
 {
 
 	initializeRobot();
-	mode = getAutoMode();
+	mode = getAutoMode(); // Call to "AutoGUI.h"
+	
 	waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int startTime = nPgmTime;
@@ -166,6 +185,6 @@ task main()
 	floorStart();
 
 	int dt = nPgmTime-startTime;
-	writeDebugStreamLine("Autonomous completed in %.2f seconds", (dt)/1000.0);
+	writeDebugStreamLine("Autonomous completed in %.2f seconds", (dt)/1000.0); // For testing purposes
 	wait1Msec(10);
 }

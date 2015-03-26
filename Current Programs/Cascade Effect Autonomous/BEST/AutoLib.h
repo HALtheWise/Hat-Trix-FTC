@@ -150,7 +150,7 @@ void lowerTallArm() {
 	if (time1[T1] >= TIMEOUT) writeDebugStreamLine("Lowering arm timed out after travelling %d", nMotorEncoder[car]);
 }
 
-void mot(int leftPow, int rightPow) //Takes left an right powers, applies them to wheels
+void mot(int leftPow, int rightPow) //Takes left an right powers, applies them to wheels, shim for other robots
 {
 	motor[FrontL] = leftPow;
 	motor[BackL] = leftPow;
@@ -159,18 +159,21 @@ void mot(int leftPow, int rightPow) //Takes left an right powers, applies them t
 	motor[BackR] = rightPow;
 }
 
-//void hitKickstand()
-//{
-//	turn(90, 75);
-//	move(-18, 75);
-//	turn(70, 75);
-//	move(80, 75);
-//}
+
+
+//	-------------------------------	EVERYTHING BELOW THIS LINE IS DEPRECIATED.	--------------------
+
+
+
+
+
+
 
 //********************************************************************************************************
 //*
 //*	move( float dist, float power , bool hold, bool glide)
 //*	is a move function that moves 'dist' at 'power' either abruptly, or 'glide'
+//* DEPRECIATED
 //*
 //********************************************************************************************************
 

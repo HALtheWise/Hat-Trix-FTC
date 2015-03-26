@@ -105,64 +105,6 @@ void getEvents()
 
 }
 
-
-/*void kickTheBucket(int button, int stopbutton)
-{
-static int Stop = 0;
-static int timelimit = 0;
-static int stage = 0;
-
-if(stopbutton)
-Stop = 1;
-else if(button)
-{
-Stop = 0;
-stage = 0;
-timelimit = time1[T4] + 1500;
-}
-
-if(Stop)
-{
-motor[kicker1] = 0;
-motor[kicker2] = 0;
-return;
-}
-
-if(time1[T4] >= timelimit)
-{
-motor[kicker1] = 0;
-motor[kicker2] = 0;
-return;
-}
-if(stage == 0)
-{
-motor[kicker1] = 100;
-motor[kicker2] = 100;
-if(nMotorEncoder[kicker1] >= 550)
-{
-motor[kicker1] = 0;
-motor[kicker2] = 0;
-stage = 1;
-}
-}
-else if(stage == 1)
-{
-motor[kicker1] = -50;
-motor[kicker2] = -50;
-if(nMotorEncoder[kicker1] <= 25)
-{
-motor[kicker1] = 0;
-motor[kicker2] = 0;
-stage = 2;
-}
-}
-}*/
-
-////////////////////////////////////////////////////////////////////////////// TASK MAIN!!! \(^0^)/
-//struct {int z; int y;} x = { 4, 5};
-
-
-
 task main()
 {
 
