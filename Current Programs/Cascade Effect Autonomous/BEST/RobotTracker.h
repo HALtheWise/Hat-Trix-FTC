@@ -99,9 +99,9 @@ void resetTracker(){
 task dispTrack(){
 	while(true){
 		wait1Msec(500);
-		writeDebugStreamLine("Track: (x, y, theta in deg) = (%d, %d, %f)", robot.x, robot.y, robot.theta*180/PI);
+		writeDebugStreamLine("Track: (x, y, theta in deg) = (%d, %d, %.2f)", robot.x, robot.y, robot.theta*180/PI);
 		if (robot.x != tRobot.x)
-			writeDebugStreamLine("Offset Track: (x, y, theta in deg) = (%d, %d, %f)", tRobot.x, tRobot.y, tRobot.theta*180/PI);
+			writeDebugStreamLine("Offset Track: (x, y, theta in deg) = (%d, %d, %.2f)", tRobot.x, tRobot.y, tRobot.theta*180/PI);
 	}
 }
 
