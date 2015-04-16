@@ -35,6 +35,8 @@ void	mot	(int leftPow, int rightPow);
 int  move	(float dist, float power, bool hold = true, bool glide = false, bool stopAtEnd = true);
 void turn	(float deg, float power);
 void Stop	(bool hold);
+void grabGoal();
+void releaseGoal();
 void liftFirstStage(bool nonBlocking = false);
 void liftTallArm ();
 void lowerTallArm();
@@ -68,6 +70,12 @@ void dumpBalls(bool fastMode){
 
 void grabGoal(){
 	servo[grabberServo] = 255;
+	wait1Msec(750);
+	servo[grabberServo] = 127;
+}
+
+void releaseGoal(){
+	servo[grabberServo] = 0;
 	wait1Msec(750);
 	servo[grabberServo] = 127;
 }
