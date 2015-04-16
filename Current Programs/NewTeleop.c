@@ -383,7 +383,7 @@ void actionElevator(Command cmd, EventList *eList, int res_id )
 
 void autoLiftElevator(bool reset = false){
 	static int CENTER_HEIGHT = -3800;
-	static int TALL_HEIGHT = -2500;
+	static int TALL_HEIGHT = -2000;
 	static int DOWN_HEIGHT = -50;
 
 	static int positionTarget = 0;

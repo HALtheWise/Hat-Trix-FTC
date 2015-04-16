@@ -136,6 +136,10 @@ void floorStart(){
 
 	wait1Msec(inter_move_delay);
 
+	if (mode == MODE_CENTER_ONLY){
+		lowerTallArm();
+	}
+
 	if (mode == MODE_MEDIUM_ALWAYS || mode == MODE_DEFEND_CENTER_MEDIUM || mode == MODE_SMART_CENTER_MEDIUM){
 		bool backsideNavigate = false;
 		if (centerPos == 1 || centerPos == 2){ //Backside navigation

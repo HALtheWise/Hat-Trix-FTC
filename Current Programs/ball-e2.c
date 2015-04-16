@@ -74,7 +74,7 @@ task main()
 		if(joystick.joy1_x2 > 13 || joystick.joy1_x2 < -13)     // turn
 		{
 
-			if(joystick.joy1_x2 > 0)
+			if(joystick.joy1_x2 < 0)
 				power = -1 * power;
 
 			motor[motorB] = power;
@@ -90,8 +90,8 @@ task main()
 		}
 		//else
 		else if(joy1Btn(2))
-			motor[motorA] = -75;
-			//pickup();
+			//motor[motorA] = -75;
+			pickup();
 		else
 		{
 			motor[motorA] = 0;

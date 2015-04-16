@@ -123,7 +123,7 @@ task parallelLowerTallArm(){
 
 void liftTallArm() {
 	const int TIMEOUT = 5000;
-	const int LIFT_HEIGHT = 3900;
+	const int LIFT_HEIGHT = 4300;
 
 	if (tallArmIsMoving) return;
 	tallArmIsMoving = true;
