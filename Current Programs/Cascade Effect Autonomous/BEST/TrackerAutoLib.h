@@ -31,6 +31,7 @@
 typedef enum{
 	Forward = 1,
 	Backward = 0,
+	AutomaticDirection = 2,
 } DrivingDirection;
 
 //---------- Function Declarations ----------//
@@ -40,6 +41,7 @@ void turnTo (FieldPos target, int power, DrivingDirection forward = Forward);
 void turnToHeading (float heading, int power, DrivingDirection forward = Forward);
 void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = Forward);
 float neededTurn(FieldPos target, DrivingDirection forward = Forward);
+DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target);
 
 void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = Forward);
 void turnTo (RelativePos target, int power, DrivingDirection forward = Forward);
@@ -53,12 +55,20 @@ void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 	moveTo(target, power, forward);
 }
 
+DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target){
+	if (in != AutomaticDirection) return in;
+	if (abs(coerceAngle(neededTurn(target, Forward))) < PI/2){
+		return Forward;
+	}
+	return Backward;
+}
+
 //This function is identical to mot(int, int) as defined in "AutoLib.h", but importing both could cause a name collision,
 // so the name of this was changed to mot2
 void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies them to wheels
 	motor[FrontL] = leftPow;
 	motor[BackL] = leftPow;
-	
+
 	motor[FrontR] = rightPow;
 	motor[BackR] = rightPow;
 }
@@ -72,6 +82,7 @@ void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies the
 
 void moveTo (FieldPos target, int power, DrivingDirection forward, float aggressiveness)
 {
+	forward = autoSelectDirection(forward, target);
 	const bool glide = true; //This will eventually become an argument to moveTo().
 	//const float TURN_AGGRESSIVENESS = 2.0;
 
@@ -160,6 +171,7 @@ float neededTurn(FieldPos target, DrivingDirection forward){
 
 void turnTo (FieldPos target, int power, DrivingDirection forward)
 {
+	forward = autoSelectDirection(forward, target);
 #ifdef BALLE
 	power += 20;
 #endif
