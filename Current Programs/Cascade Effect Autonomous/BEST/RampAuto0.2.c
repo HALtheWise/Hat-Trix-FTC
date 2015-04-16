@@ -57,17 +57,25 @@ void rampStart(){
 	const int speed_precise = 35;
 	const int inter_move_delay = 0;
 
-	moveTo(GPS_offRamp, speed_slowers);
+	moveTo(GPS_offRamp, speed_slower);
 	if(DOLIFT1) liftFirstStage(true);
 
-	//while(true){
-	//	wait1Msec(1000);
+
 	centerPos = julietUS(true);
-	//}
+	//Try to get another reading in case the first one missed something
+	mot(-speed_slower, -speed_slower);
+	for (int i = 0; i < 30; i++){
+		centerPos = julietUS(true);
+		if (centerPos == 1 || centerPos == 3) break;
+		wait1Msec(10); //Expected robot travel is about 1cm
+	}
+	mot(0, 0);
 
 	moveTo(GPS_almostMediumGoalPositionRamp, speed_normal);
 	moveTo(GPS_mediumGoalPositionRamp, speed_precise);
 	grabGoal();
+	turnAndMoveTo(GPS_prepareForKickstandReverse, speed_normal);
+	turnAndMoveTo(GPS_hitKickstandReverse, speed_precise, Forward);
 }
 
 task main()

@@ -73,9 +73,9 @@ void initPositionsRamp(){
 	30.2, 		//12in, on ramp half way from wall.
 	degreesToRadians(180));
 
-	set(GPS_offRamp, 165, GPS_rampStartingPosition.y);
+	set(GPS_offRamp, 155, GPS_rampStartingPosition.y);
 
-	set(GPS_mediumGoalPositionRamp, 300, 30);
+	set(GPS_mediumGoalPositionRamp, 270, 30);
 	set(GPS_almostMediumGoalPositionRamp, GPS_mediumGoalPositionRamp.x - 25, GPS_mediumGoalPositionRamp.y);
 
 	set(GPS_navPoint1, 291, 255);
