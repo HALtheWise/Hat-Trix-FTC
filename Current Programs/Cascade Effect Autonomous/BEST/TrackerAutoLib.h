@@ -31,7 +31,7 @@
 typedef enum{
 	Forward = 1,
 	Backward = 0,
-	AutomaticDirection = 2;
+	AutomaticDirection = 2,
 } DrivingDirection;
 
 //---------- Function Declarations ----------//
@@ -56,7 +56,7 @@ void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 }
 
 DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target){
-	if (in != AutomaticDrivingDirection) return in;
+	if (in != AutomaticDirection) return in;
 	if (abs(coerceAngle(neededTurn(target, Forward))) < PI/2){
 		return Forward;
 	}
