@@ -57,7 +57,7 @@ void rampStart(){
 	const int speed_precise = 35;
 	const int inter_move_delay = 0;
 
-	moveTo(GPS_offRamp, speed_slower, AutomaticDirection);
+	moveTo(GPS_offRamp, speed_slowers);
 	if(DOLIFT1) liftFirstStage(true);
 
 	//while(true){
@@ -65,8 +65,8 @@ void rampStart(){
 	centerPos = julietUS(true);
 	//}
 
-	moveTo(GPS_almostMediumGoalPositionRamp, speed_normal, AutomaticDirection);
-	moveTo(GPS_mediumGoalPositionRamp, speed_precise, AutomaticDirection);
+	moveTo(GPS_almostMediumGoalPositionRamp, speed_normal);
+	moveTo(GPS_mediumGoalPositionRamp, speed_precise);
 	grabGoal();
 }
 

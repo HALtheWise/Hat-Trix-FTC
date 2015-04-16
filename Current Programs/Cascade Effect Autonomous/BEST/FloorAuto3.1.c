@@ -146,7 +146,7 @@ void floorStart(){
 			backsideNavigate = true;
 			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
 		}else {//Frontside navigation
-				turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+				turnAndMoveTo(GPS_prepareForKickstand, speed_normal, Forward);
 		}
 		turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
 		if (backsideNavigate && SensorValue[sonar] < 150){ //Try to avoid a robot in our way.
@@ -159,10 +159,10 @@ void floorStart(){
 	}
 	else if(mode == MODE_KICKSTAND_ALWAYS){
 
-		turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+		turnAndMoveTo(GPS_prepareForKickstand, speed_normal, Forward);
 		wait1Msec(inter_move_delay);
 
-		turnAndMoveTo(GPS_hitKickstand, speed_normal);
+		turnAndMoveTo(GPS_hitKickstand, speed_normal, Forward);
 	}
 }
 

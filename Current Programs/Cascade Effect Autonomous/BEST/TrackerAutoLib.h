@@ -36,16 +36,16 @@ typedef enum{
 
 //---------- Function Declarations ----------//
 void	mot2	  (int leftPow, int rightPow);
-void moveTo (FieldPos target, int power, DrivingDirection forward = Forward, float aggressiveness = 1.0);
-void turnTo (FieldPos target, int power, DrivingDirection forward = Forward);
-void turnToHeading (float heading, int power, DrivingDirection forward = Forward);
-void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = Forward);
-float neededTurn(FieldPos target, DrivingDirection forward = Forward);
+void moveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection, float aggressiveness = 1.0);
+void turnTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection);
+void turnToHeading (float heading, int power, DrivingDirection forward = AutomaticDirection);
+void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection);
+float neededTurn(FieldPos target, DrivingDirection forward = AutomaticDirection);
 DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target);
 
-void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = Forward);
-void turnTo (RelativePos target, int power, DrivingDirection forward = Forward);
-void moveTo (RelativePos target, int power, DrivingDirection forward = Forward);
+void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
+void turnTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
+void moveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
 
 
 //----------- Function Definitions ----------//
