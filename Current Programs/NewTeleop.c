@@ -393,8 +393,8 @@ void autoLiftElevator(bool reset = false){
 		moving = false;
 	}
 
-	static int lastTopHat = -1;
 	int topHat = joystick.joy2_TopHat;
+	static int lastTopHat = topHat;
 	//writeDebugStreamLine("%d", topHat);
 	if (moving) {
 		if((goingUp && nMotorEncoder[car] <= positionTarget) || (!goingUp && nMotorEncoder[car] >= positionTarget) ){
