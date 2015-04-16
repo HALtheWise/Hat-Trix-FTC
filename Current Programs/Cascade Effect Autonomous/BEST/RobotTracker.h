@@ -35,6 +35,12 @@ typedef struct {
 				// Robot positions are measured to the center of the robot's drivetrain and through the cannonical front.
 } FieldPos;
 
+void copy(FieldPos *from, FieldPos *to){
+	to->x = from->x;
+	to->y = from->y;
+	to->theta = from->theta;
+}
+
 #include "Center Relative Positions.h"
 
 FieldPos robot;
