@@ -1,21 +1,29 @@
-#pragma config(Sensor, S4,     sonar,          sensorSONAR)
+#pragma config(Sensor, S4,     HTSMUX,            sensorI2CCustom9V )
 
+#include "drivers/hitechnic-sensormux.h"
 #include "drivers/lego-ultrasound.h"
 
+const tMUXSensor frontSonar = msensor_S4_3;
+const tMUXSensor sideSonar = msensor_S4_4;
+
 int getFrontSensorReading(){
-	return SensorValue[sonar];
+	return USreadDist(frontSonar);
+}
+
+int getSideSensorReading(){
+	return USreadDist(sideSonar);
 }
 
 int julietUS(bool ramp = false){
-	int reading = SensorValue[sonar];
+	int reading = getFrontSensorReading();
 	int centerPosition = 0;
 
 	float rPos;
 	if (ramp){
-		rPos = robot.y - 10.0;
+	//	rPos = robot.y - 10.0;
 	}
 	else{
-		rPos = robot.x - 10.0;
+	//	rPos = robot.x - 10.0;
 	}
 
 	if(reading >= 130 - rPos && reading < 150 - rPos){
