@@ -6,11 +6,17 @@
 const tMUXSensor frontSonar = msensor_S4_3;
 const tMUXSensor sideSonar = msensor_S4_4;
 
-int getFrontSensorReading(){
+int getFrontSensorReading(bool adjusted = false){
+	if (adjusted){
+		return USreadDist(frontSonar) + 12; //TODO: this value has not been tuned.
+	}
 	return USreadDist(frontSonar);
 }
 
-int getSideSensorReading(){
+int getSideSensorReading(bool adjusted = false){
+	if (adjusted){
+		return USreadDist(sideSonar) + 22;
+	}
 	return USreadDist(sideSonar);
 }
 
@@ -41,4 +47,80 @@ int julietUS(bool ramp = false){
 
 	writeDebugStreamLine("DETECTED CENTER STRUCTURE POSITION %d", centerPosition);
 	return centerPosition;
+}
+
+// 0 is +x, goes clockwise.
+// TODO: this should account for ramp sides and (possibly) the tower.
+float expectedUSreading(FieldPos p, int facing){
+	switch (facing)
+    {
+    case 0:
+      return FIELD_SIZE - p.x;
+      break;
+   	case 1:
+      return FIELD_SIZE - p.y;
+   	break;
+   	case 2:
+      return p.x;
+   	break;
+   	case 3:
+      return p.y;
+   	break;
+
+    default:
+      writeDebugStreamLine("ERROR: unexpected facing direction");
+    }
+    return 0;
+}
+
+void adjustByDelta(float delta, int facing, FieldPos *p){
+	switch (facing)
+    {
+    case 0:
+      p->x += delta;
+      break;
+   	case 1:
+      p->y += delta;
+   	break;
+   	case 2:
+      p->x -= delta;
+   	break;
+   	case 3:
+      p->y -= delta;
+   	break;
+
+    default:
+      writeDebugStreamLine("ERROR: unexpected facing direction");
+    }
+}
+
+// Converts the angle of the sensor into integers 0...3 as described above,
+// or -1 if it isn't within THRESHOLD. Assumes the input has been normalized.
+int direction(float ang){
+	const float THRESHOLD = degreesToRadians(10);
+	if (abs(ang) < THRESHOLD) return 0;
+	if (abs(ang - PI/2) < THRESHOLD) return 1;
+	if (abs(ang - PI) < THRESHOLD || abs(ang + PI) < THRESHOLD) return 2;
+	if (abs(ang + PI/2) < THRESHOLD) return 3;
+	return -1;
+}
+
+//********************************************************************************************************
+//*
+//*	This thread doesn't quite work yet, but we merged it into the judging branch anyway because
+//* we thought it was interesting. It endeavors to constantly monitor the robot position, and identify
+//* any time that the sonar just happens to be facing a wall. Then, if it thinks it sees the wall,
+//* it will use that to update the robot's positon estimate.
+//*
+//********************************************************************************************************
+task USmagic(){
+	while(true){
+		wait1Msec(50);
+		int facing = direction(robot.theta);
+		if (facing < 0) continue;
+
+		float delta = getFrontSensorReading(true) - expectedUSreading(robot, facing);
+		writeDebugStreamLine("US correction: %dcm", delta);
+		wait1Msec(150);
+	}
 }
