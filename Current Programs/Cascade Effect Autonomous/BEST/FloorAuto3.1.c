@@ -149,7 +149,7 @@ void floorStart(){
 				turnAndMoveTo(GPS_prepareForKickstand, speed_normal, Forward);
 		}
 		turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
-		if (backsideNavigate && SensorValue[sonar] < 150){ //Try to avoid a robot in our way.
+		if (backsideNavigate && getFrontSensorReading() < 150){ //Try to avoid a robot in our way.
 				turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
 				turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
 				turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);

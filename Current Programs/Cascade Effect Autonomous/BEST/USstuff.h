@@ -1,5 +1,11 @@
 #pragma config(Sensor, S4,     sonar,          sensorSONAR)
 
+#include "drivers/lego-ultrasound.h"
+
+int getFrontSensorReading(){
+	return SensorValue[sonar];
+}
+
 int julietUS(bool ramp = false){
 	int reading = SensorValue[sonar];
 	int centerPosition = 0;
