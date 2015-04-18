@@ -6,10 +6,10 @@ int julietUS(bool ramp = false){
 
 	float rPos;
 	if (ramp){
-		rpos = robot.y - 10.0;
+		rPos = robot.y - 10.0;
 	}
 	else{
-		rpos = robot.x - 10.0;
+		rPos = robot.x - 10.0;
 	}
 
 	if(reading >= 130 - rPos && reading < 150 - rPos){
