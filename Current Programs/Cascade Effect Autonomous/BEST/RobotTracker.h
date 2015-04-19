@@ -108,7 +108,7 @@ task dispTrack(){
 bool useGoodEncoderMeasurement = false;
 float getEncoder(){ //Returns total average encoder distance in cm.
 	const float SCALAROLD = 3125; // Motor clicks per meter. Used on last year's robot, incorrect by about 7%.
-	const float SCALARNEW = 3356.47; // Motor clicks per meter
+	const float SCALARNEW = 3356.47; // Motor clicks per meter. Measured on an acutal mat with two trials.
 	float SCALAR2 = useGoodEncoderMeasurement ? SCALARNEW : SCALAROLD;
 	return (nMotorEncoder[FrontL] + nMotorEncoder[FrontR])/2.0/SCALAR2*100;
 }
