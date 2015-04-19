@@ -69,7 +69,7 @@ RelativePos GPS_defendPointRamp;
 
 void initPositionsRamp(){
 	set(GPS_rampStartingPosition,
-	22.9 - 12.8, 	//9in, defined from robot away from wall, minus 5inches due to the slope of the ramp and trigonometry.
+	34.1 - 12.8, 	//Robot distance from wall when aligned to front of platform, minus 5inches due to the slope of the ramp and trigonometry.
 	30.2, 		//12in, on ramp half way from wall.
 	degreesToRadians(180));
 
