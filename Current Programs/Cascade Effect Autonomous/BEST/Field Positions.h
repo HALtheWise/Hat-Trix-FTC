@@ -65,6 +65,8 @@ FieldPos GPS_offRamp;
 FieldPos GPS_mediumGoalPositionRamp;
 FieldPos GPS_almostMediumGoalPositionRamp;
 
+FieldPos GPS_parkGoal;
+
 RelativePos GPS_prepareForKickstandReverse;
 RelativePos GPS_hitKickstandReverse;
 RelativePos GPS_defendPointRamp;
@@ -84,4 +86,6 @@ void initPositionsRamp(){
 	set(GPS_defendPointRamp, 80, -10);
 	set(GPS_prepareForKickstandReverse, 65, -35);
 	set(GPS_hitKickstandReverse, -10, -35);
+
+	set(GPS_parkGoal, 30, 155);
 }
