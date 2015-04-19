@@ -57,7 +57,7 @@ void initializeRobot()
 	//mot(0,0);
 	//writeDebugStreamLine("Drive motor encoders: (%d, %d)", nMotorEncoder[FrontL], nMotorEncoder[FrontR]);
 	while(true){
-		robot.y = 30;
+		robot.y = 60;
 		julietUS(true);
 		wait1Msec(300);
 	}

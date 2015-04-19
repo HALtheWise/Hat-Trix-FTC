@@ -42,7 +42,7 @@ int julietUS(bool ramp = false){
 
 	float rPos;
 	if (ramp){
-		rPos = robot.y - 10.0;
+		rPos = robot.y - 40.0;
 	}
 	else{
 		rPos = robot.x - 15.0;

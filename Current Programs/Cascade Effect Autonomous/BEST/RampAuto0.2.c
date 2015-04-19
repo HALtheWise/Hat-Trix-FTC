@@ -33,7 +33,7 @@
 
 //AutoMode mode = MODE_MEDIUM_ALWAYS;
 
-#define DOLIFT1 false
+#define DOLIFT1 true
 
 void initializeRobot()
 {
@@ -61,7 +61,6 @@ void rampStart(){
 	const int inter_move_delay = 0;
 
 	moveTo(GPS_offRamp, speed_slower);
-	if(DOLIFT1) liftFirstStage(true);
 
 
 	centerPos = julietUS(true);
@@ -78,7 +77,19 @@ void rampStart(){
 	moveTo(GPS_mediumGoalPositionRamp, speed_precise);
 	grabGoal();
 	turnAndMoveTo(GPS_prepareForKickstandReverse, speed_normal);
-	turnAndMoveTo(GPS_hitKickstandReverse, speed_precise, Forward);
+	if(centerPos == 3){
+		turnAndMoveTo(GPS_hitKickstandReverse3, speed_precise, Forward);
+	}
+	else{
+		turnAndMoveTo(GPS_hitKickstandReverse, speed_precise, Forward);
+	}
+
+	if(DOLIFT1) liftFirstStage(true);
+
+	turnAndMoveTo(GPS_parkGoal, speed_normal, Backward);
+
+	waitForLift();
+	dumpBalls();
 }
 
 task main()
@@ -96,8 +107,6 @@ task main()
 	StartTask(trackRobot); //Begin GPS tracking
 
 	rampStart();
-
-	waitForLift();
 
 	int dt = nPgmTime-startTime;
 	writeDebugStreamLine("Ramp autonomous completed in %.2f seconds", (dt)/1000.0);
