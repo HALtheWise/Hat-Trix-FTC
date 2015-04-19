@@ -165,7 +165,7 @@ void floorStart(){
 				turnAndMoveTo(GPS_navPoint5, speed_normal, AutomaticDirection);
 			}else{ //centerPos == 1
 				turnAndMoveTo(GPS_navPoint6, speed_normal, AutomaticDirection);
-				turnAndMoveTo(GPS_navPoint5, speed_normal, AutomaticDirection);
+				turnAndMoveTo(GPS_navPoint7, speed_normal, AutomaticDirection);
 			}
 			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 		}
