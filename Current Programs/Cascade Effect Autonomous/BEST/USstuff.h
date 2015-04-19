@@ -45,7 +45,7 @@ int julietUS(bool ramp = false){
 		rPos = robot.y - 10.0;
 	}
 	else{
-		rPos = robot.x - 10.0;
+		rPos = robot.x - 15.0;
 	}
 
 	reading = reading + rPos;
