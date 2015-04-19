@@ -69,23 +69,25 @@ FieldPos GPS_parkGoal;
 
 RelativePos GPS_prepareForKickstandReverse;
 RelativePos GPS_hitKickstandReverse;
+RelativePos GPS_hitKickstandReverse3;
 RelativePos GPS_defendPointRamp;
 
 
 void initPositionsRamp(){
 	set(GPS_rampStartingPosition,
-	34.1 - 12.8, 	//Robot distance from wall when aligned to front of platform, minus 5inches due to the slope of the ramp and trigonometry.
+	30.1 - 12.8, 	//Robot distance from wall when aligned to front of platform, minus 5inches due to the slope of the ramp and trigonometry.
 	60, 		//12in, on ramp half way from wall. This is supposed to be 30.2, but tweaked to make things work.
 	degreesToRadians(180));
 
 	set(GPS_offRamp, 155, GPS_rampStartingPosition.y);
 
-	set(GPS_mediumGoalPositionRamp, 270, 30);
+	set(GPS_mediumGoalPositionRamp, 270, GPS_rampStartingPosition.y + 5);
 	set(GPS_almostMediumGoalPositionRamp, GPS_mediumGoalPositionRamp.x - 25, GPS_mediumGoalPositionRamp.y);
 
 	set(GPS_defendPointRamp, 80, -10);
 	set(GPS_prepareForKickstandReverse, 65, -35);
-	set(GPS_hitKickstandReverse, -10, -35);
+	set(GPS_hitKickstandReverse, -20, -35);
+	set(GPS_hitKickstandReverse3, -50, -35);
 
 	set(GPS_parkGoal, 30, 155);
 }
