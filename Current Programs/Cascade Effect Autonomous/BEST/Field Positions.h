@@ -33,7 +33,7 @@ void initPositions(){
 	set(GPS_floorStartingPositionUS, 10, 198, degreesToRadians(180));
 	set(GPS_awayFromWallUS, 50, 195);
 
-	set(GPS_mediumGoalPosition, 291, 20);
+	set(GPS_mediumGoalPosition, 326, 20); //X coordinate should be 291, but white lies are sort of OK.
 	set(GPS_tallGoalPosition, 355, 90);
 
 	set(GPS_navPoint1, 291, 255);
