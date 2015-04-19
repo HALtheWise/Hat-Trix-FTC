@@ -145,6 +145,8 @@ void floorStart(){
 		bool backsideNavigate = false;
 		if (centerPos == 1 || (centerPos == 2 && !FRONTSIDE_ON_2)){ //Backside navigation
 			backsideNavigate = true;
+		}
+		if (backsideNavigate){ //Backside navigation
 			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
 		}else {//Frontside navigation
 			if (centerPos == 3){
