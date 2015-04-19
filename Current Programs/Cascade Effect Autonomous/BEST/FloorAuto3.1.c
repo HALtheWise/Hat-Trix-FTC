@@ -148,21 +148,23 @@ void floorStart(){
 		}
 		if (backsideNavigate){ //Backside navigation
 			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
-		}else {//Frontside navigation
+			turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
+			if (getFrontSensorReading() < 150){ //Try to avoid a robot in our way.
+				turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
+				turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
+				turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);
+			}
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
+		}
+		else {//Frontside navigation
 			if (centerPos == 3){
 				turnAndMoveTo(GPS_prepareForKickstand, speed_normal, AutomaticDirection);
 			}
 			else{
 				turnAndMoveTo(GPS_navPoint5, speed_normal, AutomaticDirection);
 			}
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 		}
-		turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
-		if (backsideNavigate && getFrontSensorReading() < 150){ //Try to avoid a robot in our way.
-				turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
-				turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
-				turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);
-		}
-		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 		grabGoal();
 	}
 	else if(mode == MODE_KICKSTAND_ALWAYS){
