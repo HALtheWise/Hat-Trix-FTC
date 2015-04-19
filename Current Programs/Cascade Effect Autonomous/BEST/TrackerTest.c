@@ -27,6 +27,8 @@
 #include "TrackerAutoLib.h"
 #include "AutoLib.h"
 #include "USstuff.h"
+#include "Field Positions.h"
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,9 +46,18 @@ void initializeRobot()
 {
 	// Place code here to sinitialize servos to starting positions.
 	// Sensors are automatically configured and setup by ROBOTC. They may need a brief time to stabilize.
+	initPositions();
+	useGoodEncoderMeasurement = true;
 	clearDebugStream();
 	gyroCal();
-	return;
+	nMotorEncoder[FrontL] = 0;
+	nMotorEncoder[FrontR] = 0;
+	//mot(20, 20);
+	//wait1Msec(14000);
+	//mot(0,0);
+	//writeDebugStreamLine("Drive motor encoders: (%d, %d)", nMotorEncoder[FrontL], nMotorEncoder[FrontR]);
+
+	StartTask(USmagic);
 }
 
 
@@ -78,7 +89,8 @@ void initializeRobot()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void debugOutputs(){
-	writeDebugStreamLine("Sonars: (front, %d) || (side, %d)", getFrontSensorReading(), getSideSensorReading());
+	//writeDebugStreamLine("Sonars: (front, %d) || (side, %d)", USreadDist(frontSonar), getSideSensorReading());
+	//writeDebugStreamLine("Drive motor encoders: (%d, %d)", nMotorEncoder[FrontL], nMotorEncoder[FrontR]);
 }
 
 void drive(){

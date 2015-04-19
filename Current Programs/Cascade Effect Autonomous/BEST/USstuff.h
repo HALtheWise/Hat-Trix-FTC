@@ -119,8 +119,8 @@ task USmagic(){
 		int facing = direction(robot.theta);
 		if (facing < 0) continue;
 
-		float delta = getFrontSensorReading(true) - expectedUSreading(robot, facing);
-		writeDebugStreamLine("US correction: %dcm", delta);
+		float delta = getFrontSensorReading(true) - expectedUSreading(robot, (facing+2)%4);
+		writeDebugStreamLine("US correction: %dcm; facing: %d", delta, facing);
 		wait1Msec(150);
 	}
 }
