@@ -35,6 +35,7 @@ AutoMode mode = MODE_MEDIUM_ALWAYS;
 
 #define DOLIFT1 true
 #define DOLIFT2 true
+#define FRONTSIDE_ON_2 true
 
 void initializeRobot()
 {
@@ -69,19 +70,19 @@ void floorStart(){
 	if(DOLIFT1) liftFirstStage(true); 	// Lift first stage extension in parallel
 		wait1Msec(600);				// Gives time to make it impressive that we're lifting in parallel
 
-		turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
+	turnAndMoveTo(GPS_awayFromWallUS, speed_normal, Backward);
 
-		if (centerPos == 2) centerPos = julietUS(); //Try to get another reading in case the first one missed something.
+	if (centerPos == 2) centerPos = julietUS(); //Try to get another reading in case the first one missed something.
 
-		wait1Msec(inter_move_delay);
+	wait1Msec(inter_move_delay);
 
-		if(mode == MODE_DEFEND_CENTER_MEDIUM){
-			turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
-			wait1Msec(500);
-		}
+	if(mode == MODE_DEFEND_CENTER_MEDIUM){
+		turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
+		wait1Msec(500);
+	}
 
-		FieldPos target;
-		translate(GPS_prepareForCenterDump, target);
+	FieldPos target;
+	translate(GPS_prepareForCenterDump, target);
 	if(distanceBetween(target, robot) > 50.0){ //If the robot is more than half a meter from "prepare to dump" position
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 	}
@@ -142,19 +143,28 @@ void floorStart(){
 
 	if (mode == MODE_MEDIUM_ALWAYS || mode == MODE_DEFEND_CENTER_MEDIUM || mode == MODE_SMART_CENTER_MEDIUM){
 		bool backsideNavigate = false;
-		if (centerPos == 1 || centerPos == 2){ //Backside navigation
+		if (centerPos == 1 || (centerPos == 2 && !FRONTSIDE_ON_2)){ //Backside navigation
 			backsideNavigate = true;
-			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
-		}else {//Frontside navigation
-				turnAndMoveTo(GPS_prepareForKickstand, speed_normal, Forward);
 		}
-		turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
-		if (backsideNavigate && getFrontSensorReading() < 150){ //Try to avoid a robot in our way.
+		if (backsideNavigate){ //Backside navigation
+			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
+			turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
+			if (getFrontSensorReading() < 150){ //Try to avoid a robot in our way.
 				turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
 				turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
 				turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);
+			}
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 		}
-		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
+		else {//Frontside navigation
+			if (centerPos == 3){
+				turnAndMoveTo(GPS_prepareForKickstand, speed_normal, AutomaticDirection);
+			}
+			else{
+				turnAndMoveTo(GPS_navPoint5, speed_normal, AutomaticDirection);
+			}
+			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
+		}
 		grabGoal();
 	}
 	else if(mode == MODE_KICKSTAND_ALWAYS){

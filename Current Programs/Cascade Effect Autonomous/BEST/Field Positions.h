@@ -6,6 +6,7 @@ FieldPos GPS_navPoint1;
 FieldPos GPS_navPoint2;
 FieldPos GPS_navPoint3;
 FieldPos GPS_navPoint4;
+FieldPos GPS_navPoint5;
 FieldPos GPS_defendPoint;
 
 
@@ -33,20 +34,22 @@ void initPositions(){
 	set(GPS_floorStartingPositionUS, 10, 198, degreesToRadians(180));
 	set(GPS_awayFromWallUS, 50, 195);
 
-	set(GPS_mediumGoalPosition, 291, 20);
+	set(GPS_mediumGoalPosition, 326, 20); //X coordinate should be 291, but white lies are sort of OK.
 	set(GPS_tallGoalPosition, 355, 90);
 
-	set(GPS_navPoint1, 291, 255);
+	set(GPS_navPoint1, 291, 255); //Between their ramp and the center structure, for backside navigation
 	set(GPS_navPoint2, 350, 220);
 	set(GPS_navPoint3, 350, 150);
 	set(GPS_navPoint4, 291, 90);
 
+	set(GPS_navPoint5, 125, 130); //Between our ramp and the center structure, for frontside navigation
+
 	set(GPS_defendPoint, 80, 320);
 
-	set(GPS_prepareForCenterDump, -99, 0);
-	set(GPS_centerDumpPosition1, -37, 8);
-	set(GPS_centerDumpPosition2, -35, 10);
-	set(GPS_centerDumpPosition3, -41, 6);
+	set(GPS_prepareForCenterDump, -99, 20);
+	set(GPS_centerDumpPosition1, -37, 22);
+	set(GPS_centerDumpPosition2, -31, 24);
+	set(GPS_centerDumpPosition3, -32.5, 6);
 
 	set(GPS_prepareForKickstand, -85, -35);
 	set(GPS_hitKickstand, 10, -35);
@@ -77,11 +80,6 @@ void initPositionsRamp(){
 
 	set(GPS_mediumGoalPositionRamp, 270, 30);
 	set(GPS_almostMediumGoalPositionRamp, GPS_mediumGoalPositionRamp.x - 25, GPS_mediumGoalPositionRamp.y);
-
-	set(GPS_navPoint1, 291, 255);
-	set(GPS_navPoint2, 350, 220);
-	set(GPS_navPoint3, 350, 150);
-	set(GPS_navPoint4, 291, 90);
 
 	set(GPS_defendPointRamp, 80, -10);
 	set(GPS_prepareForKickstandReverse, 65, -35);

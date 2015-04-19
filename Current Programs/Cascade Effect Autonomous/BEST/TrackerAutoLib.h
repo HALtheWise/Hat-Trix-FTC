@@ -36,23 +36,23 @@ typedef enum{
 
 //---------- Function Declarations ----------//
 void	mot2	  (int leftPow, int rightPow);
-void moveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection, float aggressiveness = 1.0);
+bool moveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection, float aggressiveness = 1.0);
 void turnTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection);
 void turnToHeading (float heading, int power, DrivingDirection forward = AutomaticDirection);
-void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection);
+bool turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection);
 float neededTurn(FieldPos target, DrivingDirection forward = AutomaticDirection);
 DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target);
 
-void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
+bool turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
 void turnTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
-void moveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
+bool moveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
 
 
 //----------- Function Definitions ----------//
 
-void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
+bool turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 	turnTo(target, power, forward);
-	moveTo(target, power, forward);
+	return moveTo(target, power, forward);
 }
 
 DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target){
@@ -77,10 +77,11 @@ void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies the
 //*
 //*	move( float dist, float power , bool hold, bool glide)
 //*	is a move function that moves 'dist' at 'power' either abruptly, or 'glide'
+//*  returns true if the move succeeded.
 //*
 //********************************************************************************************************
 
-void moveTo (FieldPos target, int power, DrivingDirection forward, float aggressiveness)
+bool moveTo (FieldPos target, int power, DrivingDirection forward, float aggressiveness)
 {
 	forward = autoSelectDirection(forward, target);
 	const bool glide = true; //This will eventually become an argument to moveTo().
@@ -101,6 +102,9 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 	ClearTimer(T1);
 
 	float toGo = distanceBetween(tRobot, target);
+
+	int lastTime = time1[T1];
+	int lastEncoder = nMotorEncoder[FrontL];
 
 	//TODO: Don't stop while still moving toward target.
 	while(abs(neededTurn(target, forward)) <= PI/2)//  toGo > OCD)
@@ -152,7 +156,17 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 		{
 			writeDebugStreamLine("Move timed out with %fcm to go.", toGo);
 			mot2(0, 0);
-			return;
+			return false;
+		}
+
+		if(time1[T1] > lastTime + 100){
+			if(abs(nMotorEncoder[FrontL] - lastEncoder) < 10){
+				writeDebugStreamLine("Move smart-timed out with %fcm to go.", toGo);
+				mot2(0,0);
+				return false;
+			}
+			lastTime = time1[T1];
+			lastEncoder = nMotorEncoder[FrontL];
 		}
 
 	}
@@ -160,7 +174,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 
 	writeDebugStreamLine("Move completed with miss amount of %f (cm)", distanceBetween(tRobot, target));
 
-	return;
+	return true;
 
 
 }
@@ -225,10 +239,10 @@ void turnToHeading(float heading, int power, DrivingDirection forward){
 }
 
 
-void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward){
+bool turnAndMoveTo (RelativePos target, int power, DrivingDirection forward){
 	FieldPos target2;
 	translate(target, target2);
-	turnAndMoveTo(target2, power, forward);
+	return turnAndMoveTo(target2, power, forward);
 }
 
 void turnTo (RelativePos target, int power, DrivingDirection forward){
@@ -237,8 +251,8 @@ void turnTo (RelativePos target, int power, DrivingDirection forward){
 	turnTo(target2, power, forward);
 }
 
-void moveTo (RelativePos target, int power, DrivingDirection forward){
+bool moveTo (RelativePos target, int power, DrivingDirection forward){
 	FieldPos target2;
 	translate(target, target2);
-	moveTo(target2, power, forward);
+	return moveTo(target2, power, forward);
 }
