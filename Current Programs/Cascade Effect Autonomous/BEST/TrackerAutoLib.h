@@ -103,6 +103,9 @@ bool moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 
 	float toGo = distanceBetween(tRobot, target);
 
+	int lastTime = time1[T1];
+	int lastEncoder = nMotorEncoder[FrontL];
+
 	//TODO: Don't stop while still moving toward target.
 	while(abs(neededTurn(target, forward)) <= PI/2)//  toGo > OCD)
 	{
@@ -154,6 +157,16 @@ bool moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 			writeDebugStreamLine("Move timed out with %fcm to go.", toGo);
 			mot2(0, 0);
 			return false;
+		}
+
+		if(time1[T1] > lastTime + 100){
+			if(abs(nMotorEncoder[FrontL] - lastEncoder) < 10){
+				writeDebugStreamLine("Move smart-timed out with %fcm to go.", toGo);
+				mot2(0,0);
+				return false;
+			}
+			lastTime = time1[T1];
+			lastEncoder = nMotorEncoder[FrontL];
 		}
 
 	}
