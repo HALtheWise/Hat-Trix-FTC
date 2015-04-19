@@ -36,6 +36,7 @@ AutoMode mode = MODE_MEDIUM_ALWAYS;
 #define DOLIFT1 true
 #define DOLIFT2 true
 #define FRONTSIDE_ON_2 true
+#define FRONTSIDE_ON_1 true
 
 void initializeRobot()
 {
@@ -143,10 +144,10 @@ void floorStart(){
 
 	if (mode == MODE_MEDIUM_ALWAYS || mode == MODE_DEFEND_CENTER_MEDIUM || mode == MODE_SMART_CENTER_MEDIUM){
 		bool backsideNavigate = false;
-		if (centerPos == 1 || (centerPos == 2 && !FRONTSIDE_ON_2)){ //Backside navigation
+		if ((centerPos == 1 && !FRONTSIDE_ON_1) || (centerPos == 2 && !FRONTSIDE_ON_2)){ //Backside navigation
 			backsideNavigate = true;
 		}
-		if (backsideNavigate){ //Backside navigation
+		if (backsideNavigate){ //Backside navigation. Assumes tower is in position 1 or 2.
 			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
 			turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
 			if (getFrontSensorReading() < 150){ //Try to avoid a robot in our way.
@@ -160,7 +161,10 @@ void floorStart(){
 			if (centerPos == 3){
 				turnAndMoveTo(GPS_prepareForKickstand, speed_normal, AutomaticDirection);
 			}
-			else{
+			else if(centerPos == 2){
+				turnAndMoveTo(GPS_navPoint5, speed_normal, AutomaticDirection);
+			}else{ //centerPos == 1
+				turnAndMoveTo(GPS_navPoint6, speed_normal, AutomaticDirection);
 				turnAndMoveTo(GPS_navPoint5, speed_normal, AutomaticDirection);
 			}
 			turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);

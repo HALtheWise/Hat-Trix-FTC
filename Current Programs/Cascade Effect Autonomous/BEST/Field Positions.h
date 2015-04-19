@@ -7,6 +7,7 @@ FieldPos GPS_navPoint2;
 FieldPos GPS_navPoint3;
 FieldPos GPS_navPoint4;
 FieldPos GPS_navPoint5;
+FieldPos GPS_navPoint6;
 FieldPos GPS_defendPoint;
 
 
@@ -43,6 +44,7 @@ void initPositions(){
 	set(GPS_navPoint4, 291, 90);
 
 	set(GPS_navPoint5, 125, 130); //Between our ramp and the center structure, for frontside navigation
+	set(GPS_navPoint6, 100, 250); //Between the floor zone and our center goal in position 1, for frontside nav
 
 	set(GPS_defendPoint, 80, 320);
 
