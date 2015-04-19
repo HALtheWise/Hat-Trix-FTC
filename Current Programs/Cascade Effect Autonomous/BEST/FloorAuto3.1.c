@@ -1,7 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S4,     sonar,          sensorSONAR)
+#pragma config(Sensor, S4,     HTSMUX,         sensorLowSpeed)
 #pragma config(Motor,  motorA,          lateralSweep,  tmotorNXT, openLoop)
 #pragma config(Motor,  motorB,          stuffer,       tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorC,          verticalSweep, tmotorNXT, openLoop, reversed)
