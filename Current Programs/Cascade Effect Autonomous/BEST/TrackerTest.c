@@ -56,6 +56,11 @@ void initializeRobot()
 	//wait1Msec(14000);
 	//mot(0,0);
 	//writeDebugStreamLine("Drive motor encoders: (%d, %d)", nMotorEncoder[FrontL], nMotorEncoder[FrontR]);
+	while(true){
+		robot.y = 30;
+		julietUS(true);
+		wait1Msec(300);
+	}
 
 	StartTask(USmagic);
 }
