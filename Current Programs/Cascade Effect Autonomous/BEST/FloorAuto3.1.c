@@ -154,7 +154,7 @@ void floorStart(){
 				turnAndMoveTo(GPS_navPoint2, speed_normal, AutomaticDirection);
 				turnAndMoveTo(GPS_navPoint3, speed_normal, AutomaticDirection);
 				turnAndMoveTo(GPS_navPoint4, speed_normal, AutomaticDirection);
-				turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
+				turnAndMoveTo(GPS_mediumGoalPosition, speed_normal, Backward);
 			}
 		}
 		else {//Frontside navigation
