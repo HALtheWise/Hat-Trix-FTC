@@ -1,21 +1,21 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S4,     sonar,          sensorSONAR)
-#pragma config(Motor,  motorA,          sweeper1,      tmotorNXT, openLoop, reversed)
-#pragma config(Motor,  motorB,          sweeper2,      tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
+#pragma config(Sensor, S4,     HTSMUX,         sensorLowSpeed)
+#pragma config(Motor,  motorA,          lateralSweep,  tmotorNXT, openLoop)
+#pragma config(Motor,  motorB,          stuffer,       tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorC,          verticalSweep, tmotorNXT, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_1,     FrontL,        tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     BackL,         tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     FrontR,        tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     BackR,         tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     rightRoller,   tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_2,     leftRoller,    tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C3_1,     rightRoller,   tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     leftRoller,    tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C4_1,     elevator,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     car,           tmotorTetrix, openLoop, encoder)
-#pragma config(Servo,  srvo_S3_C1_1,    grabberServo,         tServoStandard)
+#pragma config(Servo,  srvo_S3_C1_1,    grabberServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_2,    dropperServo,         tServoStandard)
-#pragma config(Servo,  srvo_S3_C1_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S3_C1_3,    sweeperServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_6,    servo6,               tServoNone)
@@ -31,26 +31,36 @@
 typedef enum{
 	Forward = 1,
 	Backward = 0,
+	AutomaticDirection = 2,
 } DrivingDirection;
 
 //---------- Function Declarations ----------//
 void	mot2	  (int leftPow, int rightPow);
-void moveTo (FieldPos target, int power, DrivingDirection forward = Forward, float aggressiveness = 1.0);
-void turnTo (FieldPos target, int power, DrivingDirection forward = Forward);
-void turnToHeading (float heading, int power, DrivingDirection forward = Forward);
-void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = Forward);
-float neededTurn(FieldPos target, DrivingDirection forward = Forward);
+bool moveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection, float aggressiveness = 1.0);
+void turnTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection);
+void turnToHeading (float heading, int power, DrivingDirection forward = AutomaticDirection);
+bool turnAndMoveTo (FieldPos target, int power, DrivingDirection forward = AutomaticDirection);
+float neededTurn(FieldPos target, DrivingDirection forward = AutomaticDirection);
+DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target);
 
-void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = Forward);
-void turnTo (RelativePos target, int power, DrivingDirection forward = Forward);
-void moveTo (RelativePos target, int power, DrivingDirection forward = Forward);
+bool turnAndMoveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
+void turnTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
+bool moveTo (RelativePos target, int power, DrivingDirection forward = AutomaticDirection);
 
 
 //----------- Function Definitions ----------//
 
-void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
+bool turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 	turnTo(target, power, forward);
-	moveTo(target, power, forward);
+	return moveTo(target, power, forward);
+}
+
+DrivingDirection autoSelectDirection(DrivingDirection in, FieldPos target){
+	if (in != AutomaticDirection) return in;
+	if (abs(coerceAngle(neededTurn(target, Forward))) < PI/2){
+		return Forward;
+	}
+	return Backward;
 }
 
 //This function is identical to mot(int, int) as defined in "AutoLib.h", but importing both could cause a name collision,
@@ -58,7 +68,7 @@ void turnAndMoveTo (FieldPos target, int power, DrivingDirection forward){
 void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies them to wheels
 	motor[FrontL] = leftPow;
 	motor[BackL] = leftPow;
-	
+
 	motor[FrontR] = rightPow;
 	motor[BackR] = rightPow;
 }
@@ -67,11 +77,19 @@ void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies the
 //*
 //*	move( float dist, float power , bool hold, bool glide)
 //*	is a move function that moves 'dist' at 'power' either abruptly, or 'glide'
+//*  returns true if the move succeeded.
+//*  If the move failed due to a motor speed timeout, hitOn will contain -1 (for left) or 1 (for right) relative to direction of travel.
 //*
 //********************************************************************************************************
 
-void moveTo (FieldPos target, int power, DrivingDirection forward, float aggressiveness)
+int hitOn = 0;
+DrivingDirection lastMoveDirection = Forward;
+
+bool moveTo (FieldPos target, int power, DrivingDirection forward, float aggressiveness)
 {
+	hitOn = 0;
+	forward = autoSelectDirection(forward, target);
+	lastMoveDirection = forward;
 	const bool glide = true; //This will eventually become an argument to moveTo().
 	//const float TURN_AGGRESSIVENESS = 2.0;
 
@@ -90,6 +108,9 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 	ClearTimer(T1);
 
 	float toGo = distanceBetween(tRobot, target);
+
+	int lastTime = time1[T1];
+	int lastEncoder = nMotorEncoder[FrontL];
 
 	//TODO: Don't stop while still moving toward target.
 	while(abs(neededTurn(target, forward)) <= PI/2)//  toGo > OCD)
@@ -141,7 +162,18 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 		{
 			writeDebugStreamLine("Move timed out with %fcm to go.", toGo);
 			mot2(0, 0);
-			return;
+			return false;
+		}
+
+		if(time1[T1] > 500 && time1[T1] > lastTime + 100){
+			if(abs(nMotorEncoder[FrontL] - lastEncoder) < 10){
+				writeDebugStreamLine("Move smart-timed out with %fcm to go.", toGo);
+				hitOn = turnCorrection > 0 ? 1 : -1;
+				mot2(0,0);
+				return false;
+			}
+			lastTime = time1[T1];
+			lastEncoder = nMotorEncoder[FrontL];
 		}
 
 	}
@@ -149,7 +181,7 @@ void moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 
 	writeDebugStreamLine("Move completed with miss amount of %f (cm)", distanceBetween(tRobot, target));
 
-	return;
+	return true;
 
 
 }
@@ -160,6 +192,7 @@ float neededTurn(FieldPos target, DrivingDirection forward){
 
 void turnTo (FieldPos target, int power, DrivingDirection forward)
 {
+	forward = autoSelectDirection(forward, target);
 #ifdef BALLE
 	power += 20;
 #endif
@@ -213,10 +246,10 @@ void turnToHeading(float heading, int power, DrivingDirection forward){
 }
 
 
-void turnAndMoveTo (RelativePos target, int power, DrivingDirection forward){
+bool turnAndMoveTo (RelativePos target, int power, DrivingDirection forward){
 	FieldPos target2;
 	translate(target, target2);
-	turnAndMoveTo(target2, power, forward);
+	return turnAndMoveTo(target2, power, forward);
 }
 
 void turnTo (RelativePos target, int power, DrivingDirection forward){
@@ -225,8 +258,8 @@ void turnTo (RelativePos target, int power, DrivingDirection forward){
 	turnTo(target2, power, forward);
 }
 
-void moveTo (RelativePos target, int power, DrivingDirection forward){
+bool moveTo (RelativePos target, int power, DrivingDirection forward){
 	FieldPos target2;
 	translate(target, target2);
-	moveTo(target2, power, forward);
+	return moveTo(target2, power, forward);
 }
