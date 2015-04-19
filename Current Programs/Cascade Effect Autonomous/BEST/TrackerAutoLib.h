@@ -78,12 +78,18 @@ void mot2(int leftPow, int rightPow){ //Takes left and right powers, applies the
 //*	move( float dist, float power , bool hold, bool glide)
 //*	is a move function that moves 'dist' at 'power' either abruptly, or 'glide'
 //*  returns true if the move succeeded.
+//*  If the move failed due to a motor speed timeout, hitOn will contain -1 (for left) or 1 (for right) relative to direction of travel.
 //*
 //********************************************************************************************************
 
+int hitOn = 0;
+DrivingDirection lastMoveDirection = Forward;
+
 bool moveTo (FieldPos target, int power, DrivingDirection forward, float aggressiveness)
 {
+	hitOn = 0;
 	forward = autoSelectDirection(forward, target);
+	lastMoveDirection = forward;
 	const bool glide = true; //This will eventually become an argument to moveTo().
 	//const float TURN_AGGRESSIVENESS = 2.0;
 
@@ -159,9 +165,10 @@ bool moveTo (FieldPos target, int power, DrivingDirection forward, float aggress
 			return false;
 		}
 
-		if(time1[T1] > lastTime + 100){
+		if(time1[T1] > 500 && time1[T1] > lastTime + 100){
 			if(abs(nMotorEncoder[FrontL] - lastEncoder) < 10){
 				writeDebugStreamLine("Move smart-timed out with %fcm to go.", toGo);
+				hitOn = turnCorrection > 0 ? 1 : -1;
 				mot2(0,0);
 				return false;
 			}
