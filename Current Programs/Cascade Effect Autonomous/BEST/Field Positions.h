@@ -6,6 +6,7 @@ FieldPos GPS_navPoint1;
 FieldPos GPS_navPoint2;
 FieldPos GPS_navPoint3;
 FieldPos GPS_navPoint4;
+FieldPos GPS_navPoint5;
 FieldPos GPS_defendPoint;
 
 
@@ -36,10 +37,12 @@ void initPositions(){
 	set(GPS_mediumGoalPosition, 326, 20); //X coordinate should be 291, but white lies are sort of OK.
 	set(GPS_tallGoalPosition, 355, 90);
 
-	set(GPS_navPoint1, 291, 255);
+	set(GPS_navPoint1, 291, 255); //Between their ramp and the center structure, for backside navigation
 	set(GPS_navPoint2, 350, 220);
 	set(GPS_navPoint3, 350, 150);
 	set(GPS_navPoint4, 291, 90);
+
+	set(GPS_navPoint5, 125, 130); //Between our ramp and the center structure, for frontside navigation
 
 	set(GPS_defendPoint, 80, 320);
 
