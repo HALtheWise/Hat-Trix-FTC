@@ -3,7 +3,7 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S4,     sonar,          sensorSONAR)
+#pragma config(Sensor, S4,     HTSMUX,         sensorLowSpeed)
 #pragma config(Motor,  motorA,          lateralSweep,  tmotorNXT, openLoop)
 #pragma config(Motor,  motorB,          stuffer,       tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorC,          verticalSweep, tmotorNXT, openLoop, reversed)
@@ -26,7 +26,10 @@
 #define null (void *)0
 #include "ButtonJoyDriver.c"
 
+#include "Cascade Effect Autonomous/BEST/drivers/hitechnic-sensormux.h"
+#include "Cascade Effect Autonomous/BEST/drivers/lego-ultrasound.h"
 
+const tMUXSensor frontSonar = msensor_S4_3;
 
 #define AI_NONE 0
 #define AI_DRIVE 1
@@ -578,7 +581,7 @@ void actionDrive(Command cmd, EventList *eList, int res_id )
 			if (isPressed(eList, sensorSpeed)) isSensing = true;
 
 			const int sonarThresh = 23;
-			if (isSensing && lefty+righty < 0 && SensorValue[sonar] < sonarThresh){
+			if (isSensing && lefty+righty < 0 && USreadDist(frontSonar) < sonarThresh){
 				lefty = 0;
 				righty = 0;
 			}
