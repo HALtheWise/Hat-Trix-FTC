@@ -74,45 +74,45 @@ int julietUS(bool ramp = false){
 // TODO: this should account for ramp sides and (possibly) the tower.
 float expectedUSreading(FieldPos p, int facing){
 	switch (facing)
-    {
-    case 0:
-      return FIELD_SIZE - p.x;
-      break;
-   	case 1:
-      return FIELD_SIZE - p.y;
-   	break;
-   	case 2:
-      return p.x;
-   	break;
-   	case 3:
-      return p.y;
-   	break;
+	{
+	case 0:
+		return FIELD_SIZE - p.x;
+		break;
+	case 1:
+		return FIELD_SIZE - p.y;
+		break;
+	case 2:
+		return p.x;
+		break;
+	case 3:
+		return p.y;
+		break;
 
-    default:
-      writeDebugStreamLine("ERROR: unexpected facing direction");
-    }
-    return 0;
+	default:
+		writeDebugStreamLine("ERROR: unexpected facing direction");
+	}
+	return 0;
 }
 
 void adjustByDelta(float delta, int facing, FieldPos *p){
 	switch (facing)
-    {
-    case 0:
-      p->x += delta;
-      break;
-   	case 1:
-      p->y += delta;
-   	break;
-   	case 2:
-      p->x -= delta;
-   	break;
-   	case 3:
-      p->y -= delta;
-   	break;
+	{
+	case 0:
+		p->x += delta;
+		break;
+	case 1:
+		p->y += delta;
+		break;
+	case 2:
+		p->x -= delta;
+		break;
+	case 3:
+		p->y -= delta;
+		break;
 
-    default:
-      writeDebugStreamLine("ERROR: unexpected facing direction");
-    }
+	default:
+		writeDebugStreamLine("ERROR: unexpected facing direction");
+	}
 }
 
 // Converts the angle of the sensor into integers 0...3 as described above,
