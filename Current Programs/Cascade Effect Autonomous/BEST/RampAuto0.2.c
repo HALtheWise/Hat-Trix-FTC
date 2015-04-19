@@ -37,12 +37,15 @@
 
 void initializeRobot()
 {
+	useGoodEncoderMeasurement = true;
 	initPositions();
 	clearDebugStream();
 	writeDebugStreamLine("GPS_centerDumpPosition1=(%d, %d, %d)", GPS_centerDumpPosition1.x, GPS_centerDumpPosition1.y, GPS_centerDumpPosition1.theta);
 	gyroCal();
 	servo[dropperServo] = HOLDING_POS;
 	return;
+	startTask(USmagic);
+
 }
 
 void waitForLift(){
