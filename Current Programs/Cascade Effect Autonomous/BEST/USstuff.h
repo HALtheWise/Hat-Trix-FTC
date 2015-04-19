@@ -7,17 +7,21 @@ const tMUXSensor frontSonar = msensor_S4_3;
 const tMUXSensor sideSonar = msensor_S4_4;
 
 int getFrontSensorReading(bool adjusted = false){
+	hogCPU();
 	if (adjusted){
 		return USreadDist(frontSonar) + 12; //TODO: this value has not been tuned.
 	}
 	return USreadDist(frontSonar);
+	releaseCPU();
 }
 
 int getSideSensorReading(bool adjusted = false){
+	hogCPU();
 	if (adjusted){
 		return USreadDist(sideSonar) + 22;
 	}
 	return USreadDist(sideSonar);
+	releaseCPU();
 }
 
 int julietUS(bool ramp = false){
