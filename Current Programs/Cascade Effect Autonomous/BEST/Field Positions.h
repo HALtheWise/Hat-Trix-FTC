@@ -43,10 +43,10 @@ void initPositions(){
 
 	set(GPS_defendPoint, 80, 320);
 
-	set(GPS_centerDumpPosition2, -35, 10);
 	set(GPS_centerDumpPosition3, -41, 6);
 	set(GPS_prepareForCenterDump, -99, 20);
 	set(GPS_centerDumpPosition1, -37, 22);
+	set(GPS_centerDumpPosition2, -31, 24);
 
 	set(GPS_prepareForKickstand, -85, -35);
 	set(GPS_hitKickstand, 10, -35);
