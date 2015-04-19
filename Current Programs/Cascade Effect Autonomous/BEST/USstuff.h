@@ -31,23 +31,34 @@ int getSideSensorReading(bool adjusted = false){
 }
 
 int julietUS(bool ramp = false){
-	int reading = getFrontSensorReading();
+	int reading;
+	if(ramp){
+		reading = getSideSensorReading(true);
+	}
+	else{
+		reading = getFrontSensorReading();
+	}
 	int centerPosition = 0;
 
 	float rPos;
 	if (ramp){
-	//	rPos = robot.y - 10.0;
+		rPos = robot.y - 10.0;
 	}
 	else{
-	//	rPos = robot.x - 10.0;
+		rPos = robot.x - 10.0;
 	}
 
-	if(reading >= 130 - rPos && reading < 150 - rPos){
+	reading = reading + rPos;
+
+	writeDebugStreamLine("US sensor reads: %d", reading);
+
+	if(reading >= 130 && reading < 150){
 		centerPosition = 1;
 	}
-	else if(reading < 130 - rPos && reading > 110 - rPos){
+	else if(reading < 130 && reading > 110){
 		centerPosition = 3;
-		}else{
+	}
+	else{
 		centerPosition = 2;
 	}
 
