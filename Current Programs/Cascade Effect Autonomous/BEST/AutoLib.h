@@ -1,21 +1,21 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S4,     seeker,         sensorI2CCustom)
-#pragma config(Motor,  motorA,          sweeper1,      tmotorNXT, openLoop, reversed)
-#pragma config(Motor,  motorB,          sweeper2,      tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
+#pragma config(Sensor, S4,     HTSMUX,         sensorLowSpeed)
+#pragma config(Motor,  motorA,          lateralSweep,  tmotorNXT, openLoop)
+#pragma config(Motor,  motorB,          stuffer,       tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorC,          verticalSweep, tmotorNXT, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_1,     FrontL,        tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     BackL,         tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     FrontR,        tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     BackR,         tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     rightRoller,   tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_2,     leftRoller,    tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C3_1,     rightRoller,   tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     leftRoller,    tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C4_1,     elevator,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     car,           tmotorTetrix, openLoop, encoder)
-#pragma config(Servo,  srvo_S3_C1_1,    grabberServo,         tServoStandard)
+#pragma config(Servo,  srvo_S3_C1_1,    grabberServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_2,    dropperServo,         tServoStandard)
-#pragma config(Servo,  srvo_S3_C1_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S3_C1_3,    sweeperServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_6,    servo6,               tServoNone)
@@ -35,6 +35,8 @@ void	mot	(int leftPow, int rightPow);
 int  move	(float dist, float power, bool hold = true, bool glide = false, bool stopAtEnd = true);
 void turn	(float deg, float power);
 void Stop	(bool hold);
+void grabGoal();
+void releaseGoal();
 void liftFirstStage(bool nonBlocking = false);
 void liftTallArm ();
 void lowerTallArm();
@@ -68,6 +70,12 @@ void dumpBalls(bool fastMode){
 
 void grabGoal(){
 	servo[grabberServo] = 255;
+	wait1Msec(750);
+	servo[grabberServo] = 127;
+}
+
+void releaseGoal(){
+	servo[grabberServo] = 0;
 	wait1Msec(750);
 	servo[grabberServo] = 127;
 }
@@ -123,7 +131,7 @@ task parallelLowerTallArm(){
 
 void liftTallArm() {
 	const int TIMEOUT = 5000;
-	const int LIFT_HEIGHT = 3900;
+	const int LIFT_HEIGHT = 4300;
 
 	if (tallArmIsMoving) return;
 	tallArmIsMoving = true;

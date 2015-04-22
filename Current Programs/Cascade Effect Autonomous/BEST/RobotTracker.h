@@ -1,21 +1,21 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S4,     seeker,         sensorI2CCustom)
-#pragma config(Motor,  motorA,          sweeper1,      tmotorNXT, openLoop, reversed)
-#pragma config(Motor,  motorB,          sweeper2,      tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
+#pragma config(Sensor, S4,     HTSMUX,         sensorLowSpeed)
+#pragma config(Motor,  motorA,          lateralSweep,  tmotorNXT, openLoop)
+#pragma config(Motor,  motorB,          stuffer,       tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorC,          verticalSweep, tmotorNXT, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_1,     FrontL,        tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     BackL,         tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     FrontR,        tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     BackR,         tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     rightRoller,   tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_2,     leftRoller,    tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C3_1,     rightRoller,   tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     leftRoller,    tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C4_1,     elevator,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     car,           tmotorTetrix, openLoop, encoder)
-#pragma config(Servo,  srvo_S3_C1_1,    grabberServo,         tServoStandard)
+#pragma config(Servo,  srvo_S3_C1_1,    grabberServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_2,    dropperServo,         tServoStandard)
-#pragma config(Servo,  srvo_S3_C1_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S3_C1_3,    sweeperServo,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_6,    servo6,               tServoNone)
@@ -34,6 +34,12 @@ typedef struct {
 	// Positive x extends down the ramp and positive z extends off the cliff.
 	// Robot positions are measured to the center of the robot's drivetrain and through the cannonical front.
 } FieldPos;
+
+void copy(FieldPos *from, FieldPos *to){
+	to->x = from->x;
+	to->y = from->y;
+	to->theta = from->theta;
+}
 
 #include "Center Relative Positions.h"
 
@@ -120,12 +126,11 @@ void resetTracker(){
 task dispTrack(){
 	while(true){
 		wait1Msec(500);
-		writeDebugStreamLine("Track: (x, y, theta in deg) = (%d, %d, %f)", robot.x, robot.y, robot.theta*180/PI);
+		writeDebugStreamLine("Track: (x, y, theta in deg) = (%d, %d, %.2f)", robot.x, robot.y, robot.theta*180/PI);
 		if (robot.x != tRobot.x)
-			writeDebugStreamLine("Offset Track: (x, y, theta in deg) = (%d, %d, %f)", tRobot.x, tRobot.y, tRobot.theta*180/PI);
+			writeDebugStreamLine("Offset Track: (x, y, theta in deg) = (%d, %d, %.2f)", tRobot.x, tRobot.y, tRobot.theta*180/PI);
 	}
 }
-
 
 //********************************************************************************************************
 //*
@@ -134,8 +139,11 @@ task dispTrack(){
 //* TODO: gracefully handle single encoder failure.
 //*
 //********************************************************************************************************
+bool useGoodEncoderMeasurement = false;
 float getEncoder(){
-	const float SCALAR2 = 3125; // Motor clicks per meter
+	const float SCALAROLD = 3125; // Motor clicks per meter. Used on last year's robot, incorrect by about 7%.
+	const float SCALARNEW = 3356.47; // Motor clicks per meter. Measured on an acutal mat with two trials.
+	float SCALAR2 = useGoodEncoderMeasurement ? SCALARNEW : SCALAROLD;
 	return (nMotorEncoder[FrontL] + nMotorEncoder[FrontR])/2.0/SCALAR2*100;
 }
 

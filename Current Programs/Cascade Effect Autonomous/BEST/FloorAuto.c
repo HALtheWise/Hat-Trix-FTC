@@ -26,8 +26,8 @@
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "TrackerAutoLib.h"
 #include "AutoLib.h"
-#include "Field Positions.h"
 #include "USstuff.h"
+#include "Field Positions.h"
 #include "Auto GUI.h"
 //#include "IRstuff.c"
 
@@ -55,11 +55,11 @@ void initializeRobot()
 	return;
 }
 
+void waitForLift(){
+	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
+	if(DOLIFT2){while(tallArmIsMoving){wait1Msec(5);}} //Wait until second stage extension has completed
+}
 
-//********************************************************************************************************
-//*
-//*	floorStart() is the main function of the entire autonomous.
-//*	It contains the main logic of navigation and sequences the actions that the robot takes.
 //* Note that positions are coded in "Field Positions.h" and refrenced here.
 //*
 //********************************************************************************************************
@@ -86,42 +86,42 @@ void floorStart(){
 
 	if (centerPos == 2) centerPos = julietUS(); //Try to get another reading in case the first one missed something.
 
-	wait1Msec(inter_move_delay);
+		wait1Msec(inter_move_delay);
 
-	if(mode == MODE_DEFEND_CENTER_MEDIUM){
-		turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
-		wait1Msec(500);
-	}
+		if(mode == MODE_DEFEND_CENTER_MEDIUM){
+			turnAndMoveTo(GPS_defendPoint, speed_normal, Forward);
+			wait1Msec(500);
+		}
 
-	FieldPos target;
-	translate(GPS_prepareForCenterDump, target); // Converts GPS_prepareForCenterDump from tower-relative to field-relative coordinates.
+		FieldPos target;
+		translate(GPS_prepareForCenterDump, target);
 	if(distanceBetween(target, robot) > 50.0){ //If the robot is more than half a meter from "prepare to dump" position
 		turnAndMoveTo(GPS_prepareForCenterDump, speed_normal, Backward);
 	}
 
-	RelativePos pos120;			// Position of the 120 cm goal, tower-relative
-	RelativePos almostDumpPos;	// Just shy of pos120, stop here to avoid hitting goal while lifting
+	RelativePos pos120;
+	RelativePos almostDumpPos;
 
 	switch (centerPos) //Turn to ball dumping position
 	{
-	case 1:
+		case 1:
 		copy(GPS_centerDumpPosition1, pos120);
 		break;
 
-	case 2:
+		case 2:
 		copy(GPS_centerDumpPosition2, pos120);
 		break;
 
-	case 3:
+		case 3:
 		copy(GPS_centerDumpPosition3, pos120);
 		break;
 
-	default:
+		default:
 		writeDebugStreamLine("Detection of center structure failed in unexpected way.");
 		return;
 	}
 	copy(pos120, almostDumpPos);
-	almostDumpPos.x -= 20; //Just shy of 120cm goal
+	almostDumpPos.x -= 30;
 
 	writeDebugStreamLine("pos120=(%d,%d,%d)", pos120.x, pos120.y, pos120.theta);
 
@@ -132,8 +132,9 @@ void floorStart(){
 
 	turnAndMoveTo(almostDumpPos, speed_slower, Backward);
 
-	if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
-	if(DOLIFT2){while(tallArmIsMoving){wait1Msec(5);}} //Wait until second stage extension has completed
+	waitForLift();
+	//if(DOLIFT1){while(!firstStageIsLifted){wait1Msec(5);}} //Wait until first stage extension has completed
+	//if(DOLIFT2){while(tallArmIsMoving){wait1Msec(5);}} //Wait until second stage extension has completed
 
 	moveTo(pos120, speed_precise, Backward);
 
@@ -153,14 +154,14 @@ void floorStart(){
 		if (centerPos == 1 || centerPos == 2){ //Backside navigation
 			backsideNavigate = true;
 			turnAndMoveTo(GPS_navPoint1, speed_fast, Backward);
-			}else {//Frontside navigation
-			turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
+		}else {//Frontside navigation
+				turnAndMoveTo(GPS_prepareForKickstand, speed_normal);
 		}
 		turnTo(GPS_mediumGoalPosition, speed_normal, Backward);
-		if (mode == MODE_SMART_CENTER_MEDIUM && backsideNavigate && SensorValue[sonar] < 150){ //Try to avoid a robot in our way.
-			turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
-			turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
-			turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);
+		if (backsideNavigate && SensorValue[sonar] < 150){ //Try to avoid a robot in our way.
+				turnAndMoveTo(GPS_navPoint2, speed_normal, Backward);
+				turnAndMoveTo(GPS_navPoint3, speed_normal, Backward);
+				turnAndMoveTo(GPS_navPoint4, speed_normal, Backward);
 		}
 		turnAndMoveTo(GPS_mediumGoalPosition, speed_fast, Backward);
 		grabGoal();

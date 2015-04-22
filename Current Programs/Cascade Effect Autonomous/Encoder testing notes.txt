@@ -1,0 +1,14 @@
+Old was 3125 ticks/meter
+
+319cm
+11126, 10398 ticks
+10762 avg
+3373.66 ticks/meter
+~7% different
+
+317cm
+(11090, 10081) ticks
+10585.5 avg
+3339.27 ticks/m
+
+Average: 3356.47 ticks/cm

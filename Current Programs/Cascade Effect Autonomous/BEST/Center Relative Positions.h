@@ -52,9 +52,8 @@ float getCenterAngle(){
 //*	Provides base for additions involving the center tower.
 //*
 //********************************************************************************************************
+const float FIELD_SIZE = 365.76;
 void getCenterFieldPos(FieldPos *result){
-	//TODO: make sure that 
-	const float FIELD_SIZE = 365.76;
 	float angle = getCenterAngle();
 	result->x = FIELD_SIZE/2;
 	result->y = FIELD_SIZE/2;
